@@ -10,8 +10,6 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import { useTheme } from "@mui/material/styles";
-
 const Input = ({
   name,
   label,
@@ -21,7 +19,6 @@ const Input = ({
   required,
   handleShowPassword,
 }) => {
-  const theme = useTheme();
   return (
     <Grid item xs={12} sm={half ? 6 : 12}>
       <Typography sx={{ fontSize: "0.8rem", fontWeight: 600, mb: "5px" }}>

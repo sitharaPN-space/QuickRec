@@ -1,7 +1,5 @@
-import React from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
 
 const ButtonComp = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(theme.palette.primary[500]),

@@ -4,7 +4,15 @@ import UserDao from "../data-access/User.dao.js";
 import UserModel from "../models/UserModel.js";
 
 export const signup = async (req, res) => {
-  const { userName, email, mobileNo, password } = req.body;
+  const {
+    userName,
+    email,
+    mobileNo,
+    password,
+    IsBoardEmployee,
+    empNumber,
+    nic,
+  } = req.body;
   try {
     const olduser = await UserDao.getUserByEmail(email);
 
@@ -17,6 +25,9 @@ export const signup = async (req, res) => {
       Password: hashedPassword,
       EmailAddress: email,
       MobileNo: mobileNo,
+      EmpNumber: empNumber,
+      NIC: nic,
+      IsEmployee: IsBoardEmployee,
     });
 
     const token = jwt.sign(
@@ -33,10 +44,10 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
 
   try {
-    const oldUser = await UserDao.getUserByEmail(email);
+    const oldUser = await UserDao.getUserByEmail(userName);
 
     if (!oldUser)
       return res.status(404).json({ message: "User doesn't exist" });

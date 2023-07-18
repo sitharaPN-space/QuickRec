@@ -9,7 +9,7 @@ import authReducer from "./state/Auth";
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
+    userContext: authReducer,
   },
 });
 

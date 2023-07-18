@@ -32,6 +32,18 @@ UserModel.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    EmpNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    NIC: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    IsEmployee: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   },
   {
     sequelize,

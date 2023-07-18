@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { Box, Typography, Container, Paper, Grid, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Paper,
+  Grid,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import Input from "../../components/Input";
 import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
@@ -7,24 +18,49 @@ import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
+import * as api from "../../api/";
+
 const initState = {
   userName: "",
   email: "",
+  nic: "",
+  EmpNo: "",
+  IsBoardEmployee: false,
   mobileNo: "",
   password: "",
   confirmPassword: "",
+  empNumber: "",
 };
 
 const SignUp = () => {
   const theme = useTheme();
+  const [boardEmpCheck, setBoardEmpCheck] = useState(false);
   const [userData, setUserData] = useState(initState);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const data = await api.signup(userData);
+      const successData = { result: data.result, token: data.token };
+      //  dispatch(getUserDataOnSuccess(successData));
+      navigate("/signin");
+    } catch (error) {
+      setError(error.response.data);
+      console.log(error.response.data);
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+    }
   };
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const hadleEmpCheck = () => {
+    setBoardEmpCheck(!boardEmpCheck);
   };
 
   const navigate = useNavigate();
@@ -52,7 +88,7 @@ const SignUp = () => {
         <Typography sx={{ fontSize: "1.5rem", fontWeight: 600 }}>
           Sign Up
         </Typography>
-        <form onSubmit={{ handleSubmit }}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2} sx={{ mt: "1rem" }}>
             <Input
               name="userName"
@@ -66,6 +102,12 @@ const SignUp = () => {
               handleChange={handleChange}
               required
               type="email"
+            />
+            <Input
+              name="nic"
+              label="National Identity No *"
+              handleChange={handleChange}
+              required
             />
             <Input
               name="mobileNo"
@@ -88,6 +130,28 @@ const SignUp = () => {
               type="password"
             />
             <Grid item xs={12}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox sx={{ ml: "-10px" }} onChange={hadleEmpCheck} />
+                <Typography sx={{ fontSize: "0.8rem", fontWeight: 600 }}>
+                  I am a Board Employee
+                </Typography>
+              </div>
+            </Grid>
+            {boardEmpCheck && (
+              <Input
+                name="empNumber"
+                label="Employee Number *"
+                handleChange={handleChange}
+                required
+              />
+            )}
+            <Grid item xs={12}>
               <ButtonComp type="submit" fullWidth variant="contained">
                 create an account
               </ButtonComp>
@@ -108,7 +172,7 @@ const SignUp = () => {
                   <ButtonComp
                     fullWidth
                     onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
+                    disabled={renderProps.disabled || boardEmpCheck}
                     startIcon={<GoogleIcon />}
                     variant="contained"
                   >
