@@ -15,6 +15,9 @@ import VacancyList from "./Pages/Vacancies/VacancyList";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme";
 import BasicDetails from "./Pages/Application/BasicDetails/BasicDetails";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import EduDetails from "./Pages/Application/EduDetails/EduDetails";
 
 function App() {
   const router = createBrowserRouter(
@@ -26,6 +29,7 @@ function App() {
         <Route path="/home" element={<VacancyList />} />
         <Route path="/application" element={<Application />}>
           <Route path="/application/basicDetails" element={<BasicDetails />} />
+          <Route path="/application/eduDetails" element={<EduDetails />} />
         </Route>
       </Route>
     )
@@ -34,10 +38,12 @@ function App() {
     <div>
       {/* <BrowserRouter> */}
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-        <CssBaseline />
-        {/* <Routes>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RouterProvider router={router} />
+          <CssBaseline />
+          {/* <Routes>
           </Routes> */}
+        </LocalizationProvider>
       </ThemeProvider>
       {/* </BrowserRouter> */}
     </div>
