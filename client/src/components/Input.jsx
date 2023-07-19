@@ -18,10 +18,11 @@ const Input = ({
   type,
   required,
   handleShowPassword,
+  size,
 }) => {
   return (
-    <Grid item xs={12} sm={half ? 6 : 12}>
-      <Typography sx={{ fontSize: "0.8rem", fontWeight: 600, mb: "5px" }}>
+    <Grid item xs={12} sm={half ? 6 : 12} sx={{ textAlign: "left" }}>
+      <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
         {label}
       </Typography>
       <TextField
@@ -64,7 +65,7 @@ const Input = ({
         sx={{
           backgroundColor: (theme) => theme.palette.background.main,
         }}
-        size="small"
+        size={size ? size : "small"}
       />
     </Grid>
   );

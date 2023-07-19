@@ -21,7 +21,7 @@ const Vacancy = ({ detail }) => {
 
   const handleApply = () => {
     navigate("/application/basicDetails", {
-      state: { id: detail.vacancyId, title: detail.title },
+      state: { vacancyId: detail.vacancyId, vacancy: detail.title },
     });
   };
 

@@ -38,7 +38,8 @@ const StepGuide = ({ isMobile }) => {
     <Paper
       sx={{
         display: "flex",
-        width: isMobile ? "100%" : "15%",
+        minWidth: "180px",
+        maxHeight: "600px",
         justifyContent: "center",
       }}
     >
