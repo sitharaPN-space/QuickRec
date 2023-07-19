@@ -29,7 +29,7 @@ class UserDao {
       });
       return user;
     } catch (error) {
-      console.log(e);
+      console.log(error);
     }
   }
 
@@ -40,7 +40,7 @@ class UserDao {
       });
       return user;
     } catch (error) {
-      console.log(e);
+      console.log(error);
     }
   }
 
@@ -56,7 +56,7 @@ class UserDao {
       });
       return user;
     } catch (error) {
-      console.log(e);
+      console.log(error);
     }
   }
 }
