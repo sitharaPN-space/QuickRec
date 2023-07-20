@@ -18,6 +18,9 @@ import BasicDetails from "./Pages/Application/BasicDetails/BasicDetails";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EduDetails from "./Pages/Application/EduDetails/EduDetails";
+import ProDetails from "./Pages/Application/ProDetails/ProDetails";
+import Declaration from "./Pages/Application/Declaration/Declaration";
+import OtherDetails from "./Pages/Application/OtherDetails/OtherDetails";
 
 function App() {
   const router = createBrowserRouter(
@@ -30,6 +33,9 @@ function App() {
         <Route path="/application" element={<Application />}>
           <Route path="/application/basicDetails" element={<BasicDetails />} />
           <Route path="/application/eduDetails" element={<EduDetails />} />
+          <Route path="/application/proDetails" element={<ProDetails />} />
+          <Route path="/application/otherDetails" element={<OtherDetails />} />
+          <Route path="/application/declaration" element={<Declaration />} />
         </Route>
       </Route>
     )
