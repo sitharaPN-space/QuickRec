@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Paper,
@@ -13,39 +13,32 @@ import {
 import Input from "../../../components/Input";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonComp from "../../../components/ButtonComp";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 
-const initState = {
-  title: "",
-  nameWithInitials: "",
-  nameDenotedbyInit: "",
-  otherName: "",
-  nic: "",
-  dateOfBirth: "",
-  sex: "",
-  civilStatus: "",
-  AddressLine1: "",
-  AddressLine2: "",
-  nationality: "",
-  ethnicity: "",
-  mobileNo1: "",
-  mobileNo2: "",
-  email: "",
-};
 const BasicDetails = ({}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const [basicDetails, setBasicDetails] = useState(initState);
+  const [state, details, setDetails, setActiveStep] = useOutletContext();
   const navigate = useNavigate();
   const location = useLocation();
+  const { basicDetails } = details;
+
+  useEffect(() => setActiveStep(0), []);
 
   const handleNext = () => {
-    navigate("/application/eduDetails");
+    navigate("/application/eduDetails", state);
   };
 
   const handleChange = (e) => {
-    setBasicDetails({ ...basicDetails, [e.target.name]: e.target.value });
+    setDetails({
+      ...details,
+      basicDetails: {
+        ...basicDetails,
+        [e.target.name]: e.target.value,
+      },
+    });
   };
+
   return (
     <Paper
       sx={{
@@ -60,6 +53,7 @@ const BasicDetails = ({}) => {
           <FormControl size="small">
             <Select
               name="title"
+              value={basicDetails.title}
               onChange={handleChange}
               sx={{
                 minWidth: "140px",
@@ -75,17 +69,20 @@ const BasicDetails = ({}) => {
         </Grid>
         <Input
           name="nameWithInitials"
+          value={basicDetails.nameWithInitials}
           label="Name with initials *"
           handleChange={handleChange}
           required
         />
         <Input
           name="nameDenotedbyInit"
+          value={basicDetails.nameDenotedbyInit}
           label="Name denoted by initials"
           handleChange={handleChange}
         />
         <Input
           name="otherName"
+          value={basicDetails.otherName}
           label="Other Names"
           handleChange={handleChange}
         />
@@ -93,6 +90,7 @@ const BasicDetails = ({}) => {
           <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
             <Input
               name="nic"
+              value={basicDetails.nic}
               label="National identity Card (NIC) *"
               handleChange={handleChange}
               required
@@ -104,12 +102,23 @@ const BasicDetails = ({}) => {
                 Date of Birth *
               </Typography>
               <DatePicker
-                onChange={(newValue) => handleChange(newValue)}
+                value={basicDetails.dateOfBirth}
+                onChange={(newValue) => {
+                  handleChange({
+                    target: {
+                      name: "dateOfBirth",
+                      value: newValue,
+                      // value: newValue.$d.toLocaleDateString(),
+                    },
+                  });
+                }}
                 sx={{
                   width: "100%",
                   backgroundColor: (theme) => theme.palette.background.main,
                 }}
-                slotProps={{ textField: { size: "small" } }}
+                slotProps={{
+                  textField: { size: "small" },
+                }}
               />
             </Grid>
           </Grid>
@@ -124,6 +133,7 @@ const BasicDetails = ({}) => {
               <FormControl size="small" sx={{ width: "100%" }}>
                 <Select
                   name="sex"
+                  value={basicDetails.sex}
                   onChange={handleChange}
                   sx={{
                     width: "100%",
@@ -143,6 +153,7 @@ const BasicDetails = ({}) => {
               <FormControl size="small" sx={{ width: "100%" }}>
                 <Select
                   name="civilStatus"
+                  value={basicDetails.civilStatus}
                   onChange={handleChange}
                   sx={{
                     minHeight: "1.4rem",
@@ -158,12 +169,14 @@ const BasicDetails = ({}) => {
         </Grid>
         <Input
           name="AddressLine1"
+          value={basicDetails.AddressLine1}
           label="Permenant Address line 1 *"
           handleChange={handleChange}
           required
         />
         <Input
-          name="AddressLine1"
+          name="AddressLine2"
+          value={basicDetails.AddressLine2}
           label="Permenant Address line 2 "
           handleChange={handleChange}
         />
@@ -176,6 +189,7 @@ const BasicDetails = ({}) => {
               <FormControl size="small" sx={{ width: "100%" }}>
                 <Select
                   name="nationality"
+                  value={basicDetails.nationality}
                   onChange={handleChange}
                   sx={{
                     width: "100%",
@@ -198,6 +212,7 @@ const BasicDetails = ({}) => {
               <FormControl size="small" sx={{ width: "100%" }}>
                 <Select
                   name="religion"
+                  value={basicDetails.religion}
                   onChange={handleChange}
                   sx={{
                     minHeight: "1.4rem",
@@ -220,6 +235,7 @@ const BasicDetails = ({}) => {
                 <Select
                   name="ethnicity"
                   onChange={handleChange}
+                  value={basicDetails.ethnicity}
                   sx={{
                     minHeight: "1.4rem",
                     backgroundColor: (theme) => theme.palette.background.main,
@@ -237,14 +253,16 @@ const BasicDetails = ({}) => {
           </Grid>
         </Grid>
         <Input
-          name="mobileNo1"
+          name="mobileNo"
+          value={basicDetails.mobileNo1}
           label="Mobile No 1 *"
           handleChange={handleChange}
           required
           half
         />
         <Input
-          name="mobileNo2"
+          name="mobileNo"
+          value={basicDetails.mobileNo2}
           label="Mobile No 2 *"
           handleChange={handleChange}
           required
@@ -252,6 +270,7 @@ const BasicDetails = ({}) => {
         />
         <Input
           name="email"
+          value={basicDetails.email}
           label="Email Address *"
           handleChange={handleChange}
           required

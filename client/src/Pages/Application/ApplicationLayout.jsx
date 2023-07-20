@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   useTheme,
@@ -6,13 +6,44 @@ import {
   useMediaQuery,
   Container,
 } from "@mui/material";
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
+
+const initState = {
+  basicDetails: {
+    title: "",
+    nameWithInitials: "",
+    nameDenotedbyInit: "",
+    otherName: "",
+    nic: "",
+    dateOfBirth: null,
+    sex: "",
+    civilStatus: "",
+    AddressLine1: "",
+    AddressLine2: "",
+    nationality: "",
+    religion: "",
+    ethnicity: "",
+    mobileNo1: "",
+    mobileNo2: "",
+    email: "",
+  },
+  eduDetails: {},
+};
 
 const Application = () => {
   const theme = useTheme();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const [details, setDetails] = useState(initState);
+  const [activeStep, setActiveStep] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!location?.state?.vacancy) {
+      navigate("./home");
+    }
+  }, []);
 
   return (
     <Box
@@ -32,7 +63,7 @@ const Application = () => {
             pt: "1rem",
           }}
         >
-          Application for the post {location?.state?.title}
+          Application for the post {location?.state?.vacancy}
         </Typography>
       </div>
 
@@ -47,8 +78,13 @@ const Application = () => {
             // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
-          <Outlet />
-          <StepGuide isMobile={isMobile} />
+          <Outlet context={[location, details, setDetails, setActiveStep]} />
+          <StepGuide
+            state={location}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            isMobile={isMobile}
+          />
         </Box>
       </Container>
     </Box>
