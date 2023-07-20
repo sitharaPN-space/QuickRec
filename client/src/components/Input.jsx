@@ -12,6 +12,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Input = ({
   name,
+  value,
   label,
   handleChange,
   half,
@@ -20,6 +21,36 @@ const Input = ({
   handleShowPassword,
   size,
 }) => {
+  let inputProps = {};
+
+  if (name === "password") {
+    inputProps = {
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton onClick={handleShowPassword}>
+            {type === "password" ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          </IconButton>
+        </InputAdornment>
+      ),
+    };
+  } else if (name === "mobileNo") {
+    inputProps = {
+      startAdornment: (
+        <InputAdornment position="start">
+          <Typography
+            sx={{
+              pr: "10px",
+              borderRight: (theme) =>
+                `1px solid ${theme.palette.secondary.main}`,
+            }}
+          >
+            +94
+          </Typography>
+        </InputAdornment>
+      ),
+    };
+  }
+
   return (
     <Grid item xs={12} sm={half ? 6 : 12} sx={{ textAlign: "left" }}>
       <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
@@ -27,41 +58,12 @@ const Input = ({
       </Typography>
       <TextField
         name={name}
+        value={value}
         onChange={handleChange}
         required={required}
         fullWidth
         type={type}
-        InputProps={
-          name === "password"
-            ? {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleShowPassword}>
-                      {type === "password" ? (
-                        <VisibilityIcon />
-                      ) : (
-                        <VisibilityOffIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }
-            : name === "mobileNo" && {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Typography
-                      sx={{
-                        pr: "10px",
-                        borderRight: (theme) =>
-                          `1px solid ${theme.palette.secondary.main}`,
-                      }}
-                    >
-                      +94
-                    </Typography>
-                  </InputAdornment>
-                ),
-              }
-        }
+        InputProps={inputProps}
         sx={{
           backgroundColor: (theme) => theme.palette.background.main,
         }}
