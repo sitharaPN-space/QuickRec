@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 
-const EduDetails = () => {
+const OtherDetails = () => {
   const [details, setDetails, activeStep, setActiveStep] = useOutletContext();
 
-  useEffect(() => setActiveStep(1), []);
+  useEffect(() => setActiveStep(3), []);
 
-  return <div>EduDeatils</div>;
+  return <div>OtherDetails</div>;
 };
 
-export default EduDetails;
+export default OtherDetails;
