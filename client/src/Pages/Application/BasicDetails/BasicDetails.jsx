@@ -16,11 +16,9 @@ import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 
 const BasicDetails = ({}) => {
-  const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [state, details, setDetails, setActiveStep] = useOutletContext();
   const navigate = useNavigate();
-  const location = useLocation();
   const { basicDetails } = details;
 
   useEffect(() => setActiveStep(0), []);
@@ -253,7 +251,7 @@ const BasicDetails = ({}) => {
           </Grid>
         </Grid>
         <Input
-          name="mobileNo"
+          name="mobileNo1"
           value={basicDetails.mobileNo1}
           label="Mobile No 1 *"
           handleChange={handleChange}
@@ -261,7 +259,7 @@ const BasicDetails = ({}) => {
           half
         />
         <Input
-          name="mobileNo"
+          name="mobileNo2"
           value={basicDetails.mobileNo2}
           label="Mobile No 2 *"
           handleChange={handleChange}
@@ -280,7 +278,7 @@ const BasicDetails = ({}) => {
         {!isMobile && (
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <div style={{ textAlign: "right" }}>
-              <ButtonComp sx={{ mt: "1rem" }} onClick={() => handleNext()}>
+              <ButtonComp sx={{ mt: "1rem" }} onClick={handleNext}>
                 Next
               </ButtonComp>
             </div>
