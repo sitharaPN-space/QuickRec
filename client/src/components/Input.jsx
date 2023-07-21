@@ -33,7 +33,7 @@ const Input = ({
         </InputAdornment>
       ),
     };
-  } else if (name === "mobileNo") {
+  } else if (name.startsWith("mobileNo")) {
     inputProps = {
       startAdornment: (
         <InputAdornment position="start">
@@ -59,7 +59,10 @@ const Input = ({
       <TextField
         name={name}
         value={value}
-        onChange={handleChange}
+        onChange={(e)=>{
+          name.startsWith("mobile")?
+          (((Number(e.target.value) || e.target.value==="" )&& e.target.value.length < 10) && handleChange(e)):handleChange(e)
+        }}
         required={required}
         fullWidth
         type={type}
