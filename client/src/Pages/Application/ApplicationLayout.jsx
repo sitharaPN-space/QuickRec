@@ -28,7 +28,21 @@ const initState = {
     mobileNo2: "",
     email: "",
   },
-  eduDetails: {},
+  eduDetails: {
+    example1: "",
+    example2: "",
+    example3: "",
+  },
+  proDetails: {
+    example1: "",
+    example2: "",
+    example3: "",
+  },
+  otherDetails: {
+    example1: "",
+    example2: "",
+    example3: "",
+  },
 };
 
 const Application = () => {
