@@ -87,7 +87,7 @@ const VacancyList = () => {
     setIsNavBar(true);
   });
 
-  function handleSearch(vacancies, query) {
+  const handleSearch = (vacancies, query) => {
     const filteredVacancies = vacancies.filter((vacancy) =>
       vacancy.title
         .toLowerCase()
@@ -95,7 +95,7 @@ const VacancyList = () => {
         .some((word) => word.startsWith(...query.toLowerCase().split(" ")))
     );
     setVacancyList(query.length > 0 ? filteredVacancies : vacancies);
-  }
+  };
 
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
