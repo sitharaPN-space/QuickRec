@@ -59,9 +59,14 @@ const Input = ({
       <TextField
         name={name}
         value={value}
-        onChange={(e)=>{
-          name.startsWith("mobile")?
-          (((Number(e.target.value) || e.target.value==="" )&& e.target.value.length < 10) && handleChange(e)):handleChange(e)
+        onChange={(e) => {
+          name.startsWith("mobile")
+            ? // moblie No inputs
+              (Number(e.target.value) || e.target.value === "") &&
+              e.target.value.length < 10 &&
+              handleChange(e)
+            : // other inputs
+              handleChange(e);
         }}
         required={required}
         fullWidth
