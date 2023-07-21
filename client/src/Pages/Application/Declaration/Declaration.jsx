@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Paper,
@@ -16,25 +16,27 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 
 const Declaration = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const [state, details, setDetails, setActiveStep] = useOutletContext();
+  const [details, setDetails, setActiveStep] = useOutletContext();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const { basicDetails } = details;
+  const { declaration } = details;
 
   useEffect(() => setActiveStep(4), []);
 
   const handlePrevious = () => {
-    navigate("/application/otherDetails", state);
+    navigate("/application/otherDetails", { state });
   };
 
-  const handleNext = () => {
-    navigate("/application/declaration", state);
+  const handleSubmit = () => {
+    console.log({ state, details });
+    navigate("/home");
   };
 
   const handleChange = (e) => {
     setDetails({
       ...details,
-      basicDetails: {
-        ...basicDetails,
+      declaration: {
+        ...declaration,
         [e.target.name]: e.target.value,
       },
     });
@@ -47,15 +49,38 @@ const Declaration = ({}) => {
       }}
     >
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
-    
+        <Input
+          name="example1"
+          value={declaration.example1}
+          label="Example *"
+          handleChange={handleChange}
+          required
+        />
+        <Input
+          name="example2"
+          value={declaration.example2}
+          label="Example *"
+          handleChange={handleChange}
+          required
+        />
+        <Input
+          name="example3"
+          value={declaration.example3}
+          label="Example *"
+          handleChange={handleChange}
+          required
+        />
+        <ButtonComp
+          sx={{ m: "5rem auto", p: "1rem 0.5rem" }}
+          onClick={handleSubmit}
+        >
+          Submit Application
+        </ButtonComp>
         {!isMobile && (
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <div style={{ textAlign: "right" }}>
               <ButtonComp sx={{ mt: "1rem" }} onClick={handlePrevious}>
                 Previous
-              </ButtonComp>
-              <ButtonComp sx={{ mt: "1rem" }} onClick={handleNext}>
-                Next
               </ButtonComp>
             </div>
           </Grid>

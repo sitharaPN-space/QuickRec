@@ -28,17 +28,18 @@ const initState = {
     mobileNo2: "",
     email: "",
   },
-  eduDetails: {
-    example1: "",
-    example2: "",
-    example3: "",
-  },
+  eduDetails: [],
   proDetails: {
     example1: "",
     example2: "",
     example3: "",
   },
   otherDetails: {
+    example1: "",
+    example2: "",
+    example3: "",
+  },
+  declaration: {
     example1: "",
     example2: "",
     example3: "",
@@ -92,7 +93,7 @@ const Application = () => {
             // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
-          <Outlet context={[location, details, setDetails, setActiveStep]} />
+          <Outlet context={[details, setDetails, setActiveStep]} />
           <StepGuide
             state={location}
             activeStep={activeStep}
