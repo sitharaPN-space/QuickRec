@@ -10,7 +10,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import LinkIcon from "@mui/icons-material/Link";
-import FileUploader from "./FileUploaderComp";
+import FileUploader from "./FileUploader";
 
 const Input = ({
   name,
