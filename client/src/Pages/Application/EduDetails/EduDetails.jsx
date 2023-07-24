@@ -24,13 +24,14 @@ const initEducation = {
   startDate: null,
   endDate: null,
   grade: "",
-  upload: "",
+  upload: { name: "Choose File" },
 };
 
 const EduDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [details, setDetails, setActiveStep] = useOutletContext();
   const [education, setEducation] = useState(initEducation);
+  const [isEditing, setIsEditing] = useState(false);
   const { state } = useLocation();
   const navigate = useNavigate();
   const { eduDetails } = details;
@@ -41,8 +42,11 @@ const EduDetails = ({}) => {
     navigate("/application/basicDetails", { state });
   };
 
-  const handleNext = () => {
-    navigate("/application/proDetails", { state });
+  const handleNext = (e) => {
+    if (eduDetails.length > 0) {
+      e.preventDefault();
+      navigate("/application/proDetails", { state });
+    }
   };
 
   const handleAdd = (e) => {
@@ -52,12 +56,27 @@ const EduDetails = ({}) => {
       eduDetails: [...eduDetails, education],
     });
     setEducation(initEducation);
+    isEditing && setIsEditing(false);
   };
 
   const handleChange = (e) => {
     setEducation({
       ...education,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleEdit = (index) => {
+    setIsEditing(true);
+    setEducation(eduDetails[index]);
+    handleDelete(index);
+  };
+
+  const handleDelete = (index) => {
+    const newEduDetails = eduDetails.filter((value, i) => i !== index);
+    setDetails({
+      ...details,
+      eduDetails: newEduDetails,
     });
   };
 
@@ -187,15 +206,29 @@ const EduDetails = ({}) => {
                 </Select>
               </FormControl>
             </Grid>
-
+            <Input
+              name="upload"
+              value={education.upload.name}
+              disabled
+              label="Upload *"
+              handleChange={(e) => {
+                e.target.files[0]?.type === "application/pdf"
+                  ? handleChange({
+                      target: { name: "upload", value: e.target.files[0] },
+                    })
+                  : alert("Invalid filetype !");
+              }}
+              required
+              half
+            />
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
                 <ButtonComp sx={{ mt: "1rem" }} type="submit">
-                  Add
+                  {isEditing ? "Save" : "Add"}
                 </ButtonComp>
               </div>
             </Grid>
-            {!isMobile && (
+            {!isMobile && !isEditing && (
               <Grid item xs={12} sx={{ textAlign: "left" }}>
                 <div style={{ textAlign: "right" }}>
                   <ButtonComp
@@ -204,7 +237,11 @@ const EduDetails = ({}) => {
                   >
                     Previous
                   </ButtonComp>
-                  <ButtonComp sx={{ mt: "1rem" }} onClick={handleNext}>
+                  <ButtonComp
+                    sx={{ mt: "1rem" }}
+                    onClick={handleNext}
+                    type="submit"
+                  >
                     Next
                   </ButtonComp>
                 </div>
@@ -218,9 +255,15 @@ const EduDetails = ({}) => {
           mt: "2rem",
         }}
       >
-        {eduDetails.map((detail, i) => (
-          <DetailCard key={i} detail={detail} />
-        ))}
+        {!isEditing &&
+          eduDetails.map((detail, i) => (
+            <DetailCard
+              key={i}
+              detail={detail}
+              onDelete={() => handleDelete(i)}
+              onEdit={() => handleEdit(i)}
+            />
+          ))}
       </Paper>
     </div>
   );
