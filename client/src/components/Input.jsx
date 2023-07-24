@@ -9,6 +9,8 @@ import {
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import LinkIcon from "@mui/icons-material/Link";
+import FileUploader from "./FileUploaderComp";
 
 const Input = ({
   name,
@@ -16,6 +18,7 @@ const Input = ({
   label,
   handleChange,
   half,
+  disabled,
   type,
   required,
   handleShowPassword,
@@ -23,6 +26,10 @@ const Input = ({
 }) => {
   let inputProps = {};
 
+  // const handleFileChange = (e) => {
+  //   const fvalue = e.target;
+  //   console.log(fvalue);
+  // };
   if (name === "password") {
     inputProps = {
       endAdornment: (
@@ -49,6 +56,24 @@ const Input = ({
         </InputAdornment>
       ),
     };
+  } else if (name === "upload") {
+    inputProps = {
+      endAdornment: (
+        <InputAdornment position="end">
+          <FileUploader handleChange={handleChange}>Go</FileUploader>
+        </InputAdornment>
+      ),
+      startAdornment: (
+        <InputAdornment position="start">
+          <LinkIcon
+            sx={{
+              p: 0,
+              transform: "rotate(135deg) translate(2px,2px)",
+            }}
+          />
+        </InputAdornment>
+      ),
+    };
   }
 
   return (
@@ -70,6 +95,7 @@ const Input = ({
         }}
         required={required}
         fullWidth
+        disabled={disabled}
         type={type}
         InputProps={inputProps}
         sx={{
