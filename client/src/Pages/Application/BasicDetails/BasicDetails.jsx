@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -88,26 +88,34 @@ const BasicDetails = ({}) => {
             label="Other Names"
             handleChange={handleChange}
           />
-          <Grid item xs={12} sx={{ textAlign: "left" }}>
-            <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
-              <Input
-                name="nic"
-                value={basicDetails.nic}
-                label="National identity Card (NIC) *"
-                handleChange={handleChange}
-                required
-                half
-              />
+          {/* <Grid item xs={12} sx={{ textAlign: "left" }}>
+            <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}> */}
+          <Input
+            name="nic"
+            value={basicDetails.nic}
+            label="National identity Card (NIC) *"
+            handleChange={handleChange}
+            required
+            half
+          />
 
-              <Grid item xs={12} sm={6}>
-                <Typography
+          {/* <Grid item xs={12} sm={6}>  */}
+          <Input
+            name="dateOfBirth"
+            type="date"
+            value={basicDetails.dateOfBirth}
+            label="Date of Birth *"
+            handleChange={handleChange}
+            required
+            half
+          />
+          {/* <Typography
                   sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                 >
                   Date of Birth *
                 </Typography>
                 <DatePicker
                   value={basicDetails.dateOfBirth}
-                  required
                   onChange={(newValue) => {
                     handleChange({
                       target: {
@@ -124,10 +132,10 @@ const BasicDetails = ({}) => {
                   slotProps={{
                     textField: { size: "small" },
                   }}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
+                /> */}
+          {/* </Grid> */}
+          {/* </Grid>
+          </Grid> */}
 
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
@@ -140,6 +148,7 @@ const BasicDetails = ({}) => {
                 <FormControl size="small" sx={{ width: "100%" }}>
                   <Select
                     name="sex"
+                    required
                     value={basicDetails.sex}
                     onChange={handleChange}
                     sx={{
@@ -162,6 +171,7 @@ const BasicDetails = ({}) => {
                 <FormControl size="small" sx={{ width: "100%" }}>
                   <Select
                     name="civilStatus"
+                    required
                     value={basicDetails.civilStatus}
                     onChange={handleChange}
                     sx={{
@@ -200,6 +210,7 @@ const BasicDetails = ({}) => {
                 <FormControl size="small" sx={{ width: "100%" }}>
                   <Select
                     name="nationality"
+                    required
                     value={basicDetails.nationality}
                     onChange={handleChange}
                     sx={{
@@ -225,6 +236,7 @@ const BasicDetails = ({}) => {
                 <FormControl size="small" sx={{ width: "100%" }}>
                   <Select
                     name="religion"
+                    required
                     value={basicDetails.religion}
                     onChange={handleChange}
                     sx={{
@@ -249,6 +261,7 @@ const BasicDetails = ({}) => {
                 <FormControl size="small" sx={{ width: "100%" }}>
                   <Select
                     name="ethnicity"
+                    required
                     onChange={handleChange}
                     value={basicDetails.ethnicity}
                     sx={{
