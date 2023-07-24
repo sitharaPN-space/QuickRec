@@ -6,7 +6,12 @@ import {
   useMediaQuery,
   Container,
 } from "@mui/material";
-import { useLocation, Outlet, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  Outlet,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
 
 const initState = {
@@ -16,7 +21,7 @@ const initState = {
     nameDenotedbyInit: "",
     otherName: "",
     nic: "",
-    dateOfBirth: null,
+    dateOfBirth: "",
     sex: "",
     civilStatus: "",
     AddressLine1: "",
@@ -53,11 +58,13 @@ const Application = () => {
   const [details, setDetails] = useState(initState);
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
+  const [isNavbar, setIsNavBar] = useOutletContext();
 
   useEffect(() => {
     if (!location?.state?.vacancy) {
       navigate("./home");
     }
+    setIsNavBar(true);
   }, []);
 
   return (
