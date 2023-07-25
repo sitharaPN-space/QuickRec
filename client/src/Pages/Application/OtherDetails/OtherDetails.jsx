@@ -13,13 +13,16 @@ import {
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
+import { setApplicationData } from "../../../state/UserApplication";
+import { useDispatch, useSelector } from "react-redux";
 
 const OtherDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [details, setDetails, setActiveStep] = useOutletContext();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { otherDetails } = details;
+  const dispatch = useDispatch();
+  const { otherAchievements } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(3), []);
 
@@ -34,8 +37,8 @@ const OtherDetails = ({}) => {
   const handleChange = (e) => {
     setDetails({
       ...details,
-      otherDetails: {
-        ...otherDetails,
+      otherAchievements: {
+        ...otherAchievements,
         [e.target.name]: e.target.value,
       },
     });
@@ -50,21 +53,21 @@ const OtherDetails = ({}) => {
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
         <Input
           name="example1"
-          value={otherDetails.example1}
+          value={otherAchievements.example1}
           label="Example *"
           handleChange={handleChange}
           required
         />
         <Input
           name="example2"
-          value={otherDetails.example2}
+          value={otherAchievements.example2}
           label="Example *"
           handleChange={handleChange}
           required
         />
         <Input
           name="example3"
-          value={otherDetails.example3}
+          value={otherAchievements.example3}
           label="Example *"
           handleChange={handleChange}
           required

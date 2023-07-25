@@ -26,7 +26,15 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
-        <Route path="/" element={<Navigate to="/signIn" replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={localStorage.getItem("profile").result ? "/home" : "/signIn"}
+              replace
+            />
+          }
+        />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/home" element={<VacancyList />} />

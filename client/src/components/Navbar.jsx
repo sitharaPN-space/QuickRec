@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -25,6 +25,13 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const navigate = useNavigate();
   const [active, setActive] = useState("");
   const user = useSelector((state) => state.userContext.data);
+
+  useEffect(() => {
+    if (!localStorage.getItem("profile").result) {
+      navigate("/");
+    }
+  }, []);
+
   const handleClick = (key) => {
     setActive(key);
   };
@@ -32,7 +39,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const handleLogOut = () => {
     localStorage.clear();
     navigate("/");
-    dispatch(logOut);
+    dispatch(logOut());
   };
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
@@ -132,7 +139,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
           margin: "10px 20px 0 20px",
         }}
       >
-        <Typography>Welcome {user?.result.UserName} !</Typography>
+        <Typography>Welcome {user?.result?.UserName} !</Typography>
       </div>
     </div>
   );

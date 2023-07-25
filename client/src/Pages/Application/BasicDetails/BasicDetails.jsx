@@ -14,13 +14,17 @@ import Input from "../../../components/Input";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
+import { DateField } from "@mui/x-date-pickers";
+import { setApplicationData } from "../../../state/UserApplication";
+import { useDispatch, useSelector } from "react-redux";
 
 const BasicDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const [details, setDetails, setActiveStep] = useOutletContext();
+  const [setActiveStep] = useOutletContext();
   const { state } = useLocation();
+  const dispatch = useDispatch();
+  const { basicDetails } = useSelector((state) => state.userApplication);
   const navigate = useNavigate();
-  const { basicDetails } = details;
 
   useEffect(() => setActiveStep(0), []);
 
@@ -28,17 +32,16 @@ const BasicDetails = ({}) => {
     e.preventDefault();
     navigate("/application/eduDetails", { state });
   };
-
   const handleChange = (e) => {
-    setDetails({
-      ...details,
-      basicDetails: {
-        ...basicDetails,
-        [e.target.name]: e.target.value,
-      },
-    });
+    dispatch(
+      setApplicationData({
+        basicDetails: {
+          ...basicDetails,
+          [e.target.name]: e.target.value,
+        },
+      })
+    );
   };
-
   return (
     <Paper
       sx={{
@@ -88,19 +91,19 @@ const BasicDetails = ({}) => {
             label="Other Names"
             handleChange={handleChange}
           />
-          {/* <Grid item xs={12} sx={{ textAlign: "left" }}>
-            <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}> */}
-          <Input
-            name="nic"
-            value={basicDetails.nic}
-            label="National identity Card (NIC) *"
-            handleChange={handleChange}
-            required
-            half
-          />
+          <Grid item xs={12} sx={{ textAlign: "left" }}>
+            <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
+              <Input
+                name="nic"
+                value={basicDetails.nic}
+                label="National identity Card (NIC) *"
+                handleChange={handleChange}
+                required
+                half
+              />
 
-          {/* <Grid item xs={12} sm={6}>  */}
-          <Input
+              <Grid item xs={12} sm={6}>
+                {/* <Input
             name="dateOfBirth"
             type="date"
             value={basicDetails.dateOfBirth}
@@ -108,14 +111,15 @@ const BasicDetails = ({}) => {
             handleChange={handleChange}
             required
             half
-          />
-          {/* <Typography
+          /> */}
+                <Typography
                   sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                 >
                   Date of Birth *
                 </Typography>
-                <DatePicker
+                <DateField
                   value={basicDetails.dateOfBirth}
+                  required
                   onChange={(newValue) => {
                     handleChange({
                       target: {
@@ -132,10 +136,10 @@ const BasicDetails = ({}) => {
                   slotProps={{
                     textField: { size: "small" },
                   }}
-                /> */}
-          {/* </Grid> */}
-          {/* </Grid>
-          </Grid> */}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
 
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>

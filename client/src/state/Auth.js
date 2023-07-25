@@ -1,9 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
+import jwt from "jwt-decode";
+
+const token = localStorage.getItem("profile");
+let decodedData;
+try {
+  decodedData = await jwt(token);
+} catch {
+  decodedData = null;
+}
 
 const userSlice = createSlice({
   name: "userContext",
   initialState: {
-    data: null,
+    data: { result: decodedData, token: token },
     error: null,
   },
   reducers: {

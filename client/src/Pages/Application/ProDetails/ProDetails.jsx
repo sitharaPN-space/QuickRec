@@ -13,6 +13,8 @@ import {
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
+import { setApplicationData } from "../../../state/UserApplication";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -20,7 +22,8 @@ const ProDetails = ({}) => {
   const { state } = useLocation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { proDetails } = details;
+  const dispatch = useDispatch();
+  const { experience } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(2), []);
 
@@ -35,8 +38,8 @@ const ProDetails = ({}) => {
   const handleChange = (e) => {
     setDetails({
       ...details,
-      proDetails: {
-        ...proDetails,
+      experience: {
+        ...experience,
         [e.target.name]: e.target.value,
       },
     });
@@ -51,21 +54,21 @@ const ProDetails = ({}) => {
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
         <Input
           name="example1"
-          value={proDetails.example1}
+          value={experience.example1}
           label="Example *"
           handleChange={handleChange}
           required
         />
         <Input
           name="example2"
-          value={proDetails.example2}
+          value={experience.example2}
           label="Example *"
           handleChange={handleChange}
           required
         />
         <Input
           name="example3"
-          value={proDetails.example3}
+          value={experience.example3}
           label="Example *"
           handleChange={handleChange}
           required

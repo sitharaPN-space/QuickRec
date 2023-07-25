@@ -14,48 +14,10 @@ import {
 } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
 
-const initState = {
-  basicDetails: {
-    title: "",
-    nameWithInitials: "",
-    nameDenotedbyInit: "",
-    otherName: "",
-    nic: "",
-    dateOfBirth: "",
-    sex: "",
-    civilStatus: "",
-    AddressLine1: "",
-    AddressLine2: "",
-    nationality: "",
-    religion: "",
-    ethnicity: "",
-    mobileNo1: "",
-    mobileNo2: "",
-    email: "",
-  },
-  eduDetails: [],
-  proDetails: {
-    example1: "",
-    example2: "",
-    example3: "",
-  },
-  otherDetails: {
-    example1: "",
-    example2: "",
-    example3: "",
-  },
-  declaration: {
-    example1: "",
-    example2: "",
-    example3: "",
-  },
-};
-
 const Application = () => {
   const theme = useTheme();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const [details, setDetails] = useState(initState);
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const [isNavbar, setIsNavBar] = useOutletContext();
@@ -100,7 +62,7 @@ const Application = () => {
             // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
-          <Outlet context={[details, setDetails, setActiveStep]} />
+          <Outlet context={[setActiveStep]} />
           <StepGuide
             state={location}
             activeStep={activeStep}

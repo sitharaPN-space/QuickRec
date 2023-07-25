@@ -15,6 +15,8 @@ import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
+import { setApplicationData } from "../../../state/UserApplication";
+import { useDispatch, useSelector } from "react-redux";
 
 const initEducation = {
   type: "",
@@ -34,7 +36,8 @@ const EduDetails = ({}) => {
   const [isEditing, setIsEditing] = useState(false);
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { eduDetails } = details;
+  const dispatch = useDispatch();
+  const { eduQualification } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(1), []);
 
@@ -43,7 +46,7 @@ const EduDetails = ({}) => {
   };
 
   const handleNext = (e) => {
-    if (eduDetails.length > 0) {
+    if (eduQualification.length > 0) {
       e.preventDefault();
       navigate("/application/proDetails", { state });
     }
@@ -51,10 +54,11 @@ const EduDetails = ({}) => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    setDetails({
-      ...details,
-      eduDetails: [...eduDetails, education],
-    });
+    dispatch(
+      setApplicationData({
+        eduQualification: [...eduQualification, education],
+      })
+    );
     setEducation(initEducation);
     isEditing && setIsEditing(false);
   };
@@ -68,15 +72,17 @@ const EduDetails = ({}) => {
 
   const handleEdit = (index) => {
     setIsEditing(true);
-    setEducation(eduDetails[index]);
+    setEducation(eduQualification[index]);
     handleDelete(index);
   };
 
   const handleDelete = (index) => {
-    const newEduDetails = eduDetails.filter((value, i) => i !== index);
+    const newEduQualification = eduQualification.filter(
+      (value, i) => i !== index
+    );
     setDetails({
       ...details,
-      eduDetails: newEduDetails,
+      eduQualification: newEduQualification,
     });
   };
 
@@ -256,7 +262,7 @@ const EduDetails = ({}) => {
         }}
       >
         {!isEditing &&
-          eduDetails.map((detail, i) => (
+          eduQualification.map((detail, i) => (
             <DetailCard
               key={i}
               detail={detail}

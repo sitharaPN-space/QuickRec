@@ -6,10 +6,12 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 import authReducer from "./state/Auth";
+import userApplicationReducer from "./state/UserApplication";
 
 const store = configureStore({
   reducer: {
     userContext: authReducer,
+    userApplication: userApplicationReducer,
   },
 });
 
