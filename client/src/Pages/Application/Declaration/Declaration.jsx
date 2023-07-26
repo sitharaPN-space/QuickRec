@@ -55,25 +55,49 @@ const Declaration = ({}) => {
     >
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
         <Input
-          name="example1"
-          value={attachments.example1}
-          label="Example *"
-          handleChange={handleChange}
+          name="cv"
+          value={attachments.cv.name}
+          label="You CV *"
+          type="file"
+          handleChange={(e) => {
+            e.target.files[0]?.type === "application/pdf"
+              ? handleChange({
+                  target: { name: "upload", value: e.target.files[0] },
+                })
+              : alert("Invalid filetype !");
+          }}
           required
+          half
         />
         <Input
-          name="example2"
-          value={attachments.example2}
-          label="Example *"
-          handleChange={handleChange}
+          name="nic"
+          value={attachments.nic.name}
+          label="Copy of NIC *"
+          type="file"
+          handleChange={(e) => {
+            e.target.files[0]?.type === "application/pdf"
+              ? handleChange({
+                  target: { name: "upload", value: e.target.files[0] },
+                })
+              : alert("Invalid filetype !");
+          }}
           required
+          half
         />
         <Input
-          name="example3"
-          value={attachments.example3}
-          label="Example *"
-          handleChange={handleChange}
+          name="birthCertificate"
+          value={attachments.birthCertificate}
+          label="Birth Certificate *"
+          type="file"
+          handleChange={(e) => {
+            e.target.files[0]?.type === "application/pdf"
+              ? handleChange({
+                  target: { name: "upload", value: e.target.files[0] },
+                })
+              : alert("Invalid filetype !");
+          }}
           required
+          half
         />
         <ButtonComp
           sx={{ m: "5rem auto", p: "1rem 0.5rem" }}

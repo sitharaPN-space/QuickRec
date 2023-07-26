@@ -10,7 +10,7 @@ import {
   FormControl,
   useMediaQuery,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateField } from "@mui/x-date-pickers/DateField";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
@@ -31,7 +31,7 @@ const initEducation = {
 
 const EduDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const [details, setDetails, setActiveStep] = useOutletContext();
+  const [setActiveStep] = useOutletContext();
   const [education, setEducation] = useState(initEducation);
   const [isEditing, setIsEditing] = useState(false);
   const { state } = useLocation();
@@ -80,10 +80,11 @@ const EduDetails = ({}) => {
     const newEduQualification = eduQualification.filter(
       (value, i) => i !== index
     );
-    setDetails({
-      ...details,
-      eduQualification: newEduQualification,
-    });
+    dispatch(
+      setApplicationData({
+        eduQualification: newEduQualification,
+      })
+    );
   };
 
   return (
@@ -116,7 +117,7 @@ const EduDetails = ({}) => {
             <Input
               name="institute"
               value={education.institute}
-              label="University/ Institute/ School *"
+              label="University / Institute / School *"
               handleChange={handleChange}
               required
             />
@@ -140,16 +141,17 @@ const EduDetails = ({}) => {
                   <Typography
                     sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                   >
-                    Start Date
+                    Start Date *
                   </Typography>
-                  <DatePicker
+                  <DateField
                     value={education.startDate}
+                    format="MMMM-YYYY"
+                    required
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "startDate",
                           value: newValue,
-                          // value: newValue.$d.toDateString(),
                         },
                       });
                     }}
@@ -166,16 +168,17 @@ const EduDetails = ({}) => {
                   <Typography
                     sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                   >
-                    End Date
+                    End Date *
                   </Typography>
-                  <DatePicker
+                  <DateField
                     value={education.endDate}
+                    format="MMMM-YYYY"
+                    required
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "endDate",
                           value: newValue,
-                          // value: newValue.$d.toDateString(),
                         },
                       });
                     }}
@@ -215,7 +218,7 @@ const EduDetails = ({}) => {
             <Input
               name="upload"
               value={education.upload.name}
-              disabled
+              type="file"
               label="Upload *"
               handleChange={(e) => {
                 e.target.files[0]?.type === "application/pdf"
@@ -262,14 +265,19 @@ const EduDetails = ({}) => {
         }}
       >
         {!isEditing &&
-          eduQualification.map((detail, i) => (
-            <DetailCard
-              key={i}
-              detail={detail}
-              onDelete={() => handleDelete(i)}
-              onEdit={() => handleEdit(i)}
-            />
-          ))}
+          eduQualification.map(
+            (detail, i) => (
+              console.log(detail),
+              (
+                <DetailCard
+                  key={i}
+                  detail={detail}
+                  onDelete={() => handleDelete(i)}
+                  onEdit={() => handleEdit(i)}
+                />
+              )
+            )
+          )}
       </Paper>
     </div>
   );

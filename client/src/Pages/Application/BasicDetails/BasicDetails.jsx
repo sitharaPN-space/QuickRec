@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Input from "../../../components/Input";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { DateField } from "@mui/x-date-pickers";
@@ -125,7 +124,6 @@ const BasicDetails = ({}) => {
                       target: {
                         name: "dateOfBirth",
                         value: newValue,
-                        // value: newValue.$d.toDateString(),
                       },
                     });
                   }}

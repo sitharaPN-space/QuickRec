@@ -13,6 +13,7 @@ const store = configureStore({
     userContext: authReducer,
     userApplication: userApplicationReducer,
   },
+  middleware: [],
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

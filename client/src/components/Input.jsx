@@ -19,6 +19,9 @@ const Input = ({
   handleChange,
   half,
   disabled,
+  multiline,
+  minRows,
+  maxRows,
   type,
   required,
   handleShowPassword,
@@ -56,7 +59,7 @@ const Input = ({
         </InputAdornment>
       ),
     };
-  } else if (name === "upload") {
+  } else if (type === "file") {
     inputProps = {
       endAdornment: (
         <InputAdornment position="end">
@@ -95,8 +98,11 @@ const Input = ({
         }}
         required={required}
         fullWidth
-        disabled={disabled}
-        type={type}
+        disabled={type === "file" ? true : disabled}
+        multiline={multiline}
+        minRows={minRows}
+        maxRows={maxRows}
+        type={type === "file" ? null : type}
         InputProps={inputProps}
         sx={{
           backgroundColor: (theme) => theme.palette.background.main,

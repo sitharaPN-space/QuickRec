@@ -16,12 +16,12 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme";
 import BasicDetails from "./Pages/Application/BasicDetails/BasicDetails";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { useSelector } from "react-redux";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EduDetails from "./Pages/Application/EduDetails/EduDetails";
 import ProDetails from "./Pages/Application/ProDetails/ProDetails";
 import Declaration from "./Pages/Application/Declaration/Declaration";
 import OtherDetails from "./Pages/Application/OtherDetails/OtherDetails";
-import { useSelector } from "react-redux";
 
 function App() {
   const user = useSelector((state) => state.userContext.data?.result);
@@ -30,12 +30,7 @@ function App() {
       <Route element={<Layout />}>
         <Route
           path="/"
-          element={
-            <Navigate
-              to={user ? "/home" : "/signIn"}
-              replace
-            />
-          }
+          element={<Navigate to={user ? "/home" : "/signIn"} replace />}
         />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />

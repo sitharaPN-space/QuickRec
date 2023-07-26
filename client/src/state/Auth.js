@@ -2,16 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import jwt from "jwt-decode";
 
 const token = localStorage.getItem("profile");
-let decodedData;
+let decodedData = null;
 try {
-  let currentDate = new Date();
-  
   const decodedToken = await jwt(token);
-  console.log(decodedToken.exp * 1000 , currentDate.getTime())
-  if (decodedToken.exp * 1000 > currentDate.getTime()) {
+  if (decodedToken.exp * 1000 > Date.now()) {
     decodedData = decodedToken;
-  } else {
-    decodedData = null;
   }
 } catch {
   decodedData = null;
