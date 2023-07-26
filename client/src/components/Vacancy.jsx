@@ -19,7 +19,8 @@ const Vacancy = ({ detail }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleApply = () => {
+  const handleApply = (e) => {
+    e.preventDefault();
     navigate("/application/basicDetails", {
       state: { vacancyId: detail.vacancyId, vacancy: detail.title },
     });
@@ -133,7 +134,10 @@ const Vacancy = ({ detail }) => {
               Applied ({detail.NoOfApplied})
             </Typography>
           </div>
-          <ButtonComp sx={{ marginLeft: "auto" }} onClick={() => handleApply()}>
+          <ButtonComp
+            sx={{ marginLeft: "auto" }}
+            onClick={(e) => handleApply(e)}
+          >
             Apply
           </ButtonComp>
         </div>

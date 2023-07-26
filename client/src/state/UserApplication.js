@@ -16,6 +16,16 @@ const userApplication = createSlice({
     otherAchievements: [],
     attachments: [],
   },
+  reducers: {
+    setEducationQulifications(state, action) {
+      state.eduQualification = [...state.eduQualification, action.payload];
+    },
+    setProfessionalQulifications(state, action) {
+      state.experience = [...state.experience, action.payload];
+    },
+  },
 });
 
+export const { setEducationQulifications, setProfessionalQulifications } =
+  userApplication.actions;
 export default userApplication.reducer;

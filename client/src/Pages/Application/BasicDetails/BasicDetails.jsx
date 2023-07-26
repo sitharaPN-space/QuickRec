@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -13,7 +13,9 @@ import {
 import Input from "../../../components/Input";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonComp from "../../../components/ButtonComp";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import StepperButton from "../../../components/StepperButton";
 
 const initState = {
   title: "",
@@ -33,13 +35,18 @@ const initState = {
   email: "",
 };
 const BasicDetails = ({}) => {
+  const [currentStep, setCurrentStep] = useOutletContext();
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [basicDetails, setBasicDetails] = useState(initState);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleNext = () => {
+  useEffect(() => {
+    setCurrentStep(0);
+  }, []);
+  const handleNext = (e) => {
+    // e.preventDefault();
     navigate("/application/eduDetails");
   };
 
@@ -259,12 +266,8 @@ const BasicDetails = ({}) => {
           type="email"
         />
         {!isMobile && (
-          <Grid item xs={12} sx={{ textAlign: "left" }}>
-            <div style={{ textAlign: "right" }}>
-              <ButtonComp sx={{ mt: "1rem" }} onClick={() => handleNext()}>
-                Next
-              </ButtonComp>
-            </div>
+          <Grid item xs={12} sx={{ textAlign: "right" }}>
+            <StepperButton handleClick={(e) => handleNext()} next />
           </Grid>
         )}
       </Grid>

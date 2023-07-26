@@ -11,6 +11,7 @@ import {
   MobileStepper,
 } from "@mui/material";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   "Basic Details",
@@ -20,10 +21,9 @@ const steps = [
   "Declaration",
 ];
 
-const StepGuide = ({ isMobile }) => {
-  const [activeStep, setActiveStep] = React.useState(0);
-
+const StepGuide = ({ isMobile, activeStep = 0, setActiveStep }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -33,12 +33,23 @@ const StepGuide = ({ isMobile }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleStep = (index) => {};
+  const handleStep = (index) => {
+    // switch (index) {
+    //   case 0:
+    //     navigate("/application/basicDetails");
+    //     break;
+    //   case 1:
+    //     navigate("/application/eduDetails");
+    //     break;
+    //   default:
+    //     break;
+    // }
+  };
   return (
     <Paper
       sx={{
         display: "flex",
-        minWidth: "180px",
+        minWidth: "200px",
         maxHeight: "600px",
         justifyContent: "center",
       }}
@@ -82,7 +93,6 @@ const StepGuide = ({ isMobile }) => {
         />
       ) : (
         <Stepper
-          nonLinear
           activeStep={activeStep}
           orientation="vertical"
           sx={{
@@ -123,7 +133,11 @@ const StepGuide = ({ isMobile }) => {
               }}
             >
               <StepButton color="inherit" onClick={handleStep(index)}>
-                {label}
+                <Typography
+                  color={index === activeStep && theme.palette.primary[500]}
+                >
+                  {label}
+                </Typography>
               </StepButton>
             </Step>
           ))}

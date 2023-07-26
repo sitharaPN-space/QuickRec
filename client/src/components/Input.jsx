@@ -15,13 +15,20 @@ const Input = ({
   label,
   handleChange,
   half,
+  quarter,
   type,
   required,
   handleShowPassword,
   size,
+  multiline,
 }) => {
   return (
-    <Grid item xs={12} sm={half ? 6 : 12} sx={{ textAlign: "left" }}>
+    <Grid
+      item
+      xs={12}
+      sm={half ? 6 : quarter ? 4 : 12}
+      sx={{ textAlign: "left" }}
+    >
       <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
         {label}
       </Typography>
@@ -31,6 +38,8 @@ const Input = ({
         required={required}
         fullWidth
         type={type}
+        multiline={multiline}
+        rows={multiline && 4}
         InputProps={
           name === "password"
             ? {

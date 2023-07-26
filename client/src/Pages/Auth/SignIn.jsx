@@ -64,6 +64,7 @@ const SignIn = () => {
     const successData = { result: result, token: token };
     try {
       dispatch(getUserDataOnSuccess(successData));
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }

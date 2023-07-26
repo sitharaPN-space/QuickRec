@@ -17,80 +17,60 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import EducationDetail from "../../../components/EduComponent";
+import ProfComponent from "../../../components/ProfComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { setEducationQulifications } from "../../../state/UserApplication";
-import moment from "moment";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { setProfessionalQulifications } from "../../../state/UserApplication";
 
-const initEduDetail = {
-  educationType: "",
-  instituteName: "",
-  qualification: "",
-  fieldOfStudy: "",
+const initProfDetail = {
+  title: "",
+  organization: "",
   startDate: "",
   endDate: "",
-  grade: "",
+  description: "",
   attachement: "",
 };
 
 const detail = {
-  educationType: "Master",
-  instituteName: "University of Peradeniya",
-  qualification: "Msc in Engineering",
-  fieldOfStudy: "Cloud Computing",
+  title: "Systems Engineer",
+  organization: "National Water Supply & Drainage Board",
   startDate: "Jan 2017",
   endDate: "Feb 2023",
-  grade: "second upper",
+  description:
+    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain.",
   attachement: "",
 };
 
-const eduTypes = [
-  { id: "1", description: "Doctoral Degree" },
-  { id: "2", description: "Master" },
-  { id: "3", description: "Postgraduate Certificate" },
-  { id: "4", description: "Postgraduate Diploma" },
-  { id: "5", description: "Bachelors" },
-  { id: "6", description: "Diploma" },
-  { id: "7", description: "Certificate" },
-  { id: "8", description: "Advanced Level" },
-  { id: "9", description: "Ordinary Level" },
-];
-
-const EduDetails = () => {
+const ProfDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [eduDetail, setEduDetail] = useState(initEduDetail);
+  const [profDetail, setProfDetail] = useState(initProfDetail);
   // const [eduDetailsList, setEduDetailsList] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const eduDetailsList = useSelector(
-    (state) => state.userApplication.eduQualification
+  const profDetailsList = useSelector(
+    (state) => state.userApplication.experience
   );
 
   useEffect(() => {
-    setCurrentStep(1);
-    dispatch(setEducationQulifications(detail));
-    console.log("EFFECTS");
+    setCurrentStep(2);
+    dispatch(setProfessionalQulifications(detail));
   }, []);
 
   // useEffect(() => {}, [eduDetailsList]);
 
   const handleChange = (e) => {
-    setEduDetail({ ...eduDetail, [e.target.name]: e.target.value });
+    setProfDetail({ ...profDetail, [e.target.name]: e.target.value });
   };
 
   const handleAddDetail = () => {
-    console.log(eduDetail);
-    dispatch(setEducationQulifications(eduDetail));
+    console.log(profDetail);
+    dispatch(setProfessionalQulifications(profDetail));
   };
 
-  const handleNext = (e) => {
-    navigate("/application/profDetails");
-  };
+  const handleNext = (e) => {};
 
   const handleBack = () => {
-    navigate("/application/basicDetails");
+    navigate("/application/eduDetails");
   };
   return (
     <div>
@@ -101,48 +81,15 @@ const EduDetails = () => {
         }}
       >
         <Grid container spacing={2} sx={{ p: "1.5rem" }}>
-          <Grid item xs={12} sx={{ textAlign: "left" }}>
-            <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-              Type of Education *
-            </Typography>
-            <FormControl size="small">
-              <Select
-                name="educationType"
-                onChange={handleChange}
-                sx={{
-                  minWidth: "140px",
-                  minHeight: "1.4rem",
-                  backgroundColor: (theme) => theme.palette.background.main,
-                }}
-              >
-                {eduTypes.map((eduType, index) => (
-                  <MenuItem
-                    // name="educationType"
-                    value={eduType.description}
-                    key={eduType.id}
-                    // onChange={handleChange}
-                  >
-                    {eduType.description}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
           <Input
-            name="instituteName"
-            label="University/ Institute/ School *"
+            name="title"
+            label="Title/ Role *"
             handleChange={handleChange}
             required
           />
           <Input
-            name="qualification"
-            label="Name of Qualification *"
-            handleChange={handleChange}
-            required
-          />
-          <Input
-            name="fieldOfStudy"
-            label="Field of Study *"
+            name="organization"
+            label="Organization *"
             handleChange={handleChange}
             required
           />
@@ -160,8 +107,8 @@ const EduDetails = () => {
                   // value={moment(eduDetail.startDate).format("MMM yyyy")}
                   // value={eduDetail?.startDate}
                   onChange={(newValue) =>
-                    setEduDetail({
-                      ...eduDetail,
+                    setProfDetail({
+                      ...profDetail,
                       startDate: newValue?.$d,
                     })
                   }
@@ -186,8 +133,8 @@ const EduDetails = () => {
                   // formatDate={(date) => moment(date).format("DD-MM-YYYY")}
                   // value={eduDetail?.endDate}
                   onChange={(newValue) => {
-                    setEduDetail({
-                      ...eduDetail,
+                    setProfDetail({
+                      ...profDetail,
                       endDate: newValue?.$d,
                     });
                   }}
@@ -202,17 +149,12 @@ const EduDetails = () => {
             </Grid>
           </Grid>
           <Input
-            name="grade"
-            label="Grade *"
+            name="description"
+            label="Description"
             handleChange={handleChange}
-            required
-            quarter
+            multiline
           />
-          <Grid
-            item
-            sm={8}
-            sx={{ display: isMobile && "none", textAlign: "left" }}
-          ></Grid>
+
           <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
             <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
               Upload your Certificate
@@ -241,12 +183,12 @@ const EduDetails = () => {
         // </Grid>
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {eduDetailsList.map((detail, index) => {
-          return <EducationDetail key={index} eduDetail={detail} />;
+        {profDetailsList.map((detail, index) => {
+          return <ProfComponent key={index} profDetail={detail} />;
         })}
       </Box>
     </div>
   );
 };
 
-export default EduDetails;
+export default ProfDetails;

@@ -11,6 +11,7 @@ import StepGuide from "../../components/StepGuide";
 
 const Application = () => {
   const theme = useTheme();
+  const [currentStep, setCurrentStep] = React.useState(0);
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 600px)");
 
@@ -47,8 +48,12 @@ const Application = () => {
             // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
-          <Outlet />
-          <StepGuide isMobile={isMobile} />
+          <Outlet context={[currentStep, setCurrentStep]} />
+          <StepGuide
+            isMobile={isMobile}
+            activeStep={currentStep}
+            setActiveStep={setCurrentStep}
+          />
         </Box>
       </Container>
     </Box>
