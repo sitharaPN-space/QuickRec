@@ -21,8 +21,10 @@ import EduDetails from "./Pages/Application/EduDetails/EduDetails";
 import ProDetails from "./Pages/Application/ProDetails/ProDetails";
 import Declaration from "./Pages/Application/Declaration/Declaration";
 import OtherDetails from "./Pages/Application/OtherDetails/OtherDetails";
+import { useSelector } from "react-redux";
 
 function App() {
+  const user = useSelector((state) => state.userContext.data?.result);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
@@ -30,7 +32,7 @@ function App() {
           path="/"
           element={
             <Navigate
-              to={localStorage.getItem("profile").result ? "/home" : "/signIn"}
+              to={user ? "/home" : "/signIn"}
               replace
             />
           }

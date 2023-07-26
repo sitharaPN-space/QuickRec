@@ -27,7 +27,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const user = useSelector((state) => state.userContext.data);
 
   useEffect(() => {
-    if (!localStorage.getItem("profile").result) {
+    if (!user?.result) {
       navigate("/");
     }
   }, []);
@@ -38,8 +38,8 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
 
   const handleLogOut = () => {
     localStorage.clear();
-    navigate("/");
     dispatch(logOut());
+    navigate("/");
   };
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>

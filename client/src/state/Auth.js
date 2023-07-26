@@ -4,7 +4,15 @@ import jwt from "jwt-decode";
 const token = localStorage.getItem("profile");
 let decodedData;
 try {
-  decodedData = await jwt(token);
+  let currentDate = new Date();
+  
+  const decodedToken = await jwt(token);
+  console.log(decodedToken.exp * 1000 , currentDate.getTime())
+  if (decodedToken.exp * 1000 > currentDate.getTime()) {
+    decodedData = decodedToken;
+  } else {
+    decodedData = null;
+  }
 } catch {
   decodedData = null;
 }

@@ -45,7 +45,6 @@ const SignIn = () => {
     try {
       const data = await api.signin(loginData);
       const successData = { result: data.result, token: data.token };
-      console.log(data.token);
       dispatch(getUserDataOnSuccess(successData));
       localStorage.setItem("profile", data.token);
       navigate("/home");
