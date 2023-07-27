@@ -108,17 +108,17 @@ const ProDetails = ({}) => {
                   <Typography
                     sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                   >
-                    Start Date
+                    Start Date *
                   </Typography>
                   <DateField
-                    value={JSON.parse(experienceDetails.startDate)}
+                    value={experienceDetails.startDate}
                     required
                     format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "startDate",
-                          value: JSON.stringify(newValue),
+                          value: newValue,
                         },
                       });
                     }}
@@ -135,17 +135,17 @@ const ProDetails = ({}) => {
                   <Typography
                     sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                   >
-                    End Date
+                    End Date *
                   </Typography>
                   <DateField
-                    value={JSON.parse(experienceDetails.endDate)}
+                    value={experienceDetails.endDate}
                     required
                     format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "endDate",
-                          value: JSON.stringify(newValue),
+                          value: newValue,
                         },
                       });
                     }}
@@ -163,7 +163,7 @@ const ProDetails = ({}) => {
             <Input
               name="description"
               value={experienceDetails.description}
-              label="Description"
+              label="Description *"
               handleChange={handleChange}
               size="medium"
               multiline
@@ -174,6 +174,7 @@ const ProDetails = ({}) => {
               name="upload"
               value={experienceDetails.upload.name}
               disabled
+              type="file"
               label="Upload *"
               handleChange={(e) => {
                 e.target.files[0]?.type === "application/pdf"

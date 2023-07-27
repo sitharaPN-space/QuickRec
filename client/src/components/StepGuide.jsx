@@ -83,7 +83,6 @@ const StepGuide = ({ state, isMobile, activeStep, setActiveStep }) => {
         />
       ) : (
         <Stepper
-          nonLinear
           activeStep={activeStep}
           orientation="vertical"
           sx={{

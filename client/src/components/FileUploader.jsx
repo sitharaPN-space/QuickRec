@@ -8,7 +8,10 @@ const FileUploader = ({ handleChange, children }) => {
   };
   return (
     <>
-      <ButtonComp sx={{ transform: "translate(12px)" }} onClick={handleClick}>
+      <ButtonComp
+        sx={{ transform: "translate(0.85rem)", height: "40px" }}
+        onClick={handleClick}
+      >
         {children}
       </ButtonComp>
       <input

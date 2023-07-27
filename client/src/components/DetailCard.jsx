@@ -17,15 +17,15 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
   const theme = useTheme();
 
   const getDate = (date) => {
-    const [day, month, dd, year] = date;
-    return `${month ?? "m"} ${year ?? "y"}`;
+    const [day, month, dd, year] = date.$d.toDateString().split(" ");
+    return `${month ?? ""} ${year ?? ""}`;
   };
 
   return (
     <Card sx={{ width: "100%", textAlign: "left", mb: "2px" }}>
       <CardHeader
         sx={{ pb: "0" }}
-        title={detail.institute}
+        title={detail.institute ?? detail.title}
         titleTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "1.2rem" : "1.5rem"),
           fontWeight: 600,
@@ -53,12 +53,12 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={isMobile ? 12 : 5}>
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              {detail.qualification}
+              {detail.qualification ?? detail.organization}
             </Typography>
           </Grid>
           <Grid item xs={isMobile ? 12 : 7}>
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              Specialized in {detail.feild}
+              {detail.field && `Specialized in ${detail.feild}`}
             </Typography>
           </Grid>
           {detail.startDate && detail.endDate && (

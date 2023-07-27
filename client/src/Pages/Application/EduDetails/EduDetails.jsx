@@ -29,7 +29,7 @@ const initEducation = {
   upload: { name: "Choose File" },
 };
 
-const EduDetails = ({}) => {
+const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
   const [education, setEducation] = useState(initEducation);
@@ -265,19 +265,14 @@ const EduDetails = ({}) => {
         }}
       >
         {!isEditing &&
-          eduQualification.map(
-            (detail, i) => (
-              console.log(detail),
-              (
-                <DetailCard
-                  key={i}
-                  detail={detail}
-                  onDelete={() => handleDelete(i)}
-                  onEdit={() => handleEdit(i)}
-                />
-              )
-            )
-          )}
+          eduQualification.map((detail, i) => (
+            <DetailCard
+              key={i}
+              detail={detail}
+              onDelete={() => handleDelete(i)}
+              onEdit={() => handleEdit(i)}
+            />
+          ))}
       </Paper>
     </div>
   );

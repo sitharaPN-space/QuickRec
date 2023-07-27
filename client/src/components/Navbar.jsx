@@ -30,7 +30,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
     if (!user?.result) {
       navigate("/");
     }
-  }, []);
+  });
 
   const handleClick = (key) => {
     setActive(key);

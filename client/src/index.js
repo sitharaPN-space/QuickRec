@@ -13,7 +13,13 @@ const store = configureStore({
     userContext: authReducer,
     userApplication: userApplicationReducer,
   },
-  middleware: [],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["userApplication/setApplicationData"],
+        ignoreState: true,
+      },
+    }),
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
