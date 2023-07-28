@@ -27,7 +27,7 @@ const Application = () => {
       navigate("./home");
     }
     setIsNavBar(true);
-  }, []);
+  }, [location?.state?.vacancy, navigate, setIsNavBar]);
 
   return (
     <Box
@@ -52,14 +52,11 @@ const Application = () => {
       </div>
 
       <Container maxWidth="lg">
-        {/* sx={{ width: isMobile ? "100%" : "85%" }}> */}
         <Box
           sx={{
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
             gap: "1rem",
-            //  isMobile ? "1rem" : "2rem",
-            // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
           <Outlet context={[setActiveStep]} />

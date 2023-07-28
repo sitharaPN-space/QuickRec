@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
-  Box,
   Paper,
   Select,
   Typography,
-  useTheme,
   MenuItem,
   Grid,
   FormControl,
@@ -102,15 +100,6 @@ const BasicDetails = ({}) => {
               />
 
               <Grid item xs={12} sm={6}>
-                {/* <Input
-            name="dateOfBirth"
-            type="date"
-            value={basicDetails.dateOfBirth}
-            label="Date of Birth *"
-            handleChange={handleChange}
-            required
-            half
-          /> */}
                 <Typography
                   sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
                 >
@@ -310,11 +299,7 @@ const BasicDetails = ({}) => {
           {!isMobile && (
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
-                <ButtonComp
-                  type="submit"
-                  sx={{ mt: "1rem" }}
-                  // onClick={handleNext}
-                >
+                <ButtonComp type="submit" sx={{ mt: "1rem" }}>
                   Next
                 </ButtonComp>
               </div>

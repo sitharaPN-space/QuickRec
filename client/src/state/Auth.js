@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getUserDataFromToken } from "../functions";
 
 const userSlice = createSlice({
   name: "userContext",
   initialState: {
-    data: { result: decodedData, token: token },
+    data: getUserDataFromToken(),
     error: null,
   },
   reducers: {
     getUserDataOnSuccess(state, action) {
-      state.data = action.payload;
+      state.data = getUserDataFromToken();
       state.error = null;
     },
     getUserDataOnFailiure(state, action) {

@@ -1,7 +1,5 @@
 import {
-  Routes,
   Route,
-  BrowserRouter,
   Navigate,
   createBrowserRouter,
   createRoutesFromElements,
@@ -22,20 +20,10 @@ import EduDetails from "./Pages/Application/EduDetails/EduDetails";
 import ProDetails from "./Pages/Application/ProDetails/ProDetails";
 import Declaration from "./Pages/Application/Declaration/Declaration";
 import OtherDetails from "./Pages/Application/OtherDetails/OtherDetails";
-import jwt from "jwt-decode";
 
 function App() {
-  const token = localStorage.getItem("profile");
-  let decodedData;
-  try {
-    const decodedToken = jwt(token);
-    if (decodedToken.exp * 1000 - 59.5 * 60 * 1000 > Date.now()) {
-      decodedData = decodedToken;
-    }
-  } catch {
-    decodedData = null;
-  }
   const user = useSelector((state) => state.userContext.data?.result);
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
@@ -58,16 +46,12 @@ function App() {
   );
   return (
     <div>
-      {/* <BrowserRouter> */}
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <RouterProvider router={router} />
           <CssBaseline />
-          {/* <Routes>
-          </Routes> */}
         </LocalizationProvider>
       </ThemeProvider>
-      {/* </BrowserRouter> */}
     </div>
   );
 }

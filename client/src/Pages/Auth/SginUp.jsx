@@ -1,18 +1,6 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  Grid,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  Switch,
-} from "@mui/material";
+import { useState } from "react";
+import { Typography, Container, Paper, Grid, Checkbox } from "@mui/material";
 import Input from "../../components/Input";
-import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
 import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
@@ -33,7 +21,6 @@ const initState = {
 };
 
 const SignUp = () => {
-  const theme = useTheme();
   const [boardEmpCheck, setBoardEmpCheck] = useState(false);
   const [userData, setUserData] = useState(initState);
   const [error, setError] = useState("");
@@ -42,9 +29,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const data = await api.signup(userData);
-      const successData = { result: data.result, token: data.token };
-      //  dispatch(getUserDataOnSuccess(successData));
+      await api.signup(userData);
       navigate("/signin");
     } catch (error) {
       setError(error.response.data);
@@ -195,6 +180,20 @@ const SignUp = () => {
               </Typography>
             </Grid>
           </Grid>
+          {error && (
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                m: "1rem",
+                p: "1rem",
+                color: "#ff0000",
+                border: "1px solid red",
+                borderRadius: "5px",
+              }}
+            >
+              {error.message}
+            </Typography>
+          )}
         </form>
       </Paper>
     </Container>

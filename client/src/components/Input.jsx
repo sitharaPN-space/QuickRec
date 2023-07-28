@@ -29,10 +29,6 @@ const Input = ({
 }) => {
   let inputProps = {};
 
-  // const handleFileChange = (e) => {
-  //   const fvalue = e.target;
-  //   console.log(fvalue);
-  // };
   if (name === "password") {
     inputProps = {
       endAdornment: (
@@ -96,8 +92,8 @@ const Input = ({
             : // other inputs
               handleChange(e);
         }}
-        required={required}
         fullWidth
+        required={required}
         disabled={type === "file" ? true : disabled}
         multiline={multiline}
         minRows={minRows}

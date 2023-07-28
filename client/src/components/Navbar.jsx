@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -7,8 +7,6 @@ import {
   Box,
   IconButton,
   ListItem,
-  ListItemButton,
-  ListItemText,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -18,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
 import { useDispatch } from "react-redux";
+import { isTokenExpired } from "../functions";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const theme = useTheme();
@@ -29,6 +28,8 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   useEffect(() => {
     if (!user?.result) {
       navigate("/");
+    } else if (isTokenExpired()) {
+      dispatch(logOut());
     }
   });
 
@@ -39,7 +40,6 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const handleLogOut = () => {
     localStorage.clear();
     dispatch(logOut());
-    navigate("/");
   };
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
@@ -77,7 +77,10 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
                 <ListItem role="none">
                   <ListItemStyle
                     key="1"
-                    onClick={() => navigate("/home")}
+                    onClick={() => {
+                      handleClick("1");
+                      navigate("/home");
+                    }}
                     sx={{
                       borderBottom:
                         active === "1"
@@ -120,16 +123,6 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
                   </ListItemStyle>
                 </ListItem>
               </List>
-
-              {/* <LinkStyle to="/home" underline="hover">
-              Home
-            </LinkStyle>
-            <LinkStyle to="/Profile" underline="hover">
-              Profile
-            </LinkStyle>
-            <LinkStyle to="/signin" underline="hover" onClick={handleLogOut}>
-              Logout
-            </LinkStyle> */}
             </Box>
           )}
         </Toolbar>

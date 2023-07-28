@@ -1,8 +1,6 @@
 import React from "react";
 import {
-  Box,
   useTheme,
-  Typography,
   Paper,
   Stepper,
   Step,
@@ -26,12 +24,10 @@ const StepGuide = ({ state, isMobile, activeStep, setActiveStep }) => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
     navigate(steps[activeStep + 1].path, state);
   };
 
   const handleBack = () => {
-    // setActiveStep((prevActiveStep) => prevActiveStep - 1);
     navigate(steps[activeStep - 1].path, state);
   };
   const handleStep = (index) => {};
