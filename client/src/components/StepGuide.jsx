@@ -135,6 +135,7 @@ const StepGuide = ({ isMobile, activeStep = 0, setActiveStep }) => {
               <StepButton color="inherit" onClick={handleStep(index)}>
                 <Typography
                   color={index === activeStep && theme.palette.primary[500]}
+                  sx={{ fontWeight: index === activeStep && "600" }}
                 >
                   {label}
                 </Typography>

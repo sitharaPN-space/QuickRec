@@ -101,6 +101,11 @@ const EduDetails = () => {
         }}
       >
         <Grid container spacing={2} sx={{ p: "1.5rem" }}>
+          <Grid item xs={12} sx={{ textAlign: "center" }}>
+            <Typography variant="h4" sx={{ fontWeight: "600" }}>
+              Education Qualification
+            </Typography>
+          </Grid>
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
               Type of Education *
@@ -213,12 +218,8 @@ const EduDetails = () => {
             sm={8}
             sx={{ display: isMobile && "none", textAlign: "left" }}
           ></Grid>
-          <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-            <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-              Upload your Certificate
-            </Typography>
-            <FileUploader />
-          </Grid>
+
+          <FileUploader label="Upload your Certificate" isMobile={isMobile} />
           <Grid item xs={12} sx={{ textAlign: "right" }}>
             <Button onClick={() => handleAddDetail()}>
               <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
@@ -242,7 +243,13 @@ const EduDetails = () => {
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
         {eduDetailsList.map((detail, index) => {
-          return <EducationDetail key={index} eduDetail={detail} />;
+          return (
+            <EducationDetail
+              key={index}
+              eduDetail={detail}
+              isMobile={isMobile}
+            />
+          );
         })}
       </Box>
     </div>

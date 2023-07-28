@@ -17,11 +17,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ProfComponent from "../../../components/ProfComponent";
+import AchievementComp from "../../../components/AchievementComp";
 import { useDispatch, useSelector } from "react-redux";
-import { setProfessionalQulifications } from "../../../state/UserApplication";
+import { setAchievementsState } from "../../../state/UserApplication";
 
-const initProfDetail = {
+const initAchievement = {
   title: "",
   organization: "",
   startDate: "",
@@ -31,8 +31,8 @@ const initProfDetail = {
 };
 
 const detail = {
-  title: "Systems Engineer",
-  organization: "National Water Supply & Drainage Board",
+  title: "Best Student Award",
+  organization: "University of Peradeniya",
   startDate: "Jan 2017",
   endDate: "Feb 2023",
   description:
@@ -40,39 +40,39 @@ const detail = {
   attachement: "",
 };
 
-const ProfDetails = () => {
+const Achievements = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [profDetail, setProfDetail] = useState(initProfDetail);
+  const [achievement, setAchievement] = useState(initAchievement);
   // const [eduDetailsList, setEduDetailsList] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const profDetailsList = useSelector(
-    (state) => state.userApplication.experience
+  const achievementsList = useSelector(
+    (state) => state.userApplication.achievements
   );
 
   useEffect(() => {
-    setCurrentStep(2);
-    dispatch(setProfessionalQulifications(profDetail));
+    setCurrentStep(3);
+    dispatch(setAchievementsState(detail));
   }, []);
 
   // useEffect(() => {}, [eduDetailsList]);
 
   const handleChange = (e) => {
-    setProfDetail({ ...profDetail, [e.target.name]: e.target.value });
+    setAchievement({ ...achievement, [e.target.name]: e.target.value });
   };
 
   const handleAddDetail = () => {
-    console.log(profDetail);
-    dispatch(setProfessionalQulifications(profDetail));
+    console.log(achievement);
+    dispatch(setAchievementsState(achievement));
   };
 
   const handleNext = (e) => {
-    navigate("/application/achievements");
+    navigate("/application/declaration");
   };
 
   const handleBack = () => {
-    navigate("/application/eduDetails");
+    navigate("/application/profDetails");
   };
   return (
     <div>
@@ -85,7 +85,7 @@ const ProfDetails = () => {
         <Grid container spacing={2} sx={{ p: "1.5rem" }}>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
             <Typography variant="h4" sx={{ fontWeight: "600" }}>
-              Professional Qualifications
+              Other Achievements
             </Typography>
           </Grid>
           <Input
@@ -114,8 +114,8 @@ const ProfDetails = () => {
                   // value={moment(eduDetail.startDate).format("MMM yyyy")}
                   // value={eduDetail?.startDate}
                   onChange={(newValue) =>
-                    setProfDetail({
-                      ...profDetail,
+                    setAchievement({
+                      ...achievement,
                       startDate: newValue?.$d,
                     })
                   }
@@ -140,8 +140,8 @@ const ProfDetails = () => {
                   // formatDate={(date) => moment(date).format("DD-MM-YYYY")}
                   // value={eduDetail?.endDate}
                   onChange={(newValue) => {
-                    setProfDetail({
-                      ...profDetail,
+                    setAchievement({
+                      ...achievement,
                       endDate: newValue?.$d,
                     });
                   }}
@@ -185,12 +185,18 @@ const ProfDetails = () => {
         // </Grid>
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {profDetailsList.map((detail, index) => {
-          return <ProfComponent key={index} profDetail={detail} />;
+        {achievementsList.map((detail, index) => {
+          return (
+            <AchievementComp
+              key={index}
+              achievement={detail}
+              isMobile={isMobile}
+            />
+          );
         })}
       </Box>
     </div>
   );
 };
 
-export default ProfDetails;
+export default Achievements;

@@ -13,7 +13,7 @@ const userApplication = createSlice({
     },
     eduQualification: [],
     experience: [],
-    otherAchievements: [],
+    achievements: [],
     attachments: [],
   },
   reducers: {
@@ -23,9 +23,15 @@ const userApplication = createSlice({
     setProfessionalQulifications(state, action) {
       state.experience = [...state.experience, action.payload];
     },
+    setAchievementsState(state, action) {
+      state.achievements = [...state.achievements, action.payload];
+    },
   },
 });
 
-export const { setEducationQulifications, setProfessionalQulifications } =
-  userApplication.actions;
+export const {
+  setEducationQulifications,
+  setProfessionalQulifications,
+  setAchievementsState,
+} = userApplication.actions;
 export default userApplication.reducer;

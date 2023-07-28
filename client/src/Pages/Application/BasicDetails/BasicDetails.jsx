@@ -60,6 +60,11 @@ const BasicDetails = ({}) => {
       }}
     >
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
+        <Grid item xs={12} sx={{ textAlign: "center" }}>
+          <Typography variant="h4" sx={{ fontWeight: "600" }}>
+            Basic Details
+          </Typography>
+        </Grid>
         <Grid item xs={12} sx={{ textAlign: "left" }}>
           <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
             Title *
