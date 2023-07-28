@@ -70,3 +70,12 @@ export const signin = async (req, res) => {
     console.log(error);
   }
 };
+
+export const applicationSubmit = async (req, res) => {
+  try {
+    throw Error();
+  } catch (error) {
+    res.status(500).json({ message: "Coming soon ..." });
+    console.log(error);
+  }
+};

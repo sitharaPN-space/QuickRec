@@ -24,7 +24,17 @@ const userApplication = createSlice({
     eduQualification: [],
     experience: [],
     otherAchievements: [],
-    attachments: [],
+    attachments: {
+      cv: {
+        name: "Choose File",
+      },
+      nic: {
+        name: "Choose File",
+      },
+      birthCertificate: {
+        name: "Choose File",
+      },
+    },
   },
   reducers: {
     setApplicationData(state, action) {
