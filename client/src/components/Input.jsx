@@ -18,6 +18,8 @@ const Input = ({
   label,
   handleChange,
   half,
+  error,
+  helperText,
   disabled,
   multiline,
   minRows,
@@ -84,7 +86,7 @@ const Input = ({
         name={name}
         value={value}
         onChange={(e) => {
-          name.startsWith("mobile")
+          name.startsWith("mobileNo")
             ? // moblie No inputs
               (Number(e.target.value) || e.target.value === "") &&
               e.target.value.length < 10 &&
@@ -96,6 +98,8 @@ const Input = ({
         required={required}
         disabled={type === "file" ? true : disabled}
         multiline={multiline}
+        error={error}
+        helperText={helperText}
         minRows={minRows}
         maxRows={maxRows}
         type={type === "file" ? null : type}

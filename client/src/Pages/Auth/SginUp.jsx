@@ -23,7 +23,9 @@ const initState = {
 const SignUp = () => {
   const [boardEmpCheck, setBoardEmpCheck] = useState(false);
   const [userData, setUserData] = useState(initState);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const confirmPasswordMatches = userData.password === userData.confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +42,9 @@ const SignUp = () => {
     }
   };
 
+  const handleShowPassowrd = () => {
+    setShowPassword(!showPassword);
+  };
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
@@ -77,12 +82,14 @@ const SignUp = () => {
           <Grid container spacing={2} sx={{ mt: "1rem" }}>
             <Input
               name="userName"
+              value={userData.userName}
               label="Name *"
               handleChange={handleChange}
               required
             />
             <Input
               name="email"
+              value={userData.email}
               label="Email Address *"
               handleChange={handleChange}
               required
@@ -90,29 +97,37 @@ const SignUp = () => {
             />
             <Input
               name="nic"
+              value={userData.nic}
               label="National Identity No *"
               handleChange={handleChange}
               required
             />
             <Input
               name="mobileNo"
+              value={userData.mobileNo}
               label="Mobile No *"
               handleChange={handleChange}
               required
             />
             <Input
               name="password"
+              value={userData.password}
               label="Password *"
               handleChange={handleChange}
+              handleShowPassword={handleShowPassowrd}
               required
-              type="password"
+              type={showPassword ? "text" : "password"}
             />
             <Input
               name="confirmPassword"
+              value={userData.confirmPassword}
               label="Confirm Password *"
+              error={!confirmPasswordMatches}
+              helperText={!confirmPasswordMatches && "Password doesn't match."}
               handleChange={handleChange}
+              handleShowPassword={handleShowPassowrd}
               required
-              type="password"
+              type={showPassword ? "text" : "password"}
             />
             <Grid item xs={12}>
               <div
@@ -137,7 +152,12 @@ const SignUp = () => {
               />
             )}
             <Grid item xs={12}>
-              <ButtonComp type="submit" fullWidth variant="contained">
+              <ButtonComp
+                type="submit"
+                disabled={!confirmPasswordMatches}
+                fullWidth
+                variant="contained"
+              >
                 create an account
               </ButtonComp>
             </Grid>
