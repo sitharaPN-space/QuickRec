@@ -48,10 +48,10 @@ export const signin = async (req, res) => {
 
   try {
     const oldUser = await UserDao.getUserByEmail(userName);
-    const { UserName, EmailAddress, UserId } = oldUser.dataValues;
 
     if (!oldUser)
       return res.status(404).json({ message: "User doesn't exist" });
+    const { UserName, EmailAddress, UserId } = oldUser.dataValues;
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.Password);
 
     if (!isPasswordCorrect)
