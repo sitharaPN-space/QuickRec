@@ -4,8 +4,6 @@ import {
   Typography,
   InputBase,
   IconButton,
-  useMediaQuery,
-  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
@@ -81,7 +79,6 @@ const VacancyList = () => {
   const [vacancyList, setVacancyList] = useState(vacancies);
   const [searchText, setSearchText] = useState("");
   const theme = useTheme();
-  const isNonMobile = useMediaQuery("(min-width: 600px)");
 
   useEffect(() => {
     setIsNavBar(true);
