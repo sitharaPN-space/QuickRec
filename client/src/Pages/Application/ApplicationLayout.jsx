@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   useTheme,
@@ -6,13 +6,28 @@ import {
   useMediaQuery,
   Container,
 } from "@mui/material";
-import { useLocation, Outlet } from "react-router-dom";
+import {
+  useLocation,
+  Outlet,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
 
 const Application = () => {
   const theme = useTheme();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const [activeStep, setActiveStep] = useState(0);
+  const navigate = useNavigate();
+  const [isNavbar, setIsNavBar] = useOutletContext();
+
+  useEffect(() => {
+    if (!location?.state?.vacancy) {
+      navigate("./home");
+    }
+    setIsNavBar(true);
+  }, [location?.state?.vacancy, navigate, setIsNavBar]);
 
   return (
     <Box
@@ -32,23 +47,25 @@ const Application = () => {
             pt: "1rem",
           }}
         >
-          Application for the post {location?.state?.title}
+          Application for the post {location?.state?.vacancy}
         </Typography>
       </div>
 
       <Container maxWidth="lg">
-        {/* sx={{ width: isMobile ? "100%" : "85%" }}> */}
         <Box
           sx={{
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
             gap: "1rem",
-            //  isMobile ? "1rem" : "2rem",
-            // margin: isMobile || isTablet ? "1rem 0.5rem" : "1rem 4rem",
           }}
         >
-          <Outlet />
-          <StepGuide isMobile={isMobile} />
+          <Outlet context={[setActiveStep]} />
+          <StepGuide
+            state={location}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            isMobile={isMobile}
+          />
         </Box>
       </Container>
     </Box>

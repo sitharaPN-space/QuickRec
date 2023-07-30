@@ -1,7 +1,5 @@
 import { styled } from "@mui/material/styles";
 import { ListItemButton } from "@mui/material";
-import { Link } from "react-router-dom";
-import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
 
 const ListItemStyle = styled(ListItemButton)(({ theme }) => ({
   textDecoration: "none",

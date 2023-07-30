@@ -1,8 +1,6 @@
 import React from "react";
 import {
-  Box,
   useTheme,
-  Typography,
   Paper,
   Stepper,
   Step,
@@ -11,28 +9,27 @@ import {
   MobileStepper,
 } from "@mui/material";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
-  "Basic Details",
-  "Educational Qualification",
-  "Professinoal Experience",
-  "Other Achievements",
-  "Declaration",
+  { name: "Basic Details", path: "/application/basicDetails" },
+  { name: "Educational Qualification", path: "/application/eduDetails" },
+  { name: "Professinoal Experience", path: "/application/proDetails" },
+  { name: "Other Achievements", path: "/application/otherDetails" },
+  { name: "Declaration", path: "/application/declaration" },
 ];
 
-const StepGuide = ({ isMobile }) => {
-  const [activeStep, setActiveStep] = React.useState(0);
-
+const StepGuide = ({ state, isMobile, activeStep, setActiveStep }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    navigate(steps[activeStep + 1].path, state);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    navigate(steps[activeStep - 1].path, state);
   };
-
   const handleStep = (index) => {};
   return (
     <Paper
@@ -47,7 +44,7 @@ const StepGuide = ({ isMobile }) => {
       {isMobile ? (
         <MobileStepper
           variant="dots"
-          steps={6}
+          steps={steps.length}
           position="static"
           activeStep={activeStep}
           sx={{ maxWidth: 400, flexGrow: 1 }}
@@ -55,7 +52,7 @@ const StepGuide = ({ isMobile }) => {
             <Button
               size="small"
               onClick={handleNext}
-              disabled={activeStep === 5}
+              disabled={activeStep === steps.length - 1}
             >
               Next
               {theme.direction === "rtl" ? (
@@ -82,7 +79,6 @@ const StepGuide = ({ isMobile }) => {
         />
       ) : (
         <Stepper
-          nonLinear
           activeStep={activeStep}
           orientation="vertical"
           sx={{
@@ -107,7 +103,7 @@ const StepGuide = ({ isMobile }) => {
         >
           {steps.map((label, index) => (
             <Step
-              key={label}
+              key={label.name}
               sx={{
                 "& .MuiStepLabel-root": {
                   display: "flex",
@@ -123,7 +119,7 @@ const StepGuide = ({ isMobile }) => {
               }}
             >
               <StepButton color="inherit" onClick={handleStep(index)}>
-                {label}
+                {label.name}
               </StepButton>
             </Step>
           ))}

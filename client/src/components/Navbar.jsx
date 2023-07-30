@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -7,8 +7,6 @@ import {
   Box,
   IconButton,
   ListItem,
-  ListItemButton,
-  ListItemText,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -18,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
 import { useDispatch } from "react-redux";
+import { isTokenExpired } from "../functions";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const theme = useTheme();
@@ -25,14 +24,22 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const navigate = useNavigate();
   const [active, setActive] = useState("");
   const user = useSelector((state) => state.userContext.data);
+
+  useEffect(() => {
+    if (!user?.result) {
+      navigate("/");
+    } else if (isTokenExpired()) {
+      dispatch(logOut());
+    }
+  });
+
   const handleClick = (key) => {
     setActive(key);
   };
 
   const handleLogOut = () => {
     localStorage.clear();
-    navigate("/");
-    dispatch(logOut);
+    dispatch(logOut());
   };
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
@@ -70,7 +77,10 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
                 <ListItem role="none">
                   <ListItemStyle
                     key="1"
-                    onClick={() => navigate("/home")}
+                    onClick={() => {
+                      handleClick("1");
+                      navigate("/home");
+                    }}
                     sx={{
                       borderBottom:
                         active === "1"
@@ -113,16 +123,6 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
                   </ListItemStyle>
                 </ListItem>
               </List>
-
-              {/* <LinkStyle to="/home" underline="hover">
-              Home
-            </LinkStyle>
-            <LinkStyle to="/Profile" underline="hover">
-              Profile
-            </LinkStyle>
-            <LinkStyle to="/signin" underline="hover" onClick={handleLogOut}>
-              Logout
-            </LinkStyle> */}
             </Box>
           )}
         </Toolbar>
@@ -132,7 +132,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
           margin: "10px 20px 0 20px",
         }}
       >
-        <Typography>Welcome {user.result.UserName} !</Typography>
+        <Typography>Welcome {user?.result?.UserName} !</Typography>
       </div>
     </div>
   );

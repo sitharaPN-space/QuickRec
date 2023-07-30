@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Paper,
-  Select,
-  Typography,
-  MenuItem,
-  Grid,
-  FormControl,
-  useMediaQuery,
-} from "@mui/material";
+import { Paper, Typography, Grid, useMediaQuery } from "@mui/material";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
@@ -16,37 +8,35 @@ import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
 
-const initEducation = {
-  type: "",
-  institute: "",
-  qualification: "",
-  feild: "",
+const initExperience = {
+  title: "",
+  organization: "",
   startDate: null,
   endDate: null,
-  grade: "",
+  description: "",
   upload: { name: "Choose File" },
 };
 
-const EduDetails = () => {
+const ProDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
-  const [education, setEducation] = useState(initEducation);
+  const [experienceDetails, setExperienceDetails] = useState(initExperience);
   const [isEditing, setIsEditing] = useState(false);
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { eduQualification } = useSelector((state) => state.userApplication);
+  const { experience } = useSelector((state) => state.userApplication);
 
-  useEffect(() => setActiveStep(1), []);
+  useEffect(() => setActiveStep(2), []);
 
   const handlePrevious = () => {
-    navigate("/application/basicDetails", { state });
+    navigate("/application/eduDetails", { state });
   };
 
   const handleNext = (e) => {
-    if (eduQualification.length > 0) {
+    if (experience.length > 0) {
       e.preventDefault();
-      navigate("/application/proDetails", { state });
+      navigate("/application/otherDetails", { state });
     }
   };
 
@@ -54,33 +44,31 @@ const EduDetails = () => {
     e.preventDefault();
     dispatch(
       setApplicationData({
-        eduQualification: [...eduQualification, education],
+        experience: [...experience, experienceDetails],
       })
     );
-    setEducation(initEducation);
+    setExperienceDetails(initExperience);
     isEditing && setIsEditing(false);
   };
 
   const handleChange = (e) => {
-    setEducation({
-      ...education,
+    setExperienceDetails({
+      ...experienceDetails,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleEdit = (index) => {
     setIsEditing(true);
-    setEducation(eduQualification[index]);
+    setExperienceDetails(experience[index]);
     handleDelete(index);
   };
 
   const handleDelete = (index) => {
-    const newEduQualification = eduQualification.filter(
-      (value, i) => i !== index
-    );
+    const newExperience = experience.filter((value, i) => i !== index);
     dispatch(
       setApplicationData({
-        eduQualification: newEduQualification,
+        experience: newExperience,
       })
     );
   };
@@ -90,46 +78,17 @@ const EduDetails = () => {
       <Paper sx={{ display: "flex" }}>
         <form onSubmit={handleAdd}>
           <Grid container spacing={2} sx={{ p: "1.5rem" }}>
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-                Type of Education *
-              </Typography>
-              <FormControl size="small">
-                <Select
-                  name="type"
-                  value={education.type}
-                  required
-                  onChange={handleChange}
-                  sx={{
-                    minWidth: "140px",
-                    minHeight: "1.4rem",
-                    backgroundColor: (theme) => theme.palette.background.main,
-                  }}
-                >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
             <Input
-              name="institute"
-              value={education.institute}
-              label="University / Institute / School *"
+              name="title"
+              value={experienceDetails.title}
+              label="Title / Role *"
               handleChange={handleChange}
               required
             />
             <Input
-              name="qualification"
-              value={education.qualification}
-              label="Name of Qualification *"
-              handleChange={handleChange}
-              required
-            />
-            <Input
-              name="feild"
-              value={education.feild}
-              label="Field of Study *"
+              name="organization"
+              value={experienceDetails.organization}
+              label="Organization *"
               handleChange={handleChange}
               required
             />
@@ -142,9 +101,9 @@ const EduDetails = () => {
                     Start Date *
                   </Typography>
                   <DateField
-                    value={education.startDate}
-                    format="MMMM-YYYY"
+                    value={experienceDetails.startDate}
                     required
+                    format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
@@ -169,9 +128,9 @@ const EduDetails = () => {
                     End Date *
                   </Typography>
                   <DateField
-                    value={education.endDate}
-                    format="MMMM-YYYY"
+                    value={experienceDetails.endDate}
                     required
+                    format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
@@ -191,31 +150,20 @@ const EduDetails = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-                Grade *
-              </Typography>
-              <FormControl size="small">
-                <Select
-                  name="grade"
-                  value={education.grade}
-                  required
-                  onChange={handleChange}
-                  sx={{
-                    minWidth: "140px",
-                    minHeight: "1.4rem",
-                    backgroundColor: (theme) => theme.palette.background.main,
-                  }}
-                >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+            <Input
+              name="description"
+              value={experienceDetails.description}
+              label="Description *"
+              handleChange={handleChange}
+              size="medium"
+              multiline
+              minRows={5}
+              maxRows={8}
+            />
             <Input
               name="upload"
-              value={education.upload.name}
+              value={experienceDetails.upload.name}
+              disabled
               type="file"
               label="Upload *"
               handleChange={(e) => {
@@ -263,7 +211,7 @@ const EduDetails = () => {
         }}
       >
         {!isEditing &&
-          eduQualification.map((detail, i) => (
+          experience.map((detail, i) => (
             <DetailCard
               key={i}
               detail={detail}
@@ -276,4 +224,4 @@ const EduDetails = () => {
   );
 };
 
-export default EduDetails;
+export default ProDetails;

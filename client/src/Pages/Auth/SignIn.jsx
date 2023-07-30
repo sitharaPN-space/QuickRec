@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Container,
-  Paper,
-  Grid,
-  Alert,
-  AlertTitle,
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Typography, Container, Paper, Grid } from "@mui/material";
 import Input from "../../components/Input";
-import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
 import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
@@ -20,7 +12,6 @@ import * as api from "../../api/";
 const initState = { userName: "", password: "" };
 
 const SignIn = () => {
-  const theme = useTheme();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState(initState);
@@ -44,9 +35,8 @@ const SignIn = () => {
 
     try {
       const data = await api.signin(loginData);
-      const successData = { result: data.result, token: data.token };
-      dispatch(getUserDataOnSuccess(successData));
-      localStorage.setItem("profile", { token: data.token });
+      localStorage.setItem("profile", data.token);
+      dispatch(getUserDataOnSuccess());
       navigate("/home");
     } catch (error) {
       dispatch(getUserDataOnFailiure(error.response.data));

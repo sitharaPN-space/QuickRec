@@ -17,3 +17,12 @@ export const signup = async (userData) => {
   const response = await API.post("user/signup", userData, config);
   return response.data;
 };
+
+export const applicationSubmit = async (applicationData) => {
+  const response = await API.post(
+    "user/applicationSubmit",
+    applicationData,
+    config
+  );
+  return response.data;
+};

@@ -1,18 +1,6 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  Grid,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  Switch,
-} from "@mui/material";
+import { useState } from "react";
+import { Typography, Container, Paper, Grid, Checkbox } from "@mui/material";
 import Input from "../../components/Input";
-import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
 import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
@@ -33,18 +21,17 @@ const initState = {
 };
 
 const SignUp = () => {
-  const theme = useTheme();
   const [boardEmpCheck, setBoardEmpCheck] = useState(false);
   const [userData, setUserData] = useState(initState);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const confirmPasswordMatches = userData.password === userData.confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await api.signup(userData);
-      const successData = { result: data.result, token: data.token };
-      //  dispatch(getUserDataOnSuccess(successData));
+      await api.signup(userData);
       navigate("/signin");
     } catch (error) {
       setError(error.response.data);
@@ -55,6 +42,9 @@ const SignUp = () => {
     }
   };
 
+  const handleShowPassowrd = () => {
+    setShowPassword(!showPassword);
+  };
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
@@ -92,12 +82,14 @@ const SignUp = () => {
           <Grid container spacing={2} sx={{ mt: "1rem" }}>
             <Input
               name="userName"
+              value={userData.userName}
               label="Name *"
               handleChange={handleChange}
               required
             />
             <Input
               name="email"
+              value={userData.email}
               label="Email Address *"
               handleChange={handleChange}
               required
@@ -105,29 +97,37 @@ const SignUp = () => {
             />
             <Input
               name="nic"
+              value={userData.nic}
               label="National Identity No *"
               handleChange={handleChange}
               required
             />
             <Input
               name="mobileNo"
+              value={userData.mobileNo}
               label="Mobile No *"
               handleChange={handleChange}
               required
             />
             <Input
               name="password"
+              value={userData.password}
               label="Password *"
               handleChange={handleChange}
+              handleShowPassword={handleShowPassowrd}
               required
-              type="password"
+              type={showPassword ? "text" : "password"}
             />
             <Input
               name="confirmPassword"
+              value={userData.confirmPassword}
               label="Confirm Password *"
+              error={!confirmPasswordMatches}
+              helperText={!confirmPasswordMatches && "Password doesn't match."}
               handleChange={handleChange}
+              handleShowPassword={handleShowPassowrd}
               required
-              type="password"
+              type={showPassword ? "text" : "password"}
             />
             <Grid item xs={12}>
               <div
@@ -152,7 +152,12 @@ const SignUp = () => {
               />
             )}
             <Grid item xs={12}>
-              <ButtonComp type="submit" fullWidth variant="contained">
+              <ButtonComp
+                type="submit"
+                disabled={!confirmPasswordMatches}
+                fullWidth
+                variant="contained"
+              >
                 create an account
               </ButtonComp>
             </Grid>
@@ -195,6 +200,20 @@ const SignUp = () => {
               </Typography>
             </Grid>
           </Grid>
+          {error && (
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                m: "1rem",
+                p: "1rem",
+                color: "#ff0000",
+                border: "1px solid red",
+                borderRadius: "5px",
+              }}
+            >
+              {error.message}
+            </Typography>
+          )}
         </form>
       </Paper>
     </Container>
