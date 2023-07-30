@@ -17,7 +17,7 @@ const initExperience = {
   upload: { name: "Choose File" },
 };
 
-const ProDetails = ({}) => {
+const ProDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
   const [experienceDetails, setExperienceDetails] = useState(initExperience);

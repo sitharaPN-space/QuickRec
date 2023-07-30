@@ -14,7 +14,7 @@ import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../../../api";
 
-const Declaration = ({}) => {
+const Declaration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
   const { state } = useLocation();
