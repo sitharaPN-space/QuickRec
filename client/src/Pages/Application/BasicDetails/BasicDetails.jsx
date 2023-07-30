@@ -15,7 +15,7 @@ import { DateField } from "@mui/x-date-pickers";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
 
-const BasicDetails = ({}) => {
+const BasicDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
   const { state } = useLocation();
@@ -56,6 +56,9 @@ const BasicDetails = ({}) => {
                 name="title"
                 value={basicDetails.title}
                 required
+                MenuProps={{
+                  disableScrollLock: true,
+                }}
                 onChange={handleChange}
                 sx={{
                   minWidth: "140px",
@@ -142,6 +145,9 @@ const BasicDetails = ({}) => {
                     required
                     value={basicDetails.sex}
                     onChange={handleChange}
+                    MenuProps={{
+                      disableScrollLock: true,
+                    }}
                     sx={{
                       width: "100%",
                       minHeight: "1.4rem",
@@ -165,6 +171,9 @@ const BasicDetails = ({}) => {
                     required
                     value={basicDetails.civilStatus}
                     onChange={handleChange}
+                    MenuProps={{
+                      disableScrollLock: true,
+                    }}
                     sx={{
                       minHeight: "1.4rem",
                       backgroundColor: (theme) => theme.palette.background.main,
@@ -204,6 +213,9 @@ const BasicDetails = ({}) => {
                     required
                     value={basicDetails.nationality}
                     onChange={handleChange}
+                    MenuProps={{
+                      disableScrollLock: true,
+                    }}
                     sx={{
                       width: "100%",
                       minHeight: "1.4rem",
@@ -230,6 +242,9 @@ const BasicDetails = ({}) => {
                     required
                     value={basicDetails.religion}
                     onChange={handleChange}
+                    MenuProps={{
+                      disableScrollLock: true,
+                    }}
                     sx={{
                       minHeight: "1.4rem",
                       backgroundColor: (theme) => theme.palette.background.main,
@@ -255,6 +270,9 @@ const BasicDetails = ({}) => {
                     required
                     onChange={handleChange}
                     value={basicDetails.ethnicity}
+                    MenuProps={{
+                      disableScrollLock: true,
+                    }}
                     sx={{
                       minHeight: "1.4rem",
                       backgroundColor: (theme) => theme.palette.background.main,

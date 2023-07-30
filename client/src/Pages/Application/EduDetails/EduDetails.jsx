@@ -100,6 +100,9 @@ const EduDetails = () => {
                   value={education.type}
                   required
                   onChange={handleChange}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
                   sx={{
                     minWidth: "140px",
                     minHeight: "1.4rem",
@@ -201,6 +204,9 @@ const EduDetails = () => {
                   value={education.grade}
                   required
                   onChange={handleChange}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
                   sx={{
                     minWidth: "140px",
                     minHeight: "1.4rem",
