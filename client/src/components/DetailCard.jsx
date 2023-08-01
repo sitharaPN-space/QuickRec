@@ -57,7 +57,7 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
           </Grid>
           <Grid item xs={isMobile ? 12 : 7}>
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              {detail.field && `Specialized in ${detail.feild}`}
+              {detail.feild && `Specialized in ${detail.feild}`}
             </Typography>
           </Grid>
           {detail.startDate && detail.endDate && (
