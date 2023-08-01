@@ -17,7 +17,7 @@ const SignIn = () => {
   const [loginData, setLoginData] = useState(initState);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [isNavbar, setIsNavBar] = useOutletContext();
+  const [setIsNavBar] = useOutletContext();
   useEffect(() => {
     setIsNavBar(false);
   });

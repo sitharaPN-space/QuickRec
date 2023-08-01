@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -17,8 +16,8 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
   const theme = useTheme();
 
   const getDate = (date) => {
-    const [day, month, dd, year] = date.$d.toDateString().split(" ");
-    return `${month ?? ""} ${year ?? ""}`;
+    const fromDate = date.$d.toDateString().split(" ");
+    return `${fromDate[1] ?? ""} ${fromDate[3] ?? ""}`;
   };
 
   return (

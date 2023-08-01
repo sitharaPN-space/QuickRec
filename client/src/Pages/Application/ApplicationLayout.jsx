@@ -20,7 +20,7 @@ const Application = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
-  const [isNavbar, setIsNavBar] = useOutletContext();
+  const [setIsNavBar] = useOutletContext();
 
   useEffect(() => {
     if (!location?.state?.vacancy) {

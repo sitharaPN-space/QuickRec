@@ -23,7 +23,7 @@ const BasicDetails = () => {
   const { basicDetails } = useSelector((state) => state.userApplication);
   const navigate = useNavigate();
 
-  useEffect(() => setActiveStep(0), []);
+  useEffect(() => setActiveStep(0), [setActiveStep]);
 
   const handleNext = (e) => {
     e.preventDefault();

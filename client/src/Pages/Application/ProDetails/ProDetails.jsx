@@ -27,7 +27,7 @@ const ProDetails = () => {
   const dispatch = useDispatch();
   const { experience } = useSelector((state) => state.userApplication);
 
-  useEffect(() => setActiveStep(2), []);
+  useEffect(() => setActiveStep(2), [setActiveStep]);
 
   const handlePrevious = () => {
     navigate("/application/eduDetails", { state });

@@ -27,7 +27,7 @@ const ProDetails = () => {
   const dispatch = useDispatch();
   const { otherAchievements } = useSelector((state) => state.userApplication);
 
-  useEffect(() => setActiveStep(3), []);
+  useEffect(() => setActiveStep(3), [setActiveStep]);
 
   const handlePrevious = () => {
     navigate("/application/proDetails", { state });

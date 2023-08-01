@@ -5,7 +5,7 @@ import {
   InputBase,
   IconButton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
@@ -75,7 +75,7 @@ const vacancies = [
 ];
 
 const VacancyList = () => {
-  const [isNavbar, setIsNavBar] = useOutletContext();
+  const [setIsNavBar] = useOutletContext();
   const [vacancyList, setVacancyList] = useState(vacancies);
   const [searchText, setSearchText] = useState("");
   const theme = useTheme();

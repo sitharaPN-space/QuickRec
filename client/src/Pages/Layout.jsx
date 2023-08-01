@@ -37,7 +37,7 @@ const Layout = () => {
         )}
       </Box>
       <Box>
-        <Outlet context={[isNavbar, setIsNavBar]} />
+        <Outlet context={[setIsNavBar]} />
       </Box>
     </Box>
   );

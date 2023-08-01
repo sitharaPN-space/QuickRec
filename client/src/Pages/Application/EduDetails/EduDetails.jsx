@@ -37,7 +37,7 @@ const EduDetails = () => {
   const dispatch = useDispatch();
   const { eduQualification } = useSelector((state) => state.userApplication);
 
-  useEffect(() => setActiveStep(1), []);
+  useEffect(() => setActiveStep(1), [setActiveStep]);
 
   const handlePrevious = () => {
     navigate("/application/basicDetails", { state });
