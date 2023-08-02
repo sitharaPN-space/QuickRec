@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import ButtonComp from "./ButtonComp";
-const FileUploader = ({ handleChange, children }) => {
+const FileUploader = ({ handleChange, required, children }) => {
   const hiddenFileInput = useRef(null);
 
-  const handleClick = (event) => {
+  const handleClick = () => {
     hiddenFileInput.current.click();
   };
   return (
@@ -18,7 +18,12 @@ const FileUploader = ({ handleChange, children }) => {
         type="file"
         ref={hiddenFileInput}
         onChange={handleChange}
-        style={{ display: "none" }}
+        style={{
+          opacity: 0,
+          width: "1px",
+          position: "absolute",
+        }}
+        required={required}
       />
     </>
   );
