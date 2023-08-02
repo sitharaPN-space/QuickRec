@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const userApplication = createSlice({
-  name: "userApplication",
-  initialState: {
+export const initState ={
     basicDetails: {
       title: "",
       nameWithInitials: "",
@@ -35,15 +33,19 @@ const userApplication = createSlice({
         name: "Choose File",
       },
     },
-  },
+  }
+
+const userApplication = createSlice({
+  name: "userApplication",
+  initialState: initState,
   reducers: {
     setApplicationData(state, action) {
       const [[key, value]] = Object.entries(action.payload);
       state[key] = value;
-    },
+    }
   },
 });
 
-export const { setApplicationData } = userApplication.actions;
+export const { setApplicationData ,resetData } = userApplication.actions;
 
 export default userApplication.reducer;

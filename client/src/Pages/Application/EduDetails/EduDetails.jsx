@@ -9,6 +9,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { DateField } from "@mui/x-date-pickers/DateField";
+import dayjs from "dayjs";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
@@ -145,14 +146,14 @@ const EduDetails = () => {
                     Start Date *
                   </Typography>
                   <DateField
-                    value={education.startDate}
+                    value={education.startDate && dayjs(education.startDate)}
                     format="MMMM-YYYY"
                     required
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "startDate",
-                          value: newValue,
+                          value: newValue.$d.toDateString(),
                         },
                       });
                     }}
@@ -172,14 +173,14 @@ const EduDetails = () => {
                     End Date *
                   </Typography>
                   <DateField
-                    value={education.endDate}
+                    value={education.endDate && dayjs(education.endDate)}
                     format="MMMM-YYYY"
                     required
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "endDate",
-                          value: newValue,
+                          value: newValue.$d.toDateString(),
                         },
                       });
                     }}

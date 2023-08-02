@@ -8,6 +8,7 @@ import {
   FormControl,
   useMediaQuery,
 } from "@mui/material";
+import dayjs from "dayjs";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
@@ -109,13 +110,15 @@ const BasicDetails = () => {
                   Date of Birth *
                 </Typography>
                 <DateField
-                  value={basicDetails.dateOfBirth}
+                  value={
+                    basicDetails.dateOfBirth && dayjs(basicDetails.dateOfBirth)
+                  }
                   required
                   onChange={(newValue) => {
                     handleChange({
                       target: {
                         name: "dateOfBirth",
-                        value: newValue,
+                        value: newValue.$d.toDateString(),
                       },
                     });
                   }}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Paper, Typography, Grid, useMediaQuery } from "@mui/material";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import Input from "../../../components/Input";
+import dayjs from "dayjs";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
@@ -101,14 +102,17 @@ const ProDetails = () => {
                     Start Date *
                   </Typography>
                   <DateField
-                    value={experienceDetails.startDate}
+                    value={
+                      experienceDetails.startDate &&
+                      dayjs(experienceDetails.startDate)
+                    }
                     required
                     format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "startDate",
-                          value: newValue,
+                          value: newValue.$d.toDateString(),
                         },
                       });
                     }}
@@ -128,14 +132,17 @@ const ProDetails = () => {
                     End Date *
                   </Typography>
                   <DateField
-                    value={experienceDetails.endDate}
+                    value={
+                      experienceDetails.endDate &&
+                      dayjs(experienceDetails.endDate)
+                    }
                     required
                     format="MMMM-YYYY"
                     onChange={(newValue) => {
                       handleChange({
                         target: {
                           name: "endDate",
-                          value: newValue,
+                          value: newValue.$d.toDateString(),
                         },
                       });
                     }}

@@ -16,8 +16,8 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
   const theme = useTheme();
 
   const getDate = (date) => {
-    const fromDate = date.$d.toDateString().split(" ");
-    return `${fromDate[1] ?? ""} ${fromDate[3] ?? ""}`;
+    const fromDate = date.split(" ");
+    return `${fromDate[1]} ${fromDate[3]}`;
   };
 
   return (

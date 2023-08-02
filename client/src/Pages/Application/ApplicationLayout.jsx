@@ -13,10 +13,13 @@ import {
   useOutletContext,
 } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
+import { useDispatch } from "react-redux";
+import { initState, setApplicationData } from "../../state/UserApplication";
 
 const Application = () => {
   const theme = useTheme();
   const location = useLocation();
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
@@ -26,8 +29,14 @@ const Application = () => {
     if (!location?.state?.vacancy) {
       navigate("./home");
     }
-    setIsNavBar(true);
   }, [location?.state?.vacancy, navigate, setIsNavBar]);
+  useEffect(() => {
+    setIsNavBar(true);
+  }, [setIsNavBar]);
+  useEffect(() => {
+    dispatch(setApplicationData(initState));
+    console.log("tests");
+  }, [dispatch]);
 
   return (
     <Box
