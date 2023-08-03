@@ -26,20 +26,27 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout />}>
-        <Route
-          path="/"
-          element={<Navigate to={user ? "/home" : "/signin"} replace />}
-        />
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/home" element={<VacancyList />} />
-        <Route path="/application" element={<Application />}>
-          <Route path="/application/basicDetails" element={<BasicDetails />} />
-          <Route path="/application/eduDetails" element={<EduDetails />} />
-          <Route path="/application/proDetails" element={<ProDetails />} />
-          <Route path="/application/otherDetails" element={<OtherDetails />} />
-          <Route path="/application/declaration" element={<Declaration />} />
+      <Route>
+        <Route element={user ? <Navigate to="/home" replace /> : <Layout />}>
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+        </Route>
+        <Route element={user ? <Layout /> : <Navigate to="/signIn" replace />}>
+          <Route path="/*" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<VacancyList />} />
+          <Route path="/application" element={<Application />}>
+            <Route
+              path="/application/basicDetails"
+              element={<BasicDetails />}
+            />
+            <Route path="/application/eduDetails" element={<EduDetails />} />
+            <Route path="/application/proDetails" element={<ProDetails />} />
+            <Route
+              path="/application/otherDetails"
+              element={<OtherDetails />}
+            />
+            <Route path="/application/declaration" element={<Declaration />} />
+          </Route>
         </Route>
       </Route>
     )

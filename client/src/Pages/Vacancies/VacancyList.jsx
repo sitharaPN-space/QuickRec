@@ -80,9 +80,7 @@ const VacancyList = () => {
   const [searchText, setSearchText] = useState("");
   const theme = useTheme();
 
-  useEffect(() => {
-    setIsNavBar(true);
-  });
+  useEffect(() => setIsNavBar(true), [setIsNavBar]);
 
   const handleSearch = (vacancies, query) => {
     const filteredVacancies = vacancies.filter((vacancy) =>
