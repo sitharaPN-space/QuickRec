@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const steps = [
   { name: "Basic Details", path: "/application/basicDetails" },
   { name: "Educational Qualification", path: "/application/eduDetails" },
-  { name: "Professinoal Experience", path: "/application/proDetails" },
+  { name: "Professional Experience", path: "/application/proDetails" },
   { name: "Other Achievements", path: "/application/otherDetails" },
   { name: "Declaration", path: "/application/declaration" },
 ];
