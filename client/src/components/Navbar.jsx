@@ -8,22 +8,30 @@ import {
   IconButton,
   ListItem,
   Typography,
+  Drawer,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ListItemStyle from "./ListItemStyle";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
 import { useDispatch } from "react-redux";
 import { isTokenExpired } from "../functions";
 
-const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
+const Navbar = ({
+  active,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  isNonMobile,
+  window,
+}) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [active, setActive] = useState("");
   const user = useSelector((state) => state.userContext.data);
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   useEffect(() => {
     if (!user?.result) {
@@ -33,13 +41,13 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
     }
   });
 
-  const handleClick = (key) => {
-    setActive(key);
-  };
-
   const handleLogOut = () => {
     localStorage.clear();
     dispatch(logOut());
+  };
+  const handleClick = (e, navigateTo) => {
+    !isNonMobile && setIsSidebarOpen(false);
+    navigateTo && navigate(navigateTo);
   };
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
@@ -70,37 +78,41 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
               >
                 <MenuIcon />
               </IconButton>
-            </Box>
-          ) : (
-            <Box component="nav">
-              <List sx={{ display: "flex" }}>
+              <Drawer
+                container={container}
+                variant="temporary"
+                open={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(!isSidebarOpen)}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+                sx={{
+                  display: { xs: "block", sm: "none" },
+                  "& .MuiDrawer-paper": {
+                    boxSizing: "border-box",
+                    backgroundColor: theme.palette.secondary.main,
+                  },
+                }}
+              >
                 <ListItem role="none">
                   <ListItemStyle
                     key="1"
-                    onClick={() => {
-                      handleClick("1");
-                      navigate("/home");
-                    }}
+                    onClick={(e) => handleClick(e, "/home")}
                     sx={{
-                      borderBottom:
-                        active === "1"
-                          ? `5px solid ${theme.palette.primary[500]}`
-                          : "none",
+                      fontSize: "16px",
+                      fontWeight: 400,
                     }}
                   >
                     Home
                   </ListItemStyle>
                 </ListItem>
-
                 <ListItem role="none">
                   <ListItemStyle
-                    key="2"
-                    onClick={() => handleClick("2")}
+                    key="5"
+                    onClick={handleClick}
                     sx={{
-                      borderBottom:
-                        active === "2"
-                          ? `5px solid ${theme.palette.primary[500]}`
-                          : "none",
+                      fontSize: "16px",
+                      fontWeight: 400,
                     }}
                   >
                     Profile
@@ -109,14 +121,64 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
 
                 <ListItem role="none">
                   <ListItemStyle
+                    key="6"
+                    onClick={handleLogOut}
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 400,
+                      width: "max-content",
+                    }}
+                  >
+                    Log out
+                  </ListItemStyle>
+                </ListItem>
+              </Drawer>
+            </Box>
+          ) : (
+            <Box component="nav">
+              <List sx={{ display: "flex" }}>
+                <ListItem role="none">
+                  <ListItemStyle
+                    key="1"
+                    onClick={(e) => handleClick(e, "/home")}
+                    sx={{
+                      borderBottom: `5px solid ${
+                        active === "1"
+                          ? theme.palette.primary[500]
+                          : theme.palette.secondary.main
+                      }`,
+                    }}
+                  >
+                    Home
+                  </ListItemStyle>
+                </ListItem>
+                <ListItem role="none">
+                  <ListItemStyle
                     key="3"
+                    onClick={() => {}}
+                    sx={{
+                      borderBottom: `5px solid ${
+                        active === "3"
+                          ? theme.palette.primary[500]
+                          : theme.palette.secondary.main
+                      }`,
+                    }}
+                  >
+                    Profile
+                  </ListItemStyle>
+                </ListItem>
+
+                <ListItem role="none">
+                  <ListItemStyle
+                    key="4"
                     onClick={() => handleLogOut()}
                     sx={{
-                      borderBottom:
-                        active === "3"
-                          ? `5px solid ${theme.palette.primary[500]}`
-                          : "none",
-                      width: "120px",
+                      borderBottom: `5px solid ${
+                        active === "4"
+                          ? theme.palette.primary[500]
+                          : theme.palette.secondary.main
+                      }`,
+                      width: "max-content",
                     }}
                   >
                     Log out
