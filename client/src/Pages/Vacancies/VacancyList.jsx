@@ -11,68 +11,7 @@ import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
 
-const vacancies = [
-  {
-    vacancyId: 1234,
-    title: "Deputy General Manager",
-    status: "Open",
-    recType: "External Recrutiement",
-    closingDate: "2023 sep 20",
-    slaryGroup: "HM 1-1",
-    boardGrade: "G2",
-    advertisement: "/path",
-    NoOfApplied: "7",
-    postedDays: 2,
-  },
-  {
-    vacancyId: 5678,
-    title: "Assistant General Manager",
-    status: "Open",
-    recType: "External Recrutiement",
-    closingDate: "2023 sep 20",
-    slaryGroup: "HM 1-1",
-    boardGrade: "G2",
-    advertisement: "/path",
-    NoOfApplied: "7",
-    postedDays: 2,
-  },
-  {
-    vacancyId: 8498,
-    title: "General Manager",
-    status: "Open",
-    recType: "External Recrutiement",
-    closingDate: "2023 sep 20",
-    slaryGroup: "HM 1-1",
-    boardGrade: "G2",
-    advertisement: "/path",
-    NoOfApplied: "7",
-    postedDays: 2,
-  },
-  {
-    vacancyId: 9101,
-    title: "Deputy General Manager",
-    status: "Open",
-    recType: "External Recrutiement",
-    closingDate: "2023 sep 20",
-    slaryGroup: "HM 1-1",
-    boardGrade: "G2",
-    advertisement: "/path",
-    NoOfApplied: "7",
-    postedDays: 2,
-  },
-  {
-    vacancyId: 1233,
-    title: "Deputy General Manager",
-    status: "Open",
-    recType: "External Recrutiement",
-    closingDate: "2023 sep 20",
-    slaryGroup: "HM 1-1",
-    boardGrade: "G2",
-    advertisement: "/path",
-    NoOfApplied: "7",
-    postedDays: 2,
-  },
-];
+const { vacancies } = require("./vacancies.json");
 
 const VacancyList = () => {
   const [setIsNavBar] = useOutletContext();
