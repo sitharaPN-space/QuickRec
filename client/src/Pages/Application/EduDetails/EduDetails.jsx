@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Paper,
-  Select,
   Typography,
   MenuItem,
   Grid,
@@ -16,6 +15,7 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
+import SelectComp from "../../../components/SelectComp";
 
 const initEducation = {
   type: "",
@@ -96,24 +96,16 @@ const EduDetails = () => {
                 Type of Education *
               </Typography>
               <FormControl size="small">
-                <Select
+                <SelectComp
                   name="type"
                   value={education.type}
                   required
                   onChange={handleChange}
-                  MenuProps={{
-                    disableScrollLock: true,
-                  }}
-                  sx={{
-                    minWidth: "140px",
-                    minHeight: "1.4rem",
-                    backgroundColor: (theme) => theme.palette.background.main,
-                  }}
                 >
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
                   <MenuItem value={3}>3</MenuItem>
-                </Select>
+                </SelectComp>
               </FormControl>
             </Grid>
             <Input
@@ -200,24 +192,16 @@ const EduDetails = () => {
                 Grade *
               </Typography>
               <FormControl size="small">
-                <Select
+                <SelectComp
                   name="grade"
                   value={education.grade}
                   required
                   onChange={handleChange}
-                  MenuProps={{
-                    disableScrollLock: true,
-                  }}
-                  sx={{
-                    minWidth: "140px",
-                    minHeight: "1.4rem",
-                    backgroundColor: (theme) => theme.palette.background.main,
-                  }}
                 >
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
                   <MenuItem value={3}>3</MenuItem>
-                </Select>
+                </SelectComp>
               </FormControl>
             </Grid>
             <Input

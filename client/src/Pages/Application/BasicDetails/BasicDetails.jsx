@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import {
   Paper,
-  Select,
   Typography,
   MenuItem,
   Grid,
@@ -15,6 +14,7 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { DateField } from "@mui/x-date-pickers";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
+import SelectComp from "../../../components/SelectComp";
 
 const BasicDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -53,24 +53,16 @@ const BasicDetails = () => {
               Title *
             </Typography>
             <FormControl size="small">
-              <Select
+              <SelectComp
                 name="title"
                 value={basicDetails.title}
                 required
-                MenuProps={{
-                  disableScrollLock: true,
-                }}
                 onChange={handleChange}
-                sx={{
-                  minWidth: "140px",
-                  minHeight: "1.4rem",
-                  backgroundColor: (theme) => theme.palette.background.main,
-                }}
               >
                 <MenuItem value={1}>Mr.</MenuItem>
                 <MenuItem value={2}>Mrs.</MenuItem>
                 <MenuItem value={3}>Miss.</MenuItem>
-              </Select>
+              </SelectComp>
             </FormControl>
           </Grid>
           <Input
@@ -143,23 +135,15 @@ const BasicDetails = () => {
                   Sex *
                 </Typography>
                 <FormControl size="small" sx={{ width: "100%" }}>
-                  <Select
+                  <SelectComp
                     name="sex"
                     required
                     value={basicDetails.sex}
                     onChange={handleChange}
-                    MenuProps={{
-                      disableScrollLock: true,
-                    }}
-                    sx={{
-                      width: "100%",
-                      minHeight: "1.4rem",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
                   >
                     <MenuItem value={1}>Male</MenuItem>
                     <MenuItem value={2}>Female</MenuItem>
-                  </Select>
+                  </SelectComp>
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
@@ -169,22 +153,15 @@ const BasicDetails = () => {
                   Civil Status *
                 </Typography>
                 <FormControl size="small" sx={{ width: "100%" }}>
-                  <Select
+                  <SelectComp
                     name="civilStatus"
                     required
                     value={basicDetails.civilStatus}
                     onChange={handleChange}
-                    MenuProps={{
-                      disableScrollLock: true,
-                    }}
-                    sx={{
-                      minHeight: "1.4rem",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
                   >
                     <MenuItem value={1}>Single</MenuItem>
                     <MenuItem value={2}>Married</MenuItem>
-                  </Select>
+                  </SelectComp>
                 </FormControl>
               </Grid>
             </Grid>
@@ -211,26 +188,18 @@ const BasicDetails = () => {
                   Nationality *
                 </Typography>
                 <FormControl size="small" sx={{ width: "100%" }}>
-                  <Select
+                  <SelectComp
                     name="nationality"
                     required
                     value={basicDetails.nationality}
                     onChange={handleChange}
-                    MenuProps={{
-                      disableScrollLock: true,
-                    }}
-                    sx={{
-                      width: "100%",
-                      minHeight: "1.4rem",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
                   >
                     <MenuItem value={1}>Sri Lankan</MenuItem>
                     <MenuItem value={2}>Indian</MenuItem>
                     <MenuItem value={3}>Japanese</MenuItem>
                     <MenuItem value={4}>Chinease</MenuItem>
                     <MenuItem value={5}>Other </MenuItem>
-                  </Select>
+                  </SelectComp>
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
@@ -240,25 +209,18 @@ const BasicDetails = () => {
                   Religion *
                 </Typography>
                 <FormControl size="small" sx={{ width: "100%" }}>
-                  <Select
+                  <SelectComp
                     name="religion"
                     required
                     value={basicDetails.religion}
                     onChange={handleChange}
-                    MenuProps={{
-                      disableScrollLock: true,
-                    }}
-                    sx={{
-                      minHeight: "1.4rem",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
                   >
                     <MenuItem value={1}>Buddhism</MenuItem>
                     <MenuItem value={2}>Hindu</MenuItem>
                     <MenuItem value={3}>Christianity </MenuItem>
                     <MenuItem value={4}>Islam </MenuItem>
                     <MenuItem value={5}>Other </MenuItem>
-                  </Select>
+                  </SelectComp>
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
@@ -268,18 +230,11 @@ const BasicDetails = () => {
                   Ethnicity *
                 </Typography>
                 <FormControl size="small" sx={{ width: "100%" }}>
-                  <Select
+                  <SelectComp
                     name="ethnicity"
                     required
                     onChange={handleChange}
                     value={basicDetails.ethnicity}
-                    MenuProps={{
-                      disableScrollLock: true,
-                    }}
-                    sx={{
-                      minHeight: "1.4rem",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
                   >
                     <MenuItem value={1}>Sinhala</MenuItem>
                     <MenuItem value={2}>Tamil</MenuItem>
@@ -287,7 +242,7 @@ const BasicDetails = () => {
                     <MenuItem value={4}>Malay </MenuItem>
                     <MenuItem value={5}>Burger </MenuItem>
                     <MenuItem value={6}>Other </MenuItem>
-                  </Select>
+                  </SelectComp>
                 </FormControl>
               </Grid>
             </Grid>
