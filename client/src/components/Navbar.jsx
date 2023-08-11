@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -13,11 +13,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ListItemStyle from "./ListItemStyle";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
-import { useDispatch } from "react-redux";
+import decode from "jwt-decode";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const theme = useTheme();
@@ -25,6 +24,15 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const navigate = useNavigate();
   const [active, setActive] = useState("");
   const user = useSelector((state) => state.userContext.data);
+
+  // useEffect(() => {
+  //   const token = user?.token;
+  //   if (token) {
+  //     const decodedToken = decode(token);
+  //     if (decodedToken * 1000 < new Date().getTime()) handleLogOut();
+  //   }
+  // }, [location]);
+
   const handleClick = (key) => {
     setActive(key);
   };
@@ -132,7 +140,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
           margin: "10px 20px 0 20px",
         }}
       >
-        <Typography>Welcome {user.result.UserName} !</Typography>
+        <Typography>Welcome {user.data.UserName} !</Typography>
       </div>
     </div>
   );

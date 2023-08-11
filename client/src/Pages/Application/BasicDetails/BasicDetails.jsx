@@ -16,6 +16,8 @@ import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StepperButton from "../../../components/StepperButton";
+import * as api from "../../../api";
+import { useSelector } from "react-redux";
 
 const initState = {
   title: "",
@@ -40,14 +42,24 @@ const BasicDetails = ({}) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [basicDetails, setBasicDetails] = useState(initState);
   const navigate = useNavigate();
-  const location = useLocation();
+  const userData = useSelector((state) => state.userContext.data);
 
   useEffect(() => {
     setCurrentStep(0);
   }, []);
-  const handleNext = (e) => {
+
+  const handleNext = async (e) => {
     // e.preventDefault();
-    navigate("/application/eduDetails");
+    basicDetails.userId = userData.data.UserId;
+    basicDetails.vacancyId = 4823;
+    console.log(basicDetails);
+
+    try {
+      //  const data = await api.saveBasicDetails(basicDetails);
+      navigate("/application/eduDetails");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange = (e) => {
@@ -61,7 +73,10 @@ const BasicDetails = ({}) => {
     >
       <Grid container spacing={2} sx={{ p: "1.5rem" }}>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
-          <Typography variant="h4" sx={{ fontWeight: "600" }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "600", color: theme.palette.primary[500] }}
+          >
             Basic Details
           </Typography>
         </Grid>
@@ -73,6 +88,7 @@ const BasicDetails = ({}) => {
             <Select
               name="title"
               onChange={handleChange}
+              value={basicDetails.title}
               sx={{
                 minWidth: "140px",
                 minHeight: "1.4rem",
@@ -87,6 +103,7 @@ const BasicDetails = ({}) => {
         </Grid>
         <Input
           name="nameWithInitials"
+          value={BasicDetails.nameWithInitials}
           label="Name with initials *"
           handleChange={handleChange}
           required

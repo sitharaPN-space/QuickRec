@@ -27,9 +27,10 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [isNavbar, setIsNavBar] = useOutletContext();
+
   useEffect(() => {
     setIsNavBar(false);
-  });
+  }, []);
 
   const handleShowPassowrd = () => {
     setShowPassword(!showPassword);
@@ -45,8 +46,14 @@ const SignIn = () => {
     try {
       const data = await api.signin(loginData);
       const successData = { result: data.result, token: data.token };
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          token: data.token,
+          userData: data.result,
+        })
+      );
       dispatch(getUserDataOnSuccess(successData));
-      localStorage.setItem("profile", { token: data.token });
       navigate("/home");
     } catch (error) {
       dispatch(getUserDataOnFailiure(error.response.data));

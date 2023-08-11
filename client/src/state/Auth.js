@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getValidatedUserData } from "../utils/UserValidation";
 
 const userSlice = createSlice({
   name: "userContext",
   initialState: {
-    data: null,
+    data: getValidatedUserData(),
     error: null,
   },
   reducers: {
     getUserDataOnSuccess(state, action) {
-      state.data = action.payload;
+      state.data = getValidatedUserData(action?.payload);
       state.error = null;
     },
     getUserDataOnFailiure(state, action) {

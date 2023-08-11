@@ -10,6 +10,7 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
       encrypt: false, // For secure connections
     },
   },
+  timezone: "+05:30",
 });
 
 // Export the instance

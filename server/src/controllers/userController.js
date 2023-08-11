@@ -47,6 +47,7 @@ export const signin = async (req, res) => {
   const { userName, password } = req.body;
 
   try {
+    console.log("user request " + req);
     const oldUser = await UserDao.getUserByEmail(userName);
 
     if (!oldUser)
@@ -61,7 +62,7 @@ export const signin = async (req, res) => {
       { email: oldUser.email, id: oldUser._id },
       process.env.JWT_SECRET_KEY,
       {
-        expiresIn: "1h",
+        expiresIn: 60, // 60 seconds
       }
     );
 

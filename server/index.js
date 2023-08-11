@@ -6,6 +6,7 @@ import helmet from "helmet"; // for http header security
 import morgan from "morgan"; // request loggers
 
 import userRoutes from "./src/routes/userRoutes.js";
+import applicationRoutes from "./src/routes/applicationRoutes.js";
 
 /* CONFIGURATION */
 const app = express();
@@ -27,6 +28,8 @@ app.use(cors());
 
 /* ROUTES */
 app.use("/user", userRoutes);
+app.use("/application", applicationRoutes);
+//app.use("/common");
 
 var port = process.env.PORT || 5000;
 app.listen(port);

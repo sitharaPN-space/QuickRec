@@ -14,11 +14,9 @@ class UserDao {
   static async getUserById(userId) {
     try {
       const user = await UserModel.findByPk(userId);
-      // Additional business logic or data manipulation if needed
       return user;
     } catch (e) {
       console.log(e);
-      //throw new Error("Failed to retrieve user");
     }
   }
 

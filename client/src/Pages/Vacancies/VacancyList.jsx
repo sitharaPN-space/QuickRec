@@ -32,7 +32,7 @@ const VacancyList = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   useEffect(() => {
     setIsNavBar(true);
-  });
+  }, []);
 
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>

@@ -17,6 +17,7 @@ const Input = ({
   half,
   quarter,
   type,
+  value,
   required,
   handleShowPassword,
   size,
@@ -37,6 +38,7 @@ const Input = ({
         onChange={handleChange}
         required={required}
         fullWidth
+        value={value}
         type={type}
         multiline={multiline}
         rows={multiline && 4}
