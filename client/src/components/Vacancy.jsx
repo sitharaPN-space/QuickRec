@@ -14,7 +14,7 @@ import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
 
 const Vacancy = ({ detail }) => {
-  const subTitle = `Posted ${detail.postedDays} days ago`;
+  const subTitle = `Posted ${detail.DaysPosted} `;
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
   const navigate = useNavigate();
@@ -22,14 +22,14 @@ const Vacancy = ({ detail }) => {
   const handleApply = (e) => {
     e.preventDefault();
     navigate("/application/basicDetails", {
-      state: { vacancyId: detail.vacancyId, vacancy: detail.title },
+      state: { vacancyId: detail.VacancyId, vacancy: detail.VacancyName },
     });
   };
 
   return (
     <Card sx={{ width: "100%" }}>
       <CardHeader
-        title={detail.title}
+        title={detail.VacancyName}
         subheader={subTitle}
         sx={{ backgroundColor: theme.palette.secondary[400], p: "12px" }}
         titleTypographyProps={{
@@ -49,7 +49,7 @@ const Vacancy = ({ detail }) => {
             color: theme.palette.secondary[800],
           }}
         >
-          {detail.recType}
+          {detail.RecruitmentType}
         </Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={isMobile ? 12 : 4}>
@@ -66,7 +66,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.closingDate}
+                {detail.ClosingDate}
               </Typography>
             </div>
           </Grid>
@@ -79,7 +79,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.closingDate}
+                {detail.PublishedDate}
               </Typography>
             </div>
           </Grid>
@@ -92,7 +92,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.slaryGroup}
+                {detail.SalaryGroup}
               </Typography>
             </div>
           </Grid>
@@ -105,7 +105,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.boardGrade}
+                {detail.BoardGrade}
               </Typography>
             </div>
           </Grid>

@@ -13,6 +13,7 @@ const RecruitementType = {
   INTERNAL: "INT",
   EXTERNAL: "EXT",
   INTERNAL_EXTERNAL: "INT_EXT",
+  PROMOTION: "PROMOTION",
 };
 
 export { ApplicationStatus, ActiveStatus, RecruitementType };

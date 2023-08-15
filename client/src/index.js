@@ -7,13 +7,20 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import authReducer from "./state/Auth";
 import applicationReducer from "./state/UserApplication";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { api } from "./state/api";
 
 const store = configureStore({
   reducer: {
     userContext: authReducer,
     userApplication: applicationReducer,
+    [api.reducerPath]: api.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
+
+setupListeners(store.dispatch);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

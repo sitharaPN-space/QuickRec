@@ -15,6 +15,7 @@ import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
 import { getVacanciesBySearch } from "../../api";
+import { useGetVacanciesQuery } from "../../state/api";
 
 const detail = {
   vacancyId: 1234,
@@ -43,6 +44,12 @@ const VacancyList = () => {
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
 
+  const { data, isLoading } = useGetVacanciesQuery();
+  console.log(
+    "🚀 ~ file: VacancyList.jsx:48 ~ VacancyList ~ vacancyList:",
+    data
+  );
+
   useEffect(() => {
     setIsNavBar(true);
   }, []);
@@ -53,9 +60,10 @@ const VacancyList = () => {
     }
   };
 
-  const searchVacancy = () => {
+  const searchVacancy = async () => {
     if (search.trim()) {
-      getVacanciesBySearch({ search });
+      const result = await getVacanciesBySearch({ search });
+      console.log(result);
     } else {
       navigate("/");
     }
@@ -116,9 +124,13 @@ const VacancyList = () => {
             marginTop: "2rem",
           }}
         >
-          <Vacancy detail={detail} />
-          <Vacancy detail={detail} />
-          <Vacancy detail={detail} />
+          {data || !isLoading ? (
+            data.data.map((vacancy) => {
+              return <Vacancy key={vacancy.VacancyId} detail={vacancy} />;
+            })
+          ) : (
+            <>{console.log("Loading...")}</>
+          )}
         </div>
       </Container>
     </div>

@@ -69,7 +69,7 @@ Vacancy.init(
   {
     sequelize,
     timestamps: true,
-    modelName: "Vacanies",
+    modelName: "Vacancies",
   }
 );
 

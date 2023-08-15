@@ -9,7 +9,7 @@ const config = {
   },
 };
 
-const API = axios.create({ baseURL: "http://10.0.19.177:5000" });
+const API = axios.create({ baseURL: "http://10.0.19.177:5000" }); // process.env.REACT_APP_BASE_URL });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
@@ -48,6 +48,7 @@ const getVacanciesBySearch = async (searchQuery) => {
   const response = await API.get(
     `/vacancy/search?searchQuery=${searchQuery.search || "none"} `
   );
+  return response.data.data;
 };
 
 export { getVacancies, saveBasicDetails, signin, signup, getVacanciesBySearch };

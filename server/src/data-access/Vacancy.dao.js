@@ -26,4 +26,22 @@ const getVacanciesBySearch = async (req) => {
   }
 };
 
-export { createOrUpadateVacancy, getVacanciesBySearch };
+const getAllVacancies = async (req) => {
+  try {
+    const results = await req.app.locals.db.query(`
+    SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
+    PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,
+    VacancyName,updatedAt, 
+    IIF(DATEDIFF(day,updatedAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETDATE()), ' hours ago'),
+    CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted
+    FROM Vacancies
+    INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
+    INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId`);
+    return results.recordset;
+  } catch (error) {
+    console.error(error);
+    return { message: "Failed data retrieval", error };
+  }
+};
+
+export { createOrUpadateVacancy, getVacanciesBySearch, getAllVacancies };
