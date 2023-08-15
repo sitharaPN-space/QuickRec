@@ -6,12 +6,7 @@ import {
   useMediaQuery,
   Container,
 } from "@mui/material";
-import {
-  useLocation,
-  Outlet,
-  useNavigate,
-  useOutletContext,
-} from "react-router-dom";
+import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
 import { useDispatch } from "react-redux";
 import { initState, setApplicationData } from "../../state/UserApplication";
@@ -23,19 +18,15 @@ const Application = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
-  const [setIsNavBar] = useOutletContext();
 
   useEffect(() => {
     if (!location?.state?.vacancy) {
       navigate("./home");
     }
-  }, [location?.state?.vacancy, navigate, setIsNavBar]);
-  useEffect(() => {
-    setIsNavBar(true);
-  }, [setIsNavBar]);
+  }, [location?.state?.vacancy, navigate]);
+
   useEffect(() => {
     dispatch(setApplicationData(initState));
-    console.log("tests");
   }, [dispatch]);
 
   return (

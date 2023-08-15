@@ -27,7 +27,9 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route element={user ? <Navigate to="/home" replace /> : <Layout />}>
+        <Route
+          element={user ? <Navigate to="/home" replace /> : <Layout auth />}
+        >
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
         </Route>

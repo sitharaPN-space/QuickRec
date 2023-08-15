@@ -5,8 +5,7 @@ import {
   InputBase,
   IconButton,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
@@ -14,12 +13,9 @@ import Vacancy from "../../components/Vacancy";
 const { vacancies } = require("./vacancies.json");
 
 const VacancyList = () => {
-  const [setIsNavBar] = useOutletContext();
   const [vacancyList, setVacancyList] = useState(vacancies);
   const [searchText, setSearchText] = useState("");
   const theme = useTheme();
-
-  useEffect(() => setIsNavBar(true), [setIsNavBar]);
 
   const handleSearch = (vacancies, query) => {
     const filteredVacancies = vacancies.filter((vacancy) =>
