@@ -10,6 +10,12 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
       encrypt: false, // For secure connections
     },
   },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
   timezone: "+05:30",
 });
 

@@ -3,10 +3,22 @@ import axios from "axios";
 const config = {
   header: {
     "Content-type": "application/json",
+    // Authorization: `Bearer ${
+    //   JSON.parse(localStorage.getItem("profile"))?.token
+    // }`,
   },
 };
 
 const API = axios.create({ baseURL: "http://10.0.19.177:5000" });
+
+API.interceptors.request.use((req) => {
+  if (localStorage.getItem("profile")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("profile"))?.token
+    }`;
+  }
+  return req;
+});
 
 const signin = async (loginData) => {
   const response = await API.post("user/signin", loginData, config);
@@ -28,8 +40,14 @@ const saveBasicDetails = async (basicDetails) => {
 };
 
 const getVacancies = async () => {
-  const response = await API.get("common/vacancies", config);
+  const response = await API.get("/vacancies", config);
   return response.data;
 };
 
-export { getVacancies, saveBasicDetails, signin, signup };
+const getVacanciesBySearch = async (searchQuery) => {
+  const response = await API.get(
+    `/vacancy/search?searchQuery=${searchQuery.search || "none"} `
+  );
+};
+
+export { getVacancies, saveBasicDetails, signin, signup, getVacanciesBySearch };

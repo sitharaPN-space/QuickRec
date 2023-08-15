@@ -6,12 +6,15 @@ import {
   IconButton,
   useMediaQuery,
   Box,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
+import { getVacanciesBySearch } from "../../api";
 
 const detail = {
   vacancyId: 1234,
@@ -26,13 +29,37 @@ const detail = {
   postedDays: 2,
 };
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const VacancyList = () => {
   const [isNavbar, setIsNavBar] = useOutletContext();
+  const query = useQuery();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
+  const [search, setSearch] = useState("");
+  const page = query.get("page") || 1;
+  const searchQuery = query.get("searchQuery");
+
   useEffect(() => {
     setIsNavBar(true);
   }, []);
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      searchVacancy();
+    }
+  };
+
+  const searchVacancy = () => {
+    if (search.trim()) {
+      getVacanciesBySearch({ search });
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <div style={{ backgroundColor: theme.palette.background.main }}>
@@ -54,21 +81,32 @@ const VacancyList = () => {
           >
             Available Opportunities
           </Typography>
-          <Paper
-            component="form"
+          <TextField
             sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
+              flex: 1,
+              border: "none",
               width: "75%",
-              backgroundcolor: theme.palette.background.main,
+              variant: "filled",
+              background: "#fff",
+              border: `1px solid ${theme.palette.primary[500]}`,
+              borderRadius: "5px",
             }}
-          >
-            <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search..." />
-            <IconButton>
-              <Search />
-            </IconButton>
-          </Paper>
+            name="search"
+            value={search}
+            placeholder="Search..."
+            onKeyDown={handleKeyPress}
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={searchVacancy}>
+                    <Search />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          {/* </Paper> */}
         </div>
         <div
           style={{

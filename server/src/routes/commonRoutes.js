@@ -1,9 +1,13 @@
 import express from "express";
-import { vacancyList } from "../controllers/CommonController";
-import auth from "../middleware/auth";
+import {
+  createVacancy,
+  getVacancyBySearch,
+} from "../controllers/VacancyController.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/vacnacies", vacancyList);
+router.post("/createVacancy", createVacancy);
+router.get("/search", getVacancyBySearch);
 
 export default router;
