@@ -5,8 +5,7 @@ import logo from "../Assets/WB_Logo.png";
 import CareerBanner from "../components/CareerBanner";
 import Navbar from "../components/Navbar";
 
-const Layout = () => {
-  const [isNavbar, setIsNavBar] = useState(false);
+const Layout = ({ auth }) => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -26,7 +25,7 @@ const Layout = () => {
             }}
           ></Box>
         </Box>
-        {isNavbar ? (
+        {!auth ? (
           <Navbar
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
@@ -37,7 +36,7 @@ const Layout = () => {
         )}
       </Box>
       <Box>
-        <Outlet context={[setIsNavBar]} />
+        <Outlet />
       </Box>
     </Box>
   );
