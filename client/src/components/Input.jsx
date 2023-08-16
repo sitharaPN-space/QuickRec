@@ -60,7 +60,11 @@ const Input = ({
     inputProps = {
       endAdornment: (
         <InputAdornment position="end">
-          <FileUploader required={required} handleChange={handleChange}>
+          <FileUploader
+            required={required}
+            name={name}
+            handleChange={handleChange}
+          >
             Go
           </FileUploader>
         </InputAdornment>

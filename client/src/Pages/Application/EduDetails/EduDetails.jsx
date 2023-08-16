@@ -25,7 +25,7 @@ const initEducation = {
   startDate: null,
   endDate: null,
   grade: "",
-  upload: { name: "Choose File" },
+  upload: "Choose File",
 };
 
 const EduDetails = () => {
@@ -206,16 +206,10 @@ const EduDetails = () => {
             </Grid>
             <Input
               name="upload"
-              value={education.upload.name}
+              value={education.upload}
               type="file"
               label="Upload *"
-              handleChange={(e) => {
-                e.target.files[0]?.type === "application/pdf"
-                  ? handleChange({
-                      target: { name: "upload", value: e.target.files[0] },
-                    })
-                  : alert("Invalid filetype !");
-              }}
+              handleChange={handleChange}
               required
               half
             />

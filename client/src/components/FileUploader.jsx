@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import ButtonComp from "./ButtonComp";
-const FileUploader = ({ handleChange, required, children }) => {
+const FileUploader = ({ name, handleChange, required, children }) => {
   const hiddenFileInput = useRef(null);
 
   const handleClick = () => {
@@ -15,9 +15,19 @@ const FileUploader = ({ handleChange, required, children }) => {
         {children}
       </ButtonComp>
       <input
+        name={name}
         type="file"
         ref={hiddenFileInput}
-        onChange={handleChange}
+        onChange={(e) => {
+          e.target.files[0]?.type === "application/pdf"
+            ? handleChange({
+                target: {
+                  name: e.target.name,
+                  value: e.target.files[0].name,
+                },
+              })
+            : alert("Invalid file type!");
+        }}
         style={{
           opacity: 0,
           width: "1px",

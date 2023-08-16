@@ -15,7 +15,7 @@ const initAchievement = {
   startDate: null,
   endDate: null,
   description: "",
-  upload: { name: "Choose File" },
+  upload: "Choose File",
 };
 
 const ProDetails = () => {
@@ -167,17 +167,11 @@ const ProDetails = () => {
             />
             <Input
               name="upload"
-              value={achievement.upload.name}
+              value={achievement.upload}
               disabled
               type="file"
               label="Upload *"
-              handleChange={(e) => {
-                e.target.files[0]?.type === "application/pdf"
-                  ? handleChange({
-                      target: { name: "upload", value: e.target.files[0] },
-                    })
-                  : alert("Invalid filetype !");
-              }}
+              handleChange={handleChange}
               required
               half
             />

@@ -68,16 +68,10 @@ const Declaration = () => {
           <Grid item xs={12}>
             <Input
               name="cv"
-              value={attachments.cv.name}
+              value={attachments.cv}
               label="You CV *"
               type="file"
-              handleChange={(e) => {
-                e.target.files[0]?.type === "application/pdf"
-                  ? handleChange({
-                      target: { name: "cv", value: e.target.files[0] },
-                    })
-                  : alert("Invalid filetype !");
-              }}
+              handleChange={handleChange}
               required
               half
             />
@@ -85,16 +79,10 @@ const Declaration = () => {
           <Grid item xs={12}>
             <Input
               name="nic"
-              value={attachments.nic.name}
+              value={attachments.nic}
               label="Copy of NIC *"
               type="file"
-              handleChange={(e) => {
-                e.target.files[0]?.type === "application/pdf"
-                  ? handleChange({
-                      target: { name: "nic", value: e.target.files[0] },
-                    })
-                  : alert("Invalid filetype !");
-              }}
+              handleChange={handleChange}
               required
               half
             />
@@ -102,19 +90,10 @@ const Declaration = () => {
           <Grid item xs={12}>
             <Input
               name="birthCertificate"
-              value={attachments.birthCertificate.name}
+              value={attachments.birthCertificate}
               label="Birth Certificate *"
               type="file"
-              handleChange={(e) => {
-                e.target.files[0]?.type === "application/pdf"
-                  ? handleChange({
-                      target: {
-                        name: "birthCertificate",
-                        value: e.target.files[0],
-                      },
-                    })
-                  : alert("Invalid filetype !");
-              }}
+              handleChange={handleChange}
               required
               half
             />
