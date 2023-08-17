@@ -30,7 +30,7 @@ BasicDetails.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    Nic: {
+    NIC: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -43,6 +43,10 @@ BasicDetails.init(
       allowNull: false,
     },
     CivilStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Religion: {
       type: DataTypes.STRING,
       allowNull: false,
     },

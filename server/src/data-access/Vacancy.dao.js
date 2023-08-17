@@ -1,7 +1,5 @@
 import Vacancy from "../models/Vacancy.js";
 import { updateOrCreate } from "./Basic.dao.js";
-import sql from "mssql";
-import { application } from "express";
 
 const createOrUpadateVacancy = async (vacancyReq, req) => {
   try {

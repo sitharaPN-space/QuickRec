@@ -5,19 +5,6 @@ const createVacancy = async (req, res) => {
   // if (!req.userId) return res.json({ message: "Unauthenticated" });
 
   try {
-    const {
-      VacancyName,
-      RecruitmentType,
-      SalaryGroupId,
-      BoardGradeId,
-      PublishedDate,
-      ClosingDate,
-      NoOfVacancies,
-      PlannedInterViewDate,
-      AgeLimit,
-      Remarks,
-      Status,
-    } = req.body;
     const vacancy = await VacancyDao.createOrUpadateVacancy(req.body);
     res.status(201).json({ result: vacancy });
   } catch (error) {

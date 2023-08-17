@@ -6,13 +6,15 @@ import {
   useMediaQuery,
   Container,
 } from "@mui/material";
-import { useLocation, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
+import { useSelector } from "react-redux";
 
 const Application = () => {
   const theme = useTheme();
   const [currentStep, setCurrentStep] = React.useState(0);
-  const location = useLocation();
+  const vacancy = useSelector((state) => state.userApplication.vacancy);
+
   const isMobile = useMediaQuery("(max-width: 600px)");
 
   return (
@@ -33,7 +35,7 @@ const Application = () => {
             pt: "1rem",
           }}
         >
-          Application for the post {location?.state?.title}
+          Application for the {vacancy.vacancy}
         </Typography>
       </div>
 

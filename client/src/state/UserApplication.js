@@ -3,6 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const userApplication = createSlice({
   name: "userApplication",
   initialState: {
+    vacancy: {
+      vacancyId: null,
+      vacancyName: "",
+    },
     basicDetails: {
       title: "",
       nameWithInitials: "",
@@ -26,6 +30,9 @@ const userApplication = createSlice({
     setAchievementsState(state, action) {
       state.achievements = [...state.achievements, action.payload];
     },
+    setVacancyDetails(state, action) {
+      state.vacancy = action.payload;
+    },
   },
 });
 
@@ -33,5 +40,6 @@ export const {
   setEducationQulifications,
   setProfessionalQulifications,
   setAchievementsState,
+  setVacancyDetails,
 } = userApplication.actions;
 export default userApplication.reducer;

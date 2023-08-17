@@ -46,8 +46,26 @@ const createBasicDetails = async (basicDetailsReq) => {
   }
 };
 
+const getApplicationBasicDetails = async (req) => {
+  const { userId, vacancyId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT bd.ApplicationId, title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
+      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
+      FROM Applications app
+      INNER JOIN ApplicationBasicDetails bd on bd.ApplicationId = app.ApplicationId
+      WHERE app.UserId = ${userId} and app.VacancyId = ${vacancyId}`
+    );
+
+    return results.recordset[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createBasicDetails,
   createOrUpadateApplication,
   getExistingApplication,
+  getApplicationBasicDetails,
 };

@@ -12,6 +12,7 @@ export const addBasicDetails = async (req, res) => {
     nameDenotedbyInit,
     otherName,
     nic,
+    religion,
     dateOfBirth,
     sex,
     civilStatus,
@@ -26,7 +27,7 @@ export const addBasicDetails = async (req, res) => {
 
   try {
     // get existing appliation
-    if (!req.userId) return res.json({ message: "Unauthenticated" });
+    // if (!req.userId) return res.json({ message: "Unauthenticated" });
 
     const dbResult = await ApplicationDAO.createOrUpadateApplication({
       UserId: userId,
@@ -41,10 +42,11 @@ export const addBasicDetails = async (req, res) => {
       NameWithInitials: nameWithInitials,
       NameDenotedbyInit: nameDenotedbyInit,
       OtherName: otherName,
-      Nic: nic,
+      NIC: nic,
       DateOfBirth: dateOfBirth,
       Sex: sex,
       CivilStatus: civilStatus,
+      Religion: religion,
       AddressLine1: AddressLine1,
       AddressLine2: AddressLine2,
       Nationality: nationality,
@@ -57,5 +59,15 @@ export const addBasicDetails = async (req, res) => {
     res.status(200).json({ basicDetails });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getBasicDetails = async (req, res) => {
+  try {
+    const basicDetails = await ApplicationDAO.getApplicationBasicDetails(req);
+    res.status(200).json({ basicDetails });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
   }
 };

@@ -12,18 +12,26 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setVacancyDetails } from "../state/UserApplication";
 
 const Vacancy = ({ detail }) => {
   const subTitle = `Posted ${detail.DaysPosted} `;
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleApply = (e) => {
     e.preventDefault();
+    const applyingVacancy = {
+      vacancyId: detail.VacancyId,
+      vacancy: detail.VacancyName,
+    };
     navigate("/application/basicDetails", {
-      state: { vacancyId: detail.VacancyId, vacancy: detail.VacancyName },
+      state: applyingVacancy,
     });
+    dispatch(setVacancyDetails(applyingVacancy));
   };
 
   return (

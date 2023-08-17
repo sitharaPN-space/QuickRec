@@ -27,11 +27,12 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
 
   // useEffect(() => {
   //   const token = user?.token;
+  //   console.log("🚀 ~ file: Navbar.jsx:30 ~ useEffect ~ user:", user);
   //   if (token) {
   //     const decodedToken = decode(token);
   //     if (decodedToken * 1000 < new Date().getTime()) handleLogOut();
   //   }
-  // }, [location]);
+  // }, []);
 
   const handleClick = (key) => {
     setActive(key);
@@ -49,11 +50,14 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
           position: "static",
           boxShadow: "none",
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: isNonMobile ? "flex-end" : "flex-start",
           maxHeight: isNonMobile ? "50px" : "40px",
           width: "100%",
           backgroundColor: theme.palette.secondary.main,
+          "& .MuiToolbar-root": {
+            minHeight: "0px",
+          },
         }}
       >
         <Toolbar
@@ -74,7 +78,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
             </Box>
           ) : (
             <Box component="nav">
-              <List sx={{ display: "flex" }}>
+              <List sx={{ display: "flex", p: "0" }}>
                 <ListItem role="none">
                   <ListItemStyle
                     key="1"

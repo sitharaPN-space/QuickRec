@@ -14,7 +14,7 @@ import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
-import { getVacanciesBySearch } from "../../api";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   useGetVacanciesQuery,
   useGetVacancyBySearchQuery,
@@ -34,7 +34,6 @@ const VacancyList = () => {
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
 
-  // const { data: vacancyList, isLoading } = useGetVacanciesQuery() || {};
   const { data: searchVacancyList, isLoading: vacancySearchLoading } =
     useGetVacancyBySearchQuery(search) || {};
 
@@ -115,7 +114,9 @@ const VacancyList = () => {
               return <Vacancy key={vacancy.VacancyId} detail={vacancy} />;
             })
           ) : (
-            <>{console.log("Loading...")}</>
+            <div>
+              <CircularProgress size="5rem" />
+            </div>
           )}
         </div>
       </Container>
