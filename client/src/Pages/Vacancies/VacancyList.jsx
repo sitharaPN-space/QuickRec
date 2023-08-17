@@ -15,20 +15,10 @@ import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
 import { getVacanciesBySearch } from "../../api";
-import { useGetVacanciesQuery } from "../../state/api";
-
-const detail = {
-  vacancyId: 1234,
-  title: "Deputy General Manager",
-  status: "Open",
-  recType: "External Recrutiement",
-  closingDate: "2023 sep 20",
-  slaryGroup: "HM 1-1",
-  boardGrade: "G2",
-  advertisement: "/path",
-  NoOfApplied: "7",
-  postedDays: 2,
-};
+import {
+  useGetVacanciesQuery,
+  useGetVacancyBySearchQuery,
+} from "../../state/api";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -44,11 +34,9 @@ const VacancyList = () => {
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
 
-  const { data, isLoading } = useGetVacanciesQuery();
-  console.log(
-    "🚀 ~ file: VacancyList.jsx:48 ~ VacancyList ~ vacancyList:",
-    data
-  );
+  // const { data: vacancyList, isLoading } = useGetVacanciesQuery() || {};
+  const { data: searchVacancyList, isLoading: vacancySearchLoading } =
+    useGetVacancyBySearchQuery(search) || {};
 
   useEffect(() => {
     setIsNavBar(true);
@@ -62,8 +50,6 @@ const VacancyList = () => {
 
   const searchVacancy = async () => {
     if (search.trim()) {
-      const result = await getVacanciesBySearch({ search });
-      console.log(result);
     } else {
       navigate("/");
     }
@@ -124,8 +110,8 @@ const VacancyList = () => {
             marginTop: "2rem",
           }}
         >
-          {data || !isLoading ? (
-            data.data.map((vacancy) => {
+          {searchVacancyList && !vacancySearchLoading ? (
+            searchVacancyList.data.map((vacancy) => {
               return <Vacancy key={vacancy.VacancyId} detail={vacancy} />;
             })
           ) : (

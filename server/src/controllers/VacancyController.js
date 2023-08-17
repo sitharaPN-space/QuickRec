@@ -41,8 +41,20 @@ const getVacanciesForApply = async (req, res) => {
 const getVacancyBySearch = async (req, res) => {
   try {
     // const title = new RegExp(searchQuery, "i"); // ignore
-    // console.log("DEBUG:", searchQuery);
+    //  console.log("DEBUG:", searchQuery);
     const vacancies = await VacancyDao.getVacanciesBySearch(req);
+    vacancies.map((vacancy) => {
+      vacancy.Status =
+        vacancy.Status === ActiveStatus.ACTIVE ? "Open" : "Close";
+      vacancy.RecruitmentType =
+        (vacancy.RecruitmentType === RecruitementType.EXTERNAL
+          ? "External"
+          : vacancy.RecruitmentType === RecruitementType.INTERNAL
+          ? "Internal"
+          : vacancy.RecruitmentType === RecruitementType.INTERNAL_EXTERNAL
+          ? "Internal and External"
+          : "Promotion") + " Recruitment";
+    });
     res.status(200).json({ data: vacancies });
   } catch (e) {
     res.status(404).json({ message: "Data Retrival Fails" });
@@ -52,16 +64,16 @@ const getVacancyBySearch = async (req, res) => {
 
 const getAllVacancies = async (req, res) => {
   try {
-    const vacancies = await VacancyDao.getAllVacancies(req);
+    let vacancies = await VacancyDao.getAllVacancies(req);
     vacancies.map((vacancy) => {
       vacancy.Status =
         vacancy.Status === ActiveStatus.ACTIVE ? "Open" : "Close";
       vacancy.RecruitmentType =
         (vacancy.RecruitmentType === RecruitementType.EXTERNAL
           ? "External"
-          : vacancy.RecruitmentType === RecruitmentType.INTERNAL
+          : vacancy.RecruitmentType === RecruitementType.INTERNAL
           ? "Internal"
-          : vacancy.RecruitmentType === RecruitmentType.INTERNAL_EXTERNAL
+          : vacancy.RecruitmentType === RecruitementType.INTERNAL_EXTERNAL
           ? "Internal and External"
           : "Promotion") + " Recruitment";
     });

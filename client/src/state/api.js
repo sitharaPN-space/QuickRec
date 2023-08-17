@@ -9,7 +9,11 @@ export const api = createApi({
       query: () => `/vacancy`,
       providesTags: ["Vacancy"],
     }),
+    getVacancyBySearch: builder.query({
+      query: (searchQuery) => `/vacancy/search/?searchQuery=${searchQuery}`,
+      providesTags: ["Vacancy"],
+    }),
   }),
 });
 
-export const { useGetVacanciesQuery } = api;
+export const { useGetVacanciesQuery, useGetVacancyBySearchQuery } = api;
