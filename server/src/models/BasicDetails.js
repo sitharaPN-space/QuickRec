@@ -10,7 +10,7 @@ BasicDetails.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    ApplicationId: {
+    UserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

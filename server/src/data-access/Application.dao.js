@@ -36,7 +36,7 @@ const createBasicDetails = async (basicDetailsReq) => {
     const basicDetails = await updateOrCreate(
       BasicDetails,
       {
-        ApplicationId: `${basicDetailsReq?.ApplicationId}`,
+        UserId: `${basicDetailsReq?.userId}`,
       },
       basicDetailsReq
     );
@@ -47,14 +47,13 @@ const createBasicDetails = async (basicDetailsReq) => {
 };
 
 const getApplicationBasicDetails = async (req) => {
-  const { userId, vacancyId } = req.query;
+  const { userId } = req.query;
   try {
     const results = await req.app.locals.db.query(
-      `SELECT bd.ApplicationId, title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
+      `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
-      FROM Applications app
-      INNER JOIN ApplicationBasicDetails bd on bd.ApplicationId = app.ApplicationId
-      WHERE app.UserId = ${userId} and app.VacancyId = ${vacancyId}`
+      FROM ApplicationBasicDetails  
+      WHERE userId = ${userId}`
     );
 
     return results.recordset[0];

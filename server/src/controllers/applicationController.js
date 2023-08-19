@@ -37,7 +37,7 @@ export const addBasicDetails = async (req, res) => {
     const application = dbResult;
 
     const basicDetails = await ApplicationDAO.createBasicDetails({
-      ApplicationId: application.ApplicationId,
+      userId: userId,
       Title: title,
       NameWithInitials: nameWithInitials,
       NameDenotedbyInit: nameDenotedbyInit,
@@ -64,8 +64,8 @@ export const addBasicDetails = async (req, res) => {
 
 export const getBasicDetails = async (req, res) => {
   try {
-    const basicDetails = await ApplicationDAO.getApplicationBasicDetails(req);
-    res.status(200).json({ basicDetails });
+    const data = await ApplicationDAO.getApplicationBasicDetails(req);
+    res.status(200).json({ data });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Something went wrong" });

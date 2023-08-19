@@ -14,8 +14,8 @@ export const api = createApi({
       providesTags: ["Vacancy"],
     }),
     getAppBasicDetails: builder.query({
-      query: ({ userId, vacancyId }) => ({
-        url: `/application/basicDetails/?vacancyId=${vacancyId}&userId=${userId}`,
+      query: ({ userId }) => ({
+        url: `/application/basicDetails/?userId=${userId}`,
       }),
       providesTags: ["AppBasicDetails"],
     }),
