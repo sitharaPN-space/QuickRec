@@ -6,7 +6,9 @@ const config = {
   },
 };
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:5000",
+});
 
 export const signin = async (loginData) => {
   const response = await API.post("user/signin", loginData, config);
@@ -15,6 +17,11 @@ export const signin = async (loginData) => {
 
 export const signup = async (userData) => {
   const response = await API.post("user/signup", userData, config);
+  return response.data;
+};
+
+export const getVacancies = async () => {
+  const response = await API.post("vacancy", config);
   return response.data;
 };
 
