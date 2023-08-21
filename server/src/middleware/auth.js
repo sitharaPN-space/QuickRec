@@ -14,12 +14,14 @@ const auth = async (req, res, next) => {
 
       req.userId = decodeData?.id;
     } else {
+      // google auth
       decodeData = jwt.decode(token);
       req.userId = decodeData?.sub;
     }
 
     next();
   } catch (error) {
+    res.status(401).json({ error: "session expired" });
     console.log(error);
   }
 };

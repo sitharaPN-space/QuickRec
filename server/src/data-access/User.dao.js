@@ -14,11 +14,9 @@ class UserDao {
   static async getUserById(userId) {
     try {
       const user = await UserModel.findByPk(userId);
-      // Additional business logic or data manipulation if needed
       return user;
-    } catch (e) {
-      console.log(e);
-      //throw new Error("Failed to retrieve user");
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -33,10 +31,15 @@ class UserDao {
     }
   }
 
-  static async getUserByEmail(email) {
+  static async getUserByEmail(email, admin) {
     try {
       const user = await UserModel.findOne({
-        where: { EmailAddress: `${email}` },
+        where: {
+          [Op.and]: [
+            { isAdmin: admin ?? { [Op.or]: [true, false] } },
+            { EmailAddress: `${email}` },
+          ],
+        },
       });
       return user;
     } catch (error) {
