@@ -6,7 +6,7 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
     const vacancy = await updateOrCreate(
       Vacancy,
       {
-        VacancyId: `${vacancyReq.VacancyId ? vacancyReq.VacancyId : undefined}`,
+        VacancyId: vacancyReq.VacancyId ? vacancyReq.VacancyId : null,
       },
       vacancyReq
     );
@@ -21,13 +21,14 @@ const getVacanciesBySearch = async (req) => {
   try {
     const results = await req.app.locals.db.query(
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
-      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,
+      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
       VacancyName,updatedAt, 
-      IIF(DATEDIFF(day,updatedAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETDATE()), ' hours ago'),
-      CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted
+      IIF(DATEDIFF(day,updatedAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETUTCDATE()), ' hours ago'),
+      CONCAT(DATEDIFF(day,updatedAt,GETUTCDATE()), ' days ago')) DaysPosted
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
-      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'`
+      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
+      ORDER BY updatedAt DESC`
     );
 
     return results.recordset;
@@ -37,22 +38,4 @@ const getVacanciesBySearch = async (req) => {
   }
 };
 
-const getAllVacancies = async (req) => {
-  try {
-    const results = await req.app.locals.db.query(`
-    SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
-    PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,
-    VacancyName,updatedAt, 
-    IIF(DATEDIFF(day,updatedAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETDATE()), ' hours ago'),
-    CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted
-    FROM Vacancies
-    INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
-    INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId`);
-    return results.recordset;
-  } catch (error) {
-    console.error(error);
-    return { message: "Failed data retrieval", error };
-  }
-};
-
-export { createOrUpadateVacancy, getVacanciesBySearch, getAllVacancies };
+export { createOrUpadateVacancy, getVacanciesBySearch };

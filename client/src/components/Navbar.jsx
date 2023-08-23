@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { isTokenExpired } from "../utils/getDataFromToken";
+import { isTokenExpired } from "../utils/userValidation";
 
 const Navbar = ({
   active,

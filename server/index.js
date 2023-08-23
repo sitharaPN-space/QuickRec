@@ -4,11 +4,17 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet"; // for http header security
 import morgan from "morgan"; // request loggers
+import sql from "mssql";
 
+import DBconfig from "./dbconfig.js";
 import userRoutes from "./src/routes/userRoutes.js";
+import applicationRoutes from "./src/routes/applicationRoutes.js";
+import commonRoutes from "./src/routes/commonRoutes.js";
+import masterRoutes from "./src/routes/masterRoutes.js";
 
 /* CONFIGURATION */
 const app = express();
+const appPool = new sql.ConnectionPool(DBconfig);
 
 dotenv.config();
 app.use(express.json());
@@ -27,10 +33,28 @@ app.use(cors());
 
 /* ROUTES */
 app.use("/user", userRoutes);
+app.use("/application", applicationRoutes);
+app.use("/vacancy", commonRoutes);
+app.use("/master", masterRoutes);
 
 var port = process.env.PORT || 5000;
-app.listen(port);
-console.log("Quick Rec Backend Server is Running at : %s", port);
+appPool
+  .connect()
+  .then(function (pool) {
+    app.locals.db = pool;
+    const server = app.listen(port, function () {
+      const host = server.address().address;
+      const port = server.address().port;
+      console.log(
+        "QuickRec Backend Server is Running at http://%s:%s",
+        host,
+        port
+      );
+    });
+  })
+  .catch(function (err) {
+    console.error("ERROR starting server ", err);
+  });
 
 process.once("SIGUSR2", function () {
   process.kill(process.pid, "SIGUSR2");

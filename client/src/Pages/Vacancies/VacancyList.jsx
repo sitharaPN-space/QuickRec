@@ -4,31 +4,39 @@ import {
   Typography,
   InputBase,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
-
-const { vacancies } = require("./vacancies.json");
+import { useGetVacancyBySearchQuery } from "../../state/api";
 
 const VacancyList = () => {
-  const [vacancyList, setVacancyList] = useState(vacancies);
   const [searchText, setSearchText] = useState("");
+  const [search, setSearch] = useState("");
   const theme = useTheme();
 
-  const handleSearch = (vacancies, query) => {
-    const filteredVacancies = vacancies.filter((vacancy) =>
-      vacancy.title
-        .toLowerCase()
-        .split(" ")
-        .some((word) => word.startsWith(...query.toLowerCase().split(" ")))
-    );
-    setVacancyList(query.length > 0 ? filteredVacancies : vacancies);
-  };
+  const { data: searchVacancyList, isLoading: vacancySearchLoading } =
+    useGetVacancyBySearchQuery(search);
 
+  const handleSearch = () => {
+    setSearch(searchText);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setSearch(searchText);
+    }
+  };
   return (
-    <div style={{ backgroundColor: theme.palette.background.main }}>
+    <div
+      style={{
+        backgroundColor: theme.palette.background.main,
+        minHeight: "calc(100vh - 164px)",
+        paddingBottom: "20px",
+      }}
+    >
       <Container component="main" maxWidth="md">
         <div
           style={{
@@ -60,15 +68,10 @@ const VacancyList = () => {
             <InputBase
               sx={{ ml: 1, flex: 1 }}
               onChange={(e) => setSearchText(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSearch(vacancies, searchText);
-                }
-              }}
+              onKeyPress={handleKeyPress}
               placeholder="Search..."
             />
-            <IconButton onClick={() => handleSearch(vacancies, searchText)}>
+            <IconButton onClick={handleSearch}>
               <Search />
             </IconButton>
           </Paper>
@@ -81,9 +84,27 @@ const VacancyList = () => {
             marginTop: "2rem",
           }}
         >
-          {vacancyList.map((detail, i) => (
-            <Vacancy key={i} detail={detail} />
-          ))}
+          {searchVacancyList && !vacancySearchLoading ? (
+            searchVacancyList.data.length > 0 ? (
+              searchVacancyList.data.map((vacancy) => {
+                return <Vacancy key={vacancy.VacancyId} vacancy={vacancy} />;
+              })
+            ) : (
+              <div
+                style={{
+                  width: "max-content",
+                  height: "200px",
+                  margin: "auto",
+                }}
+              >
+                No Results ...
+              </div>
+            )
+          ) : (
+            <div style={{ width: "min-content", margin: "auto" }}>
+              <CircularProgress size="5rem" />
+            </div>
+          )}
         </div>
       </Container>
     </div>

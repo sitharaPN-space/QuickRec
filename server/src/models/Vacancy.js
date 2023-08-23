@@ -19,9 +19,10 @@ Vacancy.init(
       type: DataTypes.ENUM,
       allowNull: false,
       values: [
-        RecruitementType.INTERNAL,
-        RecruitementType.EXTERNAL,
-        RecruitementType.INTERNAL_EXTERNAL,
+        RecruitementType.Internal,
+        RecruitementType.External,
+        RecruitementType.Internal_External,
+        RecruitementType.Promotion,
       ],
     },
     SalaryGroupId: {
@@ -63,7 +64,7 @@ Vacancy.init(
     Status: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: [ActiveStatus.ACTIVE, ActiveStatus.INACTIVE],
+      values: [ActiveStatus.Open, ActiveStatus.Close],
     },
   },
   {

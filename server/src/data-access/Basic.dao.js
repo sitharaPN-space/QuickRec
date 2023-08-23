@@ -13,7 +13,4 @@ export const updateOrCreate = async (model, where, newItem) => {
   });
   const data = item[1].dataValues;
   return { item: data };
-  //   return { item: item, created: false };
 };
-
-// export default BasicDAO;

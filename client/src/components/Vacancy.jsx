@@ -11,25 +11,28 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
-const Vacancy = ({ detail }) => {
-  const subTitle = `Posted ${detail.postedDays} days ago`;
+const Vacancy = ({ vacancy }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
   const navigate = useNavigate();
 
   const handleApply = () => {
     navigate("/application/basicDetails", {
-      state: { vacancyId: detail.vacancyId, vacancy: detail.title },
+      state: { vacancyId: vacancy.vacancyId, vacancy: vacancy.title },
     });
   };
 
   return (
     <Card sx={{ width: "100%" }}>
       <CardHeader
-        title={detail.title}
-        subheader={subTitle}
-        sx={{ backgroundColor: theme.palette.secondary[400], p: "12px" }}
+        title={vacancy.VacancyName}
+        subheader={`Posted ${vacancy.DaysPosted}`}
+        sx={{
+          backgroundColor: (theme) => theme.palette.secondary[400],
+          p: "12px",
+        }}
         titleTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "1.2rem" : "1.5rem"),
           fontWeight: 600,
@@ -37,17 +40,29 @@ const Vacancy = ({ detail }) => {
         subheaderTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "0.8rem" : "1rem"),
         }}
+        action={
+          <Typography
+            fontSize={isMobile ? "14px" : "16px"}
+            sx={{
+              lineHeight: "3.3",
+              pr: "10px",
+              color: (theme) => theme.palette.secondary[800],
+            }}
+          >
+            {vacancy.Status}
+          </Typography>
+        }
       />
       <CardContent sx={{ "&:last-child": { pb: "10px" } }}>
         <Typography
+          fontSize={isMobile ? "14px" : "16px"}
           sx={{
-            fontSize: (isMobile) => (isMobile ? "14px" : "16px"),
-            fontWeight: 550,
+            fontWeight: 575,
             mb: "10px",
-            color: theme.palette.secondary[800],
+            color: (theme) => theme.palette.secondary[800],
           }}
         >
-          {detail.recType}
+          {vacancy.RecruitmentType}
         </Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={isMobile ? 12 : 4}>
@@ -62,9 +77,12 @@ const Vacancy = ({ detail }) => {
               </Typography>
               <Typography
                 fontSize={isMobile ? "14px" : "16px"}
-                sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
+                sx={{
+                  fontWeight: 550,
+                  color: (theme) => theme.palette.secondary[700],
+                }}
               >
-                {detail.closingDate}
+                {dayjs(vacancy.ClosingDate).format("YYYY-MM-DD")}
               </Typography>
             </div>
           </Grid>
@@ -75,9 +93,12 @@ const Vacancy = ({ detail }) => {
               </Typography>
               <Typography
                 fontSize={isMobile ? "14px" : "16px"}
-                sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
+                sx={{
+                  fontWeight: 550,
+                  color: (theme) => theme.palette.secondary[700],
+                }}
               >
-                {detail.publishedDate}
+                {dayjs(vacancy.PublishedDate).format("YYYY-MM-DD")}
               </Typography>
             </div>
           </Grid>
@@ -88,9 +109,12 @@ const Vacancy = ({ detail }) => {
               </Typography>
               <Typography
                 fontSize={isMobile ? "14px" : "16px"}
-                sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
+                sx={{
+                  fontWeight: 550,
+                  color: (theme) => theme.palette.secondary[700],
+                }}
               >
-                {detail.salaryGroup}
+                {vacancy.SalaryGroup}
               </Typography>
             </div>
           </Grid>
@@ -101,9 +125,12 @@ const Vacancy = ({ detail }) => {
               </Typography>
               <Typography
                 fontSize={isMobile ? "14px" : "16px"}
-                sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
+                sx={{
+                  fontWeight: 550,
+                  color: (theme) => theme.palette.secondary[700],
+                }}
               >
-                {detail.boardGrade}
+                {vacancy.BoardGrade}
               </Typography>
             </div>
           </Grid>
@@ -113,7 +140,7 @@ const Vacancy = ({ detail }) => {
                 Advertisement:{" "}
               </Typography>
               <DescriptionOutlinedIcon
-                sx={{ color: theme.palette.primary[500] }}
+                sx={{ color: (theme) => theme.palette.primary[500] }}
               />
             </div>
           </Grid>
@@ -129,7 +156,7 @@ const Vacancy = ({ detail }) => {
           <div style={{ display: "flex", gap: "10px" }}>
             <VisibilityIcon sx={{ fontSize: "24px" }} />
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              Applied ({detail.NoOfApplied})
+              Applied ({vacancy.NoOfApplied})
             </Typography>
           </div>
           <ButtonComp sx={{ marginLeft: "auto" }} onClick={() => handleApply()}>
