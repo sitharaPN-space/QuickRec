@@ -5,15 +5,21 @@ const ApplicationStatus = {
 };
 
 const ActiveStatus = {
-  ACTIVE: { short: "ACT", desc: "ACTIVE" },
-  INACTIVE: { short: "INA", desc: "INACTIVE" },
+  ACT: "Open",
+  INA: "Close",
+  Open: "ACT",
+  Close: "INA",
 };
 
 const RecruitementType = {
-  INTERNAL: "INT",
-  EXTERNAL: "EXT",
-  INTERNAL_EXTERNAL: "INT_EXT",
-  PROMOTION: "PROMOTION",
+  Internal: "INT",
+  External: "EXT",
+  Internal_External: "INT_EXT",
+  Promotion: "PRO",
+  INT: "Internal Recruitment",
+  EXT: "External Recruitment",
+  INT_EXT: "Internal and External Recruitment",
+  PRO: "Promotion Recruitment",
 };
 
 export { ApplicationStatus, ActiveStatus, RecruitementType };
