@@ -25,7 +25,7 @@ const initEducation = {
   startDate: null,
   endDate: null,
   grade: "",
-  upload: "Choose File",
+  upload: "",
 };
 
 const EduDetails = () => {
