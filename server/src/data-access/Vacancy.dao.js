@@ -16,12 +16,24 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
   }
 };
 
+const deleteVacancy = async (vacancyId) => {
+  try {
+    await Vacancy.destroy({
+      where: {
+        VacancyId: vacancyId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getVacanciesBySearch = async (req) => {
   const { searchQuery } = req.query;
   try {
     const results = await req.app.locals.db.query(
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
-      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
+      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,NoOfApplied,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
       VacancyName,updatedAt, 
       IIF(DATEDIFF(day,updatedAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETUTCDATE()), ' hours ago'),
       CONCAT(DATEDIFF(day,updatedAt,GETUTCDATE()), ' days ago')) DaysPosted
@@ -38,4 +50,4 @@ const getVacanciesBySearch = async (req) => {
   }
 };
 
-export { createOrUpadateVacancy, getVacanciesBySearch };
+export { createOrUpadateVacancy, deleteVacancy, getVacanciesBySearch };
