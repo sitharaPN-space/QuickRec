@@ -49,6 +49,10 @@ Vacancy.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    NoOfApplied: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     PlannedInterViewDate: {
       type: DataTypes.DATE,
       allowNull: true,
