@@ -27,6 +27,41 @@ export const api = createApi({
       }),
       invalidatesTags: ["AppBasicDetails"],
     }),
+    getAppEduDetails: builder.query({
+      query: ({ userId }) => ({
+        url: `application/eduDetails/?userId=${userId}`,
+      }),
+      providesTags: ["AppEduDetails"],
+    }),
+    getAppEduDetailById: builder.query({
+      query: ({ id }) => ({
+        url: `/application/eduDetail/?eduId=${id}`,
+      }),
+      providesTags: ["AppEduDetails"],
+    }),
+    createAppEduDetails: builder.mutation({
+      query: (createEduReq) => {
+        const formData = new FormData();
+        formData.append("userId", createEduReq.userId);
+        formData.append("eduTypeId", createEduReq.eduTypeId);
+        formData.append("endDate", createEduReq.endDate);
+        formData.append("startDate", createEduReq.startDate);
+        formData.append("fieldOfStudy", createEduReq.fieldOfStudy);
+        formData.append("grade", createEduReq.grade);
+        formData.append("instituteName", createEduReq.instituteName);
+        formData.append("qualification", createEduReq.qualification);
+        formData.append("attachmentPath", createEduReq.attachmentPath);
+        formData.append("attachment", createEduReq.attachment);
+        console.log("🚀 ~ file: api.js:49 ~ formData:", formData);
+        return {
+          url: `/application/addEduDetails`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
+      invalidatesTags: ["AppEduDetails"],
+    }),
   }),
 });
 
@@ -35,4 +70,6 @@ export const {
   useGetVacancyBySearchQuery,
   useCreateAppBasicDetailsMutation,
   useGetAppBasicDetailsQuery,
+  useGetAppEduDetailsQuery,
+  useCreateAppEduDetailsMutation,
 } = api;

@@ -71,3 +71,23 @@ export const getBasicDetails = async (req, res) => {
     res.status(404).json({ message: "Something went wrong" });
   }
 };
+
+export const getEduDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.getApplicationEduDetails(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const addEduDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.createEduDetails(req.body);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};

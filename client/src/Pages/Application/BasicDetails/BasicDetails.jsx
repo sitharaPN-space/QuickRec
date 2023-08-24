@@ -16,6 +16,7 @@ import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StepperButton from "../../../components/StepperButton";
+import CircularProgress from "@mui/material/CircularProgress";
 import * as api from "../../../api";
 import { useSelector } from "react-redux";
 import {
@@ -359,7 +360,9 @@ const BasicDetails = ({}) => {
           </Grid>
         </form>
       ) : (
-        <p>Lodding..</p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress size="5rem" />
+        </div>
       )}
     </Paper>
   );

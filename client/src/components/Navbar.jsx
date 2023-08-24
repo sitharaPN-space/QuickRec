@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../state/Auth";
 import decode from "jwt-decode";
+import { api } from "../state/api";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const theme = useTheme();
@@ -41,6 +42,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const handleLogOut = () => {
     localStorage.clear();
     navigate("/");
+    dispatch(api.util.resetApiState());
     dispatch(logOut);
   };
   return (

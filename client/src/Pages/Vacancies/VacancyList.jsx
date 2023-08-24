@@ -114,7 +114,7 @@ const VacancyList = () => {
               return <Vacancy key={vacancy.VacancyId} detail={vacancy} />;
             })
           ) : (
-            <div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <CircularProgress size="5rem" />
             </div>
           )}

@@ -1,5 +1,6 @@
 import Application from "../models/Application.js";
 import BasicDetails from "../models/BasicDetails.js";
+import EduDetails from "../models/EduDetails.js";
 import { Op } from "sequelize";
 import { application } from "express";
 import { updateOrCreate } from "./Basic.dao.js";
@@ -49,14 +50,66 @@ const createBasicDetails = async (basicDetailsReq) => {
 const getApplicationBasicDetails = async (req) => {
   const { userId } = req.query;
   try {
-    const results = await req.app.locals.db.query(
-      `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
+    const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
       FROM ApplicationBasicDetails  
+      WHERE userId = ${userId}`;
+
+    const results = await req.app.locals.db.query(queryString);
+    return results.recordset[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationEduDetails = async (req) => {
+  const { userId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT EduDetailsId,UserId,instituteName,qualification,fieldOfStudy,startDate,endDate,
+      grade,attachmentPath, EducationType.educationType  FROM ApplicationEduDetails  
+      INNER JOIN EducationType ON EducationType.EduTypeId = ApplicationEduDetails.EduTypeId
       WHERE userId = ${userId}`
     );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    return results.recordset[0];
+const createEduDetails = async (eduDetailsReq) => {
+  const {
+    eduDetailsId,
+    userId,
+    attachmentPath,
+    eduTypeId,
+    endDate,
+    fieldOfStudy,
+    grade,
+    instituteName,
+    qualification,
+    startDate,
+  } = eduDetailsReq;
+  try {
+    const eduDetails = await updateOrCreate(
+      EduDetails,
+      {
+        EduDetailsId: `${eduDetailsReq?.eduDetailsId}`,
+      },
+      {
+        eduDetailsId,
+        userId,
+        attachmentPath,
+        eduTypeId,
+        endDate,
+        fieldOfStudy,
+        grade,
+        instituteName,
+        qualification,
+        startDate,
+      }
+    );
+    return eduDetails.item;
   } catch (error) {
     console.log(error);
   }
@@ -67,4 +120,6 @@ export {
   createOrUpadateApplication,
   getExistingApplication,
   getApplicationBasicDetails,
+  getApplicationEduDetails,
+  createEduDetails,
 };

@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import moment from "moment";
 
-const EducationDetail = ({ eduDetail, isActive, isMobile }) => {
+const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
   const theme = useTheme();
   return (
     <Paper
@@ -92,7 +92,7 @@ const EducationDetail = ({ eduDetail, isActive, isMobile }) => {
                 justifyContent: "flex-end",
               }}
             >
-              <IconButton>
+              <IconButton onClick={() => handleEdit(eduDetail.EduDetailsId)}>
                 <EditNoteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
               <IconButton>
@@ -128,7 +128,7 @@ const EducationDetail = ({ eduDetail, isActive, isMobile }) => {
             <div
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <IconButton>
+              <IconButton onClick={() => handleEdit(eduDetail.EduDetailsId)}>
                 <EditNoteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
               <IconButton>

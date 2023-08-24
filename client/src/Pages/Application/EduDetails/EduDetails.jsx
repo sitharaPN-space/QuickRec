@@ -18,10 +18,12 @@ import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EducationDetail from "../../../components/EduComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { setEducationQulifications } from "../../../state/UserApplication";
-import moment from "moment";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { useSelector } from "react-redux";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  useCreateAppEduDetailsMutation,
+  useGetAppEduDetailsQuery,
+} from "../../../state/api";
 
 const initEduDetail = {
   educationType: "",
@@ -32,57 +34,58 @@ const initEduDetail = {
   endDate: "",
   grade: "",
   attachement: "",
-};
-
-const detail = {
-  educationType: "Master",
-  instituteName: "University of Peradeniya",
-  qualification: "Msc in Engineering",
-  fieldOfStudy: "Cloud Computing",
-  startDate: "Jan 2017",
-  endDate: "Feb 2023",
-  grade: "second upper",
-  attachement: "",
+  attachmentPath: "",
 };
 
 const eduTypes = [
-  { id: "1", description: "Doctoral Degree" },
-  { id: "2", description: "Master" },
-  { id: "3", description: "Postgraduate Certificate" },
-  { id: "4", description: "Postgraduate Diploma" },
-  { id: "5", description: "Bachelors" },
-  { id: "6", description: "Diploma" },
-  { id: "7", description: "Certificate" },
-  { id: "8", description: "Advanced Level" },
-  { id: "9", description: "Ordinary Level" },
+  { id: 1, description: "Doctoral Degree" },
+  { id: 2, description: "Master" },
+  { id: 3, description: "Postgraduate Certificate" },
+  { id: 4, description: "Postgraduate Diploma" },
+  { id: 5, description: "Bachelors" },
+  { id: 6, description: "Diploma" },
+  { id: 7, description: "Certificate" },
+  { id: 8, description: "Advanced Level" },
+  { id: 9, description: "Ordinary Level" },
 ];
 
 const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [eduDetail, setEduDetail] = useState(initEduDetail);
-  // const [eduDetailsList, setEduDetailsList] = useState([]);
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const eduDetailsList = useSelector(
-    (state) => state.userApplication.eduQualification
-  );
+  const userData = useSelector((state) => state.userContext.data);
+
+  const [createAppEduDetails, { isLoading: createLoading }] =
+    useCreateAppEduDetailsMutation();
+
+  const {
+    data: educationDetails,
+    isLoading: eduDataLoading,
+    isSuccess,
+  } = useGetAppEduDetailsQuery({
+    userId: userData.data.UserId,
+  }) || [];
+
+  const [eduDetail, setEduDetail] = useState();
+  const [eduDetailList, setEduDetailList] = useState([]);
 
   useEffect(() => {
     setCurrentStep(1);
-    dispatch(setEducationQulifications(detail));
-    console.log("EFFECTS");
-  }, []);
-
-  // useEffect(() => {}, [eduDetailsList]);
+    setEduDetailList(educationDetails?.data || []);
+  }, [educationDetails?.data]);
 
   const handleChange = (e) => {
     setEduDetail({ ...eduDetail, [e.target.name]: e.target.value });
   };
 
   const handleAddDetail = () => {
-    console.log(eduDetail);
-    dispatch(setEducationQulifications(eduDetail));
+    createAppEduDetails({
+      ...eduDetail,
+      userId: userData.data.UserId,
+      attachment: file,
+      attachmentPath: file?.name,
+    }).unwrap();
   };
 
   const handleNext = (e) => {
@@ -91,6 +94,10 @@ const EduDetails = () => {
 
   const handleBack = () => {
     navigate("/application/basicDetails");
+  };
+
+  const handleEditDetails = (detialId) => {
+    console.log("Edit click", detialId);
   };
   return (
     <div>
@@ -112,8 +119,9 @@ const EduDetails = () => {
             </Typography>
             <FormControl size="small">
               <Select
-                name="educationType"
+                name="eduTypeId"
                 onChange={handleChange}
+                value={eduDetail?.eduTypeId || ""}
                 sx={{
                   minWidth: "140px",
                   minHeight: "1.4rem",
@@ -123,7 +131,7 @@ const EduDetails = () => {
                 {eduTypes.map((eduType, index) => (
                   <MenuItem
                     // name="educationType"
-                    value={eduType.description}
+                    value={eduType.id}
                     key={eduType.id}
                     // onChange={handleChange}
                   >
@@ -219,7 +227,11 @@ const EduDetails = () => {
             sx={{ display: isMobile && "none", textAlign: "left" }}
           ></Grid>
 
-          <FileUploader label="Upload your Certificate" isMobile={isMobile} />
+          <FileUploader
+            label="Upload your Certificate"
+            isMobile={isMobile}
+            setFile={setFile}
+          />
           <Grid item xs={12} sx={{ textAlign: "right" }}>
             <Button onClick={() => handleAddDetail()}>
               <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
@@ -242,15 +254,22 @@ const EduDetails = () => {
         // </Grid>
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {eduDetailsList.map((detail, index) => {
-          return (
-            <EducationDetail
-              key={index}
-              eduDetail={detail}
-              isMobile={isMobile}
-            />
-          );
-        })}
+        {isSuccess ? (
+          eduDetailList?.map((detail, index) => {
+            return (
+              <EducationDetail
+                key={detail.EduDetailsId}
+                eduDetail={detail}
+                isMobile={isMobile}
+                handleEdit={handleEditDetails}
+              />
+            );
+          })
+        ) : (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress size="5rem" />
+          </div>
+        )}
       </Box>
     </div>
   );

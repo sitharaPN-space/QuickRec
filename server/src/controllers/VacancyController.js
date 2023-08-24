@@ -31,8 +31,6 @@ const getVacancyBySearch = async (req, res) => {
     //  console.log("DEBUG:", searchQuery);
     const vacancies = await VacancyDao.getVacanciesBySearch(req);
     vacancies.map((vacancy) => {
-      vacancy.Status =
-        vacancy.Status === ActiveStatus.ACTIVE ? "Open" : "Close";
       vacancy.RecruitmentType =
         (vacancy.RecruitmentType === RecruitementType.EXTERNAL
           ? "External"

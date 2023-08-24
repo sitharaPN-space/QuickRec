@@ -10,9 +10,8 @@ import {
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 
-const FileUploader = ({ label, isMobile }) => {
+const FileUploader = ({ label, isMobile, setFile }) => {
   const inputFile = useRef(null);
-  const [file, setFile] = useState(null);
   const theme = useTheme();
 
   const handleFileChange = (e) => {
