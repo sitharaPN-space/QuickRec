@@ -10,7 +10,10 @@ import sql from "mssql";
 import DBconfig from "./dbconfig.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import applicationRoutes from "./src/routes/applicationRoutes.js";
-import { addEduDetails } from "./src/controllers/applicationController.js";
+import {
+  addEduDetails,
+  addExpDetails,
+} from "./src/controllers/applicationController.js";
 import commonRoutes from "./src/routes/commonRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -54,6 +57,11 @@ app.post(
   "/application/addEduDetails",
   upload.single("attachment"),
   addEduDetails
+);
+app.post(
+  "/application/addExpDetails",
+  upload.single("attachment"),
+  addExpDetails
 );
 
 /* ROUTES */

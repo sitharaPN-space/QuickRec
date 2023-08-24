@@ -55,7 +55,6 @@ const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
   const [file, setFile] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
   const userData = useSelector((state) => state.userContext.data);
 
@@ -76,6 +75,10 @@ const EduDetails = () => {
   const [eduDetailList, setEduDetailList] = useState([]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
     setCurrentStep(1);
     setEduDetailList(educationDetails?.data || []);
   }, [educationDetails?.data]);
@@ -85,7 +88,6 @@ const EduDetails = () => {
   };
 
   const handleAddDetail = () => {
-    console.log(eduDetail);
     createAppEduDetails({
       ...eduDetail,
       userId: userData.data.UserId,
@@ -100,6 +102,7 @@ const EduDetails = () => {
       (x) => x.eduDetailsId === detialId
     );
     setEduDetail(() => edDetail[0]);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
   const handleDeleteDetail = (detailId) => {

@@ -1,8 +1,7 @@
 import Application from "../models/Application.js";
 import BasicDetails from "../models/BasicDetails.js";
 import EduDetails from "../models/EduDetails.js";
-import { Op } from "sequelize";
-import { application } from "express";
+import ExpDetails from "../models/ExpDetails.js";
 import { updateOrCreate } from "./Basic.dao.js";
 
 const getExistingApplication = async (applicationId) => {
@@ -127,6 +126,28 @@ const deleteEduDetails = async (param) => {
   }
 };
 
+const createExpDetails = async (expDetailReq) => {
+  try {
+    const expDetails = await updateOrCreate(
+      ExpDetails,
+      {
+        expDetailId: `${expDetailReq?.expDetailId}`,
+      },
+      {
+        userId: expDetailReq.userId,
+        organization: expDetailReq.organization,
+        startDate: expDetailReq.startDate,
+        endDate: expDetailReq.endDate,
+        description: expDetailReq.description,
+        attachmentPath: expDetailReq.attachmentPath,
+      }
+    );
+    return expDetails.item;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createBasicDetails,
   createOrUpadateApplication,
@@ -135,4 +156,5 @@ export {
   getApplicationEduDetails,
   createEduDetails,
   deleteEduDetails,
+  createExpDetails,
 };

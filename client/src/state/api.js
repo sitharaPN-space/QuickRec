@@ -70,6 +70,11 @@ export const api = createApi({
       }),
       invalidatesTags: ["AppEduDetails"],
     }),
+    createAppExpDetails: builder.mutation({
+      query: (createExpReq) => {
+        const formData = new FormData();
+      },
+    }),
   }),
 });
 

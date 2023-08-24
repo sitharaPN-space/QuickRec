@@ -14,6 +14,5 @@ router.post("/addBasicDetails", addBasicDetails);
 router.get("/basicDetails", getBasicDetails);
 router.get("/eduDetails", getEduDetails);
 router.delete("/deleteEduDetails", deleteEduDetails);
-// router.post("/addEduDetails", addEduDetails);
 
 export default router;
