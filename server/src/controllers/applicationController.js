@@ -91,3 +91,13 @@ export const addEduDetails = async (req, res) => {
     res.status(404).json({ message: "Something went wrong" });
   }
 };
+
+export const deleteEduDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.deleteEduDetails(req.query);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};

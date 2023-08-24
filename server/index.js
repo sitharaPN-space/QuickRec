@@ -60,6 +60,7 @@ app.post(
 app.use("/user", userRoutes);
 app.use("/application", applicationRoutes);
 app.use("/vacancy", commonRoutes);
+app.use("/download", commonRoutes);
 
 /* SERVER CONFIG */
 var port = process.env.PORT || 5000;

@@ -18,11 +18,13 @@ import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EducationDetail from "../../../components/EduComponent";
+import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
   useCreateAppEduDetailsMutation,
   useGetAppEduDetailsQuery,
+  useDeleteEduDetailsMutation,
 } from "../../../state/api";
 
 const initEduDetail = {
@@ -30,8 +32,8 @@ const initEduDetail = {
   instituteName: "",
   qualification: "",
   fieldOfStudy: "",
-  startDate: "",
-  endDate: "",
+  startDate: {},
+  endDate: {},
   grade: "",
   attachement: "",
   attachmentPath: "",
@@ -53,11 +55,14 @@ const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
   const [file, setFile] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
   const userData = useSelector((state) => state.userContext.data);
 
   const [createAppEduDetails, { isLoading: createLoading }] =
     useCreateAppEduDetailsMutation();
+  const [deleteEduDetails, { isLoading: deleteLoading }] =
+    useDeleteEduDetailsMutation();
 
   const {
     data: educationDetails,
@@ -67,7 +72,7 @@ const EduDetails = () => {
     userId: userData.data.UserId,
   }) || [];
 
-  const [eduDetail, setEduDetail] = useState();
+  const [eduDetail, setEduDetail] = useState({});
   const [eduDetailList, setEduDetailList] = useState([]);
 
   useEffect(() => {
@@ -80,12 +85,31 @@ const EduDetails = () => {
   };
 
   const handleAddDetail = () => {
+    console.log(eduDetail);
     createAppEduDetails({
       ...eduDetail,
       userId: userData.data.UserId,
       attachment: file,
       attachmentPath: file?.name,
     }).unwrap();
+    resetFields();
+  };
+
+  const handleEditDetails = (detialId) => {
+    const edDetail = educationDetails.data.filter(
+      (x) => x.eduDetailsId === detialId
+    );
+    setEduDetail(() => edDetail[0]);
+  };
+
+  const handleDeleteDetail = (detailId) => {
+    deleteEduDetails({ detailId }).unwrap();
+    resetFields();
+  };
+
+  const resetFields = () => {
+    setEduDetail(initEduDetail);
+    setFile(null);
   };
 
   const handleNext = (e) => {
@@ -96,9 +120,6 @@ const EduDetails = () => {
     navigate("/application/basicDetails");
   };
 
-  const handleEditDetails = (detialId) => {
-    console.log("Edit click", detialId);
-  };
   return (
     <div>
       <Paper
@@ -144,18 +165,21 @@ const EduDetails = () => {
           <Input
             name="instituteName"
             label="University/ Institute/ School *"
+            value={eduDetail?.instituteName || ""}
             handleChange={handleChange}
             required
           />
           <Input
             name="qualification"
             label="Name of Qualification *"
+            value={eduDetail?.qualification || ""}
             handleChange={handleChange}
             required
           />
           <Input
             name="fieldOfStudy"
             label="Field of Study *"
+            value={eduDetail?.fieldOfStudy || ""}
             handleChange={handleChange}
             required
           />
@@ -169,9 +193,7 @@ const EduDetails = () => {
                 </Typography>
                 <DatePicker
                   name="startDate"
-                  // value={eduDetail.startDate}
-                  // value={moment(eduDetail.startDate).format("MMM yyyy")}
-                  // value={eduDetail?.startDate}
+                  value={dayjs(eduDetail?.startDate) || {}}
                   onChange={(newValue) =>
                     setEduDetail({
                       ...eduDetail,
@@ -194,10 +216,7 @@ const EduDetails = () => {
                 </Typography>
                 <DatePicker
                   name="endDate"
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-                  // value={eduDetail?.endDate}
+                  value={dayjs(eduDetail?.endDate) || {}}
                   onChange={(newValue) => {
                     setEduDetail({
                       ...eduDetail,
@@ -217,6 +236,7 @@ const EduDetails = () => {
           <Input
             name="grade"
             label="Grade *"
+            value={eduDetail?.grade || ""}
             handleChange={handleChange}
             required
             quarter
@@ -258,10 +278,11 @@ const EduDetails = () => {
           eduDetailList?.map((detail, index) => {
             return (
               <EducationDetail
-                key={detail.EduDetailsId}
+                key={detail.eduDetailsId}
                 eduDetail={detail}
                 isMobile={isMobile}
                 handleEdit={handleEditDetails}
+                handleDelete={handleDeleteDetail}
               />
             );
           })

@@ -44,6 +44,7 @@ export const api = createApi({
         const formData = new FormData();
         formData.append("userId", createEduReq.userId);
         formData.append("eduTypeId", createEduReq.eduTypeId);
+        formData.append("eduDetailsId", createEduReq?.eduDetailsId);
         formData.append("endDate", createEduReq.endDate);
         formData.append("startDate", createEduReq.startDate);
         formData.append("fieldOfStudy", createEduReq.fieldOfStudy);
@@ -62,6 +63,13 @@ export const api = createApi({
       },
       invalidatesTags: ["AppEduDetails"],
     }),
+    deleteEduDetails: builder.mutation({
+      query: ({ detailId }) => ({
+        url: `/application/deleteEduDetails/?eduId=${detailId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["AppEduDetails"],
+    }),
   }),
 });
 
@@ -72,4 +80,5 @@ export const {
   useGetAppBasicDetailsQuery,
   useGetAppEduDetailsQuery,
   useCreateAppEduDetailsMutation,
+  useDeleteEduDetailsMutation,
 } = api;

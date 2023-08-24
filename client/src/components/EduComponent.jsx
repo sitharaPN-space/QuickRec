@@ -13,10 +13,16 @@ import {
 import TimelineDot from "@mui/lab/TimelineDot";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import moment from "moment";
+import DownloadIcon from "../components/DownloadIcon";
 
-const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
+const EducationDetail = ({
+  eduDetail,
+  isActive,
+  isMobile,
+  handleEdit,
+  handleDelete,
+}) => {
   const theme = useTheme();
   return (
     <Paper
@@ -73,7 +79,8 @@ const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
               <Typography variant="common">attachment</Typography>
-              <IconButton>
+              <DownloadIcon fileName={eduDetail.attachmentPath} />
+              {/* <IconButton>
                 <DescriptionOutlinedIcon
                   sx={{
                     color: theme.palette.primary[500],
@@ -81,7 +88,7 @@ const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
                     height: 24,
                   }}
                 />
-              </IconButton>
+              </IconButton> */}
             </div>
 
             <div
@@ -92,7 +99,7 @@ const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
                 justifyContent: "flex-end",
               }}
             >
-              <IconButton onClick={() => handleEdit(eduDetail.EduDetailsId)}>
+              <IconButton onClick={() => handleEdit(eduDetail.eduDetailsId)}>
                 <EditNoteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
               <IconButton>
@@ -128,10 +135,10 @@ const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
             <div
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <IconButton onClick={() => handleEdit(eduDetail.EduDetailsId)}>
+              <IconButton onClick={() => handleEdit(eduDetail.eduDetailsId)}>
                 <EditNoteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={() => handleDelete(eduDetail.eduDetailsId)}>
                 <DeleteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
             </div>
@@ -167,20 +174,14 @@ const EducationDetail = ({ eduDetail, isActive, isMobile, handleEdit }) => {
             <Typography variant="common">
               {`Grade - ${eduDetail.grade}`}
             </Typography>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <Typography variant="common">attachment</Typography>
-              <IconButton>
-                <DescriptionOutlinedIcon
-                  sx={{
-                    color: theme.palette.primary[500],
-                    width: 28,
-                    height: 24,
-                  }}
-                />
-              </IconButton>
-            </div>
+            {(eduDetail.attachmentPath || eduDetail.attachmentPath === "/") && (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <Typography variant="common">attachment</Typography>
+                <DownloadIcon fileName={eduDetail.attachmentPath} />
+              </div>
+            )}
           </div>
         </CardContent>
       )}

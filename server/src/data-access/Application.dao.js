@@ -66,8 +66,8 @@ const getApplicationEduDetails = async (req) => {
   const { userId } = req.query;
   try {
     const results = await req.app.locals.db.query(
-      `SELECT EduDetailsId,UserId,instituteName,qualification,fieldOfStudy,startDate,endDate,
-      grade,attachmentPath, EducationType.educationType  FROM ApplicationEduDetails  
+      `SELECT eduDetailsId,UserId,instituteName,qualification,fieldOfStudy,startDate,endDate,
+      grade,attachmentPath, EducationType.educationType,ApplicationEduDetails.eduTypeId  FROM ApplicationEduDetails  
       INNER JOIN EducationType ON EducationType.EduTypeId = ApplicationEduDetails.EduTypeId
       WHERE userId = ${userId}`
     );
@@ -97,7 +97,6 @@ const createEduDetails = async (eduDetailsReq) => {
         EduDetailsId: `${eduDetailsReq?.eduDetailsId}`,
       },
       {
-        eduDetailsId,
         userId,
         attachmentPath,
         eduTypeId,
@@ -115,6 +114,19 @@ const createEduDetails = async (eduDetailsReq) => {
   }
 };
 
+const deleteEduDetails = async (param) => {
+  try {
+    await EduDetails.destroy({
+      where: {
+        EduDetailsId: `${param.eduId}`,
+      },
+    });
+    return { message: "delete success" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createBasicDetails,
   createOrUpadateApplication,
@@ -122,4 +134,5 @@ export {
   getApplicationBasicDetails,
   getApplicationEduDetails,
   createEduDetails,
+  deleteEduDetails,
 };
