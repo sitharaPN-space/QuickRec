@@ -137,6 +137,23 @@ export const api = createApi({
       }),
       invalidatesTags: ["AppAchvDetails"],
     }),
+    createUplodDocuments: builder.mutation({
+      query: (fileUploadReq) => {
+        const formData = new FormData();
+        formData.append("userId", fileUploadReq.userId);
+        formData.append("vacancyId", fileUploadReq.vacancyId);
+        formData.append("docPath", fileUploadReq.docPath);
+        formData.append("document", fileUploadReq.doc);
+        formData.append("docType", fileUploadReq.docType);
+        return {
+          url: `/application/uploadDocs`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
+      invalidatesTags: ["uploadDocs"],
+    }),
   }),
 });
 
@@ -154,4 +171,5 @@ export const {
   useGetAppAchvDetailsQuery,
   useDeleteAchvDetailsMutation,
   useDeleteExpDetailsMutation,
+  useCreateUplodDocumentsMutation,
 } = api;

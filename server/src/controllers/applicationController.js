@@ -161,3 +161,13 @@ export const deleteAchvDetails = async (req, res) => {
     res.status(404).json({ message: "Something went wrong" });
   }
 };
+
+export const uploadApplicationDocs = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.uploadApplicationDocs(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};

@@ -19,24 +19,30 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AchievementComp from "../../../components/AchievementComp";
 import { useDispatch, useSelector } from "react-redux";
 import { setAchievementsState } from "../../../state/UserApplication";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useCreateUplodDocumentsMutation } from "../../../state/api";
+import ButtonComp from "../../../components/ButtonComp";
 
 const initAttachments = {
   userId: "",
-  cvCopy: "",
-  nicCopy: "",
-  BCCopy: "",
-  isAgreed: "",
+  vacancyId: "",
+  documentPath: "",
+  document: null,
 };
 
 const Declaration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [declationDetails, setDeclationDetails] = useState(initAttachments);
+  const [documentDetails, setDocumentDetails] = useState(initAttachments);
   const [isAgreed, setIsAgreed] = useState(false);
   const [cvDocument, setCvDocument] = useState(null);
   const [nicDocument, setNicDocument] = useState(null);
   const [bcDocument, setBCDocument] = useState(null);
   const userData = useSelector((state) => state.userContext.data);
+  const applyingVacancy = useSelector((state) => state.userApplication.vacancy);
+
+  const [uploadDocuments, { isLoading: createLoading }] =
+    useCreateUplodDocumentsMutation();
 
   const navigate = useNavigate();
 
@@ -44,11 +50,26 @@ const Declaration = () => {
     setCurrentStep(4);
   }, []);
 
-  const handleChange = (e) => {
-    setDeclationDetails({
-      ...declationDetails,
-      [e.target.name]: e.target.value,
-    });
+  // const handleChange = (e) => {
+  //   setDeclationDetails({
+  //     ...declationDetails,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  const fileUploadHandle = ({ file, type }) => {
+    if (!file) {
+      return;
+    }
+
+    uploadDocuments({
+      ...documentDetails,
+      userId: userData.data.UserId,
+      vacancyId: applyingVacancy.vacancyId,
+      docType: type,
+      doc: file,
+      docPath: file?.name,
+    }).unwrap();
   };
 
   const handleNext = (e) => {};
@@ -71,24 +92,85 @@ const Declaration = () => {
               Declaration
             </Typography>
           </Grid>
-          <FileUploader
-            label="Your CV *"
-            isMobile={isMobile}
-            setFile={setCvDocument}
-          />
-          <Grid item sm={8}></Grid>
-          <FileUploader
-            label="National Identitiy Card"
-            isMobile={isMobile}
-            setFile={setNicDocument}
-          />
-          <Grid item sm={8}></Grid>
-          <FileUploader
-            label="Birth Certificate"
-            isMobile={isMobile}
-            setFile={setBCDocument}
-          />
-          <Grid item sm={8}></Grid>
+          <Grid item sm={4} sx={{ textAlign: "left" }}>
+            <FileUploader
+              label="Your CV *"
+              isMobile={isMobile}
+              setFile={setCvDocument}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={8}
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                fileUploadHandle({ file: cvDocument, type: "CV" });
+              }}
+            >
+              Upload
+            </Button>
+          </Grid>
+          <Grid item sm={4} sx={{ textAlign: "left" }}>
+            <FileUploader
+              label="National Identitiy Card"
+              isMobile={isMobile}
+              setFile={setNicDocument}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={8}
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                fileUploadHandle({ file: nicDocument, type: "NIC" });
+              }}
+            >
+              Upload
+            </Button>
+          </Grid>
+          <Grid item sm={4} sx={{ textAlign: "left" }}>
+            <FileUploader
+              label="Birth Certificate"
+              isMobile={isMobile}
+              setFile={setBCDocument}
+            />
+          </Grid>
+
+          <Grid
+            item
+            sm={8}
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                fileUploadHandle({ file: bcDocument, type: "BC" });
+              }}
+            >
+              Upload
+            </Button>
+          </Grid>
 
           {/* <Grid item sm={12} sx={{ textAlign: "left" }}>
             <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
@@ -141,7 +223,9 @@ const Declaration = () => {
           }}
         >
           <StepperButton handleClick={handleBack} back />
-          <StepperButton handleClick={handleNext} next />
+          <ButtonComp sx={{ mt: "1rem", p: "8px 12px" }} onClick={handleNext}>
+            Submit Application{" "}
+          </ButtonComp>
         </div>
         // </Grid>
       )}

@@ -7,25 +7,35 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 
 const FileUploader = ({ label, isMobile, setFile }) => {
   const inputFile = useRef(null);
+  const [error, setError] = useState(null);
   const theme = useTheme();
 
   const handleFileChange = (e) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
+      if (e.target.files[0].type.indexOf("pdf") > 0) {
+        if (e.target.files[0].size < 5 * 1000 * 1024) {
+          setFile(e.target.files[0]);
+          setError(null);
+        } else {
+          setError("File size must be less than 5MB");
+        }
+      } else {
+        setError("Incorrect File Format!");
+      }
+    } else {
+      setError("File is not available to upload");
     }
   };
 
   return (
-    <Grid item sm={4} sx={{ textAlign: "left" }}>
+    <div>
       <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
         {label}
       </Typography>
-      {/* <UploadFileIcon /> */}
       <TextField
         sx={{
           // p: "4px",
@@ -43,7 +53,7 @@ const FileUploader = ({ label, isMobile, setFile }) => {
           },
         }}
         type="file"
-        accept=".png, .jpg, .jpeg, .pdf"
+        accept=".pdf"
         size="small"
         ref={inputFile}
         InputProps={
@@ -62,16 +72,13 @@ const FileUploader = ({ label, isMobile, setFile }) => {
           }
         }
         onChange={handleFileChange}
-      >
-        {/* <Input
-            id="image_uploads"
-            onChange={handleFileChange}
-            accept=".png, .jpg, .jpeg, .pdf"
-            ref={inputFile}
-            sx={{ display: "none" }}
-          /> */}
-      </TextField>
-    </Grid>
+      ></TextField>
+      {error && (
+        <Typography sx={{ fontSize: "0.8rem", color: "#ff0000", mt: "5px" }}>
+          {error}
+        </Typography>
+      )}
+    </div>
   );
 };
 

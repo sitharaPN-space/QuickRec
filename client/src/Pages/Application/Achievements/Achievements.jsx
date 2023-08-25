@@ -193,12 +193,13 @@ const Achievements = () => {
             handleChange={handleChange}
             multiline
           />
-          <FileUploader
-            label="Upload your Certificate"
-            isMobile={isMobile}
-            setFile={setFile}
-          />
-
+          <Grid item sm={4} sx={{ textAlign: "left" }}>
+            <FileUploader
+              label="Upload your Certificate"
+              isMobile={isMobile}
+              setFile={setFile}
+            />
+          </Grid>
           <Grid item xs={12} sx={{ textAlign: "right" }}>
             <Button onClick={() => handleAddDetail()}>
               <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />

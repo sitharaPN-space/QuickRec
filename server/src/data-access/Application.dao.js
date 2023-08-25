@@ -227,6 +227,27 @@ const createAchveDetails = async (achvDetailReq) => {
   }
 };
 
+const uploadApplicationDocs = async (req) => {
+  try {
+    const uploadReq = req.body;
+    const docQuery =
+      req.docType === "CV"
+        ? "CVPath"
+        : uploadReq.docType === "NIC"
+        ? "NICPath"
+        : "BCPath";
+
+    const results = await req.app.locals.db.query(
+      `UPDATE Applications SET 
+      ${docQuery} = '${uploadReq.docPath}' 
+      WHERE userId = '${uploadReq.userId}' and vacancyId= ${uploadReq.vacancyId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createBasicDetails,
   createOrUpadateApplication,
@@ -241,4 +262,5 @@ export {
   getApplicationExpDetails,
   deleteExpDetails,
   deleteAchvDetails,
+  uploadApplicationDocs,
 };
