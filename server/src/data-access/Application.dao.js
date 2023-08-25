@@ -1,13 +1,29 @@
 import Application from "../models/Application.js";
 import BasicDetails from "../models/BasicDetails.js";
-import { Op } from "sequelize";
-import { application } from "express";
 import { updateOrCreate } from "./Basic.dao.js";
+
+const getApplicationsByVacancy = async (req) => {
+  const { vacancyId } = req.query;
+
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT Applications.ApplicationId,VacancyName,NameWithInitials,MobileNo1,AppliedDate
+      FROM Applications 
+      INNER JOIN ApplicationBasicDetails abd ON abd.ApplicationId = Applications.ApplicationId
+      INNER JOIN Vacancies v ON v.VacancyId = Applications.VacancyId
+      ${vacancyId ? `WHERE Applications.VacancyId='${vacancyId}'` : ""}`
+    );
+
+    return results.recordsets[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getExistingApplication = async (applicationId) => {
   try {
     const application = await Application.findOne({
-      where: { ApplicationId: `${applicationId}` },
+      where: { ApplicationId: applicationId },
     });
     return application;
   } catch (e) {
@@ -47,13 +63,14 @@ const createBasicDetails = async (basicDetailsReq) => {
 };
 
 const getApplicationBasicDetails = async (req) => {
-  const { userId } = req.query;
+  const { applicationId } = req.query;
+
   try {
     const results = await req.app.locals.db.query(
       `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
       FROM ApplicationBasicDetails  
-      WHERE userId = ${userId}`
+      WHERE ApplicationId = ${applicationId}`
     );
 
     return results.recordset[0];
@@ -65,6 +82,7 @@ const getApplicationBasicDetails = async (req) => {
 export {
   createBasicDetails,
   createOrUpadateApplication,
+  getApplicationsByVacancy,
   getExistingApplication,
   getApplicationBasicDetails,
 };

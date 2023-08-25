@@ -1,7 +1,14 @@
-import BasicDetails from "../models/BasicDetails.js";
-import Application from "../models/Application.js";
 import * as ApplicationDAO from "../data-access/Application.dao.js";
 import { ApplicationStatus } from "../constant/common.js";
+
+export const getApplications = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.getApplicationsByVacancy(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const addBasicDetails = async (req, res) => {
   const {
