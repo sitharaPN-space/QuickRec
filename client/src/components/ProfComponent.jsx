@@ -19,6 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import moment from "moment";
+import DownloadIcon from "../components/DownloadIcon";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,7 +32,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const ProfComponent = ({ profDetail, isActive }) => {
+const ProfComponent = ({ profDetail, isActive, handleEdit, handleDelete }) => {
   const theme = useTheme();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -71,10 +72,10 @@ const ProfComponent = ({ profDetail, isActive }) => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <IconButton>
+            <IconButton onClick={() => handleEdit(profDetail.expDetailId)}>
               <EditNoteIcon sx={{ width: 28, height: 28 }} />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => handleDelete(profDetail.expDetailId)}>
               <DeleteIcon sx={{ width: 28, height: 28 }} />
             </IconButton>
           </div>
@@ -96,20 +97,15 @@ const ProfComponent = ({ profDetail, isActive }) => {
                 year: "numeric",
               })}`}
             </Typography>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <Typography variant="common">attachment</Typography>
-              <IconButton>
-                <DescriptionOutlinedIcon
-                  sx={{
-                    color: theme.palette.primary[500],
-                    width: 28,
-                    height: 24,
-                  }}
-                />
-              </IconButton>
-            </div>
+            {(profDetail.attachmentPath ||
+              profDetail.attachmentPath === "/") && (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <Typography variant="common">attachment</Typography>
+                <DownloadIcon fileName={profDetail.attachmentPath} />
+              </div>
+            )}
           </div>
           <CardActions>
             <Typography variant="common" color={theme.palette.primary[500]}>

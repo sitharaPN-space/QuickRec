@@ -111,3 +111,53 @@ export const addExpDetails = async (req, res) => {
     res.status(404).json({ message: "Something went wrong" });
   }
 };
+
+export const addAchvDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.createAchveDetails(req.body);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const getExpDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.getApplicationExpDetails(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const deleteExpDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.deleteExpDetails(req.query);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const getAchvDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.getApplicationAchvDetails(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const deleteAchvDetails = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.deleteAchvDetails(req.query);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};

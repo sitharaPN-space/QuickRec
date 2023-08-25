@@ -1,11 +1,11 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db-connect-seq.js";
 
-class ExpDetails extends Model {}
+class AchveDetails extends Model {}
 
-ExpDetails.init(
+AchveDetails.init(
   {
-    expDetailId: {
+    achvDetailId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -41,9 +41,9 @@ ExpDetails.init(
   },
   {
     sequelize,
-    modelName: "ApplicationExpDetails",
+    modelName: "ApplicationAchveDetails",
     timestamps: true,
   }
 );
 
-export default ExpDetails;
+export default AchveDetails;

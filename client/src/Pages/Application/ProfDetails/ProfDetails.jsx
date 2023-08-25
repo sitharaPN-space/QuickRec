@@ -12,6 +12,7 @@ import {
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import dayjs from "dayjs";
 import Input from "../../../components/Input";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FileUploader from "../../../components/FileUploader";
@@ -20,51 +21,90 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ProfComponent from "../../../components/ProfComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfessionalQulifications } from "../../../state/UserApplication";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  useCreateAppExpDetailsMutation,
+  useGetAppExpDetailsQuery,
+  useDeleteExpDetailsMutation,
+} from "../../../state/api";
 
-const initProfDetail = {
+const initExpDetail = {
   title: "",
   organization: "",
-  startDate: "",
-  endDate: "",
+  startDate: {},
+  endDate: {},
   description: "",
   attachement: "",
-};
-
-const detail = {
-  title: "Systems Engineer",
-  organization: "National Water Supply & Drainage Board",
-  startDate: "Jan 2017",
-  endDate: "Feb 2023",
-  description:
-    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain.",
-  attachement: "",
+  attachmentPath: "",
 };
 
 const ProfDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [profDetail, setProfDetail] = useState(initProfDetail);
-  // const [eduDetailsList, setEduDetailsList] = useState([]);
+  const [file, setFile] = useState(null);
+  const [expDetail, setExpDetail] = useState(initExpDetail);
+  const [expDetailsList, setExpDetailsList] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userContext.data);
   const profDetailsList = useSelector(
     (state) => state.userApplication.experience
   );
 
+  const [createAppExpDetails, { isLoading: createLoading }] =
+    useCreateAppExpDetailsMutation();
+
+  const [deleteExpDetail, { isLoading: deleteLoading }] =
+    useDeleteExpDetailsMutation();
+
+  const {
+    data: experienceDetails,
+    isLoading: expDataLoading,
+    isSuccess,
+  } = useGetAppExpDetailsQuery({
+    userId: userData.data.UserId,
+  }) || [];
+
   useEffect(() => {
-    setCurrentStep(2);
-    dispatch(setProfessionalQulifications(profDetail));
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
-  // useEffect(() => {}, [eduDetailsList]);
+  useEffect(() => {
+    setCurrentStep(2);
+    setExpDetailsList(experienceDetails?.data || []);
+  }, [experienceDetails?.data]);
 
   const handleChange = (e) => {
-    setProfDetail({ ...profDetail, [e.target.name]: e.target.value });
+    setExpDetail({ ...expDetail, [e.target.name]: e.target.value });
   };
 
   const handleAddDetail = () => {
-    console.log(profDetail);
-    dispatch(setProfessionalQulifications(profDetail));
+    createAppExpDetails({
+      ...expDetail,
+      userId: userData.data.UserId,
+      attachment: file,
+      attachmentPath: file?.name,
+    }).unwrap();
+    resetFields();
+  };
+
+  const handleEditDetails = (detialId) => {
+    const edDetail = experienceDetails.data.filter(
+      (x) => x.expDetailId === detialId
+    );
+    setExpDetail(() => edDetail[0]);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
+  const handleDeleteDetail = (detailId) => {
+    // deleteEduDetails({ detailId }).unwrap();
+    deleteExpDetail({ detailId }).unwrap();
+    resetFields();
+  };
+
+  const resetFields = () => {
+    setExpDetail(initExpDetail);
+    setFile(null);
   };
 
   const handleNext = (e) => {
@@ -91,12 +131,14 @@ const ProfDetails = () => {
           <Input
             name="title"
             label="Title/ Role *"
+            value={expDetail?.title || ""}
             handleChange={handleChange}
             required
           />
           <Input
             name="organization"
             label="Organization *"
+            value={expDetail?.organization || ""}
             handleChange={handleChange}
             required
           />
@@ -110,12 +152,10 @@ const ProfDetails = () => {
                 </Typography>
                 <DatePicker
                   name="startDate"
-                  // value={eduDetail.startDate}
-                  // value={moment(eduDetail.startDate).format("MMM yyyy")}
-                  // value={eduDetail?.startDate}
+                  value={dayjs(expDetail?.startDate) || {}}
                   onChange={(newValue) =>
-                    setProfDetail({
-                      ...profDetail,
+                    setExpDetail({
+                      ...expDetail,
                       startDate: newValue?.$d,
                     })
                   }
@@ -135,13 +175,10 @@ const ProfDetails = () => {
                 </Typography>
                 <DatePicker
                   name="endDate"
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-                  // value={eduDetail?.endDate}
+                  value={dayjs(expDetail?.endDate) || {}}
                   onChange={(newValue) => {
-                    setProfDetail({
-                      ...profDetail,
+                    setExpDetail({
+                      ...expDetail,
                       endDate: newValue?.$d,
                     });
                   }}
@@ -158,10 +195,16 @@ const ProfDetails = () => {
           <Input
             name="description"
             label="Description"
+            value={expDetail?.description || ""}
             handleChange={handleChange}
             multiline
           />
-          <FileUploader label="Upload your Certificate" isMobile={isMobile} />
+
+          <FileUploader
+            label="Upload your Certificate"
+            isMobile={isMobile}
+            setFile={setFile}
+          />
 
           <Grid item xs={12} sx={{ textAlign: "right" }}>
             <Button onClick={() => handleAddDetail()}>
@@ -185,9 +228,22 @@ const ProfDetails = () => {
         // </Grid>
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {profDetailsList.map((detail, index) => {
-          return <ProfComponent key={index} profDetail={detail} />;
-        })}
+        {isSuccess ? (
+          expDetailsList.map((detail, index) => {
+            return (
+              <ProfComponent
+                key={index}
+                profDetail={detail}
+                handleEdit={handleEditDetails}
+                handleDelete={handleDeleteDetail}
+              />
+            );
+          })
+        ) : (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress size="5rem" />
+          </div>
+        )}
       </Box>
     </div>
   );

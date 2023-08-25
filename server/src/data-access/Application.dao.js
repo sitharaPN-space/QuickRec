@@ -2,6 +2,7 @@ import Application from "../models/Application.js";
 import BasicDetails from "../models/BasicDetails.js";
 import EduDetails from "../models/EduDetails.js";
 import ExpDetails from "../models/ExpDetails.js";
+import AchvDetails from "../models/AchveDetails.js";
 import { updateOrCreate } from "./Basic.dao.js";
 
 const getExistingApplication = async (applicationId) => {
@@ -65,9 +66,37 @@ const getApplicationEduDetails = async (req) => {
   const { userId } = req.query;
   try {
     const results = await req.app.locals.db.query(
-      `SELECT eduDetailsId,UserId,instituteName,qualification,fieldOfStudy,startDate,endDate,
+      `SELECT eduDetailsId,UserId,qualification,instituteName,fieldOfStudy,startDate,endDate,
       grade,attachmentPath, EducationType.educationType,ApplicationEduDetails.eduTypeId  FROM ApplicationEduDetails  
       INNER JOIN EducationType ON EducationType.EduTypeId = ApplicationEduDetails.EduTypeId
+      WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationExpDetails = async (req) => {
+  const { userId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT expDetailId,userId,title,organization,startDate,endDate,
+      description,attachmentPath FROM ApplicationExpDetails  
+      WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationAchvDetails = async (req) => {
+  const { userId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT achvDetailId,userId,title,organization,startDate,endDate,
+      description,attachmentPath FROM ApplicationAchveDetails  
       WHERE userId = ${userId}`
     );
     return results.recordset;
@@ -126,6 +155,32 @@ const deleteEduDetails = async (param) => {
   }
 };
 
+const deleteExpDetails = async (param) => {
+  try {
+    await ExpDetails.destroy({
+      where: {
+        expDetailId: `${param.eduId}`,
+      },
+    });
+    return { message: "delete success" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteAchvDetails = async (param) => {
+  try {
+    await AchvDetails.destroy({
+      where: {
+        achvDetailId: `${param.eduId}`,
+      },
+    });
+    return { message: "delete success" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const createExpDetails = async (expDetailReq) => {
   try {
     const expDetails = await updateOrCreate(
@@ -135,6 +190,7 @@ const createExpDetails = async (expDetailReq) => {
       },
       {
         userId: expDetailReq.userId,
+        title: expDetailReq.title,
         organization: expDetailReq.organization,
         startDate: expDetailReq.startDate,
         endDate: expDetailReq.endDate,
@@ -143,6 +199,29 @@ const createExpDetails = async (expDetailReq) => {
       }
     );
     return expDetails.item;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createAchveDetails = async (achvDetailReq) => {
+  try {
+    const achvDetails = await updateOrCreate(
+      AchvDetails,
+      {
+        expDetailId: `${achvDetailReq?.achvDetailId}`,
+      },
+      {
+        userId: achvDetailReq.userId,
+        title: expDetailReq.title,
+        organization: achvDetailReq.organization,
+        startDate: achvDetailReq.startDate,
+        endDate: achvDetailReq.endDate,
+        description: achvDetailReq.description,
+        attachmentPath: achvDetailReq.attachmentPath,
+      }
+    );
+    return achvDetails.item;
   } catch (error) {
     console.log(error);
   }
@@ -157,4 +236,9 @@ export {
   createEduDetails,
   deleteEduDetails,
   createExpDetails,
+  createAchveDetails,
+  getApplicationAchvDetails,
+  getApplicationExpDetails,
+  deleteExpDetails,
+  deleteAchvDetails,
 };

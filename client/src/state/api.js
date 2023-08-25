@@ -53,7 +53,6 @@ export const api = createApi({
         formData.append("qualification", createEduReq.qualification);
         formData.append("attachmentPath", createEduReq.attachmentPath);
         formData.append("attachment", createEduReq.attachment);
-        console.log("🚀 ~ file: api.js:49 ~ formData:", formData);
         return {
           url: `/application/addEduDetails`,
           method: "POST",
@@ -73,7 +72,68 @@ export const api = createApi({
     createAppExpDetails: builder.mutation({
       query: (createExpReq) => {
         const formData = new FormData();
+        formData.append("userId", createExpReq.userId);
+        formData.append("title", createExpReq.title);
+        formData.append("organization", createExpReq.organization);
+        formData.append("endDate", createExpReq.endDate);
+        formData.append("startDate", createExpReq.startDate);
+        formData.append("description", createExpReq.description);
+        formData.append("attachmentPath", createExpReq.attachmentPath);
+        formData.append("attachment", createExpReq.attachment);
+        return {
+          url: `/application/addExpDetails`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
       },
+      invalidatesTags: ["AppExpDetails"],
+    }),
+    deleteExpDetails: builder.mutation({
+      query: ({ detailId }) => ({
+        url: `/application/deleteExpDetails/?eduId=${detailId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["AppExpDetails"],
+    }),
+    getAppExpDetails: builder.query({
+      query: ({ userId }) => ({
+        url: `application/expDetails/?userId=${userId}`,
+      }),
+      providesTags: ["AppExpDetails"],
+    }),
+    createAppAchvDetails: builder.mutation({
+      query: (createAchvReq) => {
+        const formData = new FormData();
+        formData.append("userId", createAchvReq.userId);
+        formData.append("title", createAchvReq.title);
+        formData.append("organization", createAchvReq.organization);
+        formData.append("endDate", createAchvReq.endDate);
+        formData.append("startDate", createAchvReq.startDate);
+        formData.append("description", createAchvReq.description);
+        formData.append("attachmentPath", createAchvReq.attachmentPath);
+        formData.append("attachment", createAchvReq.attachment);
+        return {
+          url: `/application/addAchvDetails`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
+      invalidatesTags: ["AppAchvDetails"],
+    }),
+    getAppAchvDetails: builder.query({
+      query: ({ userId }) => ({
+        url: `application/achvDetails/?userId=${userId}`,
+      }),
+      providesTags: ["AppAchvDetails"],
+    }),
+    deleteAchvDetails: builder.mutation({
+      query: ({ detailId }) => ({
+        url: `/application/deleteAchvDetails/?eduId=${detailId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["AppAchvDetails"],
     }),
   }),
 });
@@ -86,4 +146,10 @@ export const {
   useGetAppEduDetailsQuery,
   useCreateAppEduDetailsMutation,
   useDeleteEduDetailsMutation,
+  useCreateAppExpDetailsMutation,
+  useCreateAppAchvDetailsMutation,
+  useGetAppExpDetailsQuery,
+  useGetAppAchvDetailsQuery,
+  useDeleteAchvDetailsMutation,
+  useDeleteExpDetailsMutation,
 } = api;

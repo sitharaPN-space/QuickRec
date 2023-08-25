@@ -13,6 +13,7 @@ import applicationRoutes from "./src/routes/applicationRoutes.js";
 import {
   addEduDetails,
   addExpDetails,
+  addAchvDetails,
 } from "./src/controllers/applicationController.js";
 import commonRoutes from "./src/routes/commonRoutes.js";
 import path from "path";
@@ -62,6 +63,12 @@ app.post(
   "/application/addExpDetails",
   upload.single("attachment"),
   addExpDetails
+);
+
+app.post(
+  "/application/addAchvDetails",
+  upload.single("attachment"),
+  addAchvDetails
 );
 
 /* ROUTES */
