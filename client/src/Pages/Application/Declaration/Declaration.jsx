@@ -13,8 +13,6 @@ import {
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import Input from "../../../components/Input";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -22,7 +20,8 @@ import AchievementComp from "../../../components/AchievementComp";
 import { useDispatch, useSelector } from "react-redux";
 import { setAchievementsState } from "../../../state/UserApplication";
 
-const initAchievement = {
+const initAttachments = {
+  userId: "",
   cvCopy: "",
   nicCopy: "",
   BCCopy: "",
@@ -32,15 +31,14 @@ const initAchievement = {
 const Declaration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
-  const [declationDetails, setDeclationDetails] = useState(initAchievement);
+  const [declationDetails, setDeclationDetails] = useState(initAttachments);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [cvDocument, setCvDocument] = useState(null);
+  const [nicDocument, setNicDocument] = useState(null);
+  const [bcDocument, setBCDocument] = useState(null);
+  const userData = useSelector((state) => state.userContext.data);
 
-  // const [eduDetailsList, setEduDetailsList] = useState([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  //   const achievementsList = useSelector(
-  //     (state) => state.userApplication.achievements
-  //   );
 
   useEffect(() => {
     setCurrentStep(4);
@@ -73,11 +71,23 @@ const Declaration = () => {
               Declaration
             </Typography>
           </Grid>
-          <FileUploader label="Your CV *" isMobile={isMobile} />
+          <FileUploader
+            label="Your CV *"
+            isMobile={isMobile}
+            setFile={setCvDocument}
+          />
           <Grid item sm={8}></Grid>
-          <FileUploader label="National Identitiy Card" isMobile={isMobile} />
+          <FileUploader
+            label="National Identitiy Card"
+            isMobile={isMobile}
+            setFile={setNicDocument}
+          />
           <Grid item sm={8}></Grid>
-          <FileUploader label="Birth Certificate" isMobile={isMobile} />
+          <FileUploader
+            label="Birth Certificate"
+            isMobile={isMobile}
+            setFile={setBCDocument}
+          />
           <Grid item sm={8}></Grid>
 
           {/* <Grid item sm={12} sx={{ textAlign: "left" }}>

@@ -80,15 +80,6 @@ const EducationDetail = ({
             >
               <Typography variant="common">attachment</Typography>
               <DownloadIcon fileName={eduDetail.attachmentPath} />
-              {/* <IconButton>
-                <DescriptionOutlinedIcon
-                  sx={{
-                    color: theme.palette.primary[500],
-                    width: 28,
-                    height: 24,
-                  }}
-                />
-              </IconButton> */}
             </div>
 
             <div
@@ -102,7 +93,7 @@ const EducationDetail = ({
               <IconButton onClick={() => handleEdit(eduDetail.eduDetailsId)}>
                 <EditNoteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={() => handleDelete(eduDetail.eduDetailsId)}>
                 <DeleteIcon sx={{ width: 28, height: 28 }} />
               </IconButton>
             </div>

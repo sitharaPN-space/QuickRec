@@ -17,8 +17,7 @@ import Collapse from "@mui/material/Collapse";
 import { styled } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import moment from "moment";
+import DownloadIcon from "../components/DownloadIcon";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,7 +30,13 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const AchievementComp = ({ achievement, isActive, isMobile }) => {
+const AchievementComp = ({
+  achievement,
+  isActive,
+  isMobile,
+  handleEdit,
+  handleDelete,
+}) => {
   const theme = useTheme();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -71,10 +76,10 @@ const AchievementComp = ({ achievement, isActive, isMobile }) => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <IconButton>
+            <IconButton onClick={() => handleEdit(achievement.achvDetailId)}>
               <EditNoteIcon sx={{ width: 28, height: 28 }} />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => handleDelete(achievement.achvDetailId)}>
               <DeleteIcon sx={{ width: 28, height: 28 }} />
             </IconButton>
           </div>
@@ -107,20 +112,15 @@ const AchievementComp = ({ achievement, isActive, isMobile }) => {
                 }
               )}`}
             </Typography>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <Typography variant="common">attachment</Typography>
-              <IconButton>
-                <DescriptionOutlinedIcon
-                  sx={{
-                    color: theme.palette.primary[500],
-                    width: 28,
-                    height: 24,
-                  }}
-                />
-              </IconButton>
-            </div>
+
+            {achievement?.attachmentPath !== "undefined" && (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <Typography variant="common">attachment</Typography>
+                <DownloadIcon fileName={achievement.attachmentPath} />
+              </div>
+            )}
           </div>
           {achievement.description && (
             <CardActions>

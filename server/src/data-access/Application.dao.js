@@ -209,11 +209,11 @@ const createAchveDetails = async (achvDetailReq) => {
     const achvDetails = await updateOrCreate(
       AchvDetails,
       {
-        expDetailId: `${achvDetailReq?.achvDetailId}`,
+        achvDetailId: `${achvDetailReq?.achvDetailId}`,
       },
       {
         userId: achvDetailReq.userId,
-        title: expDetailReq.title,
+        title: achvDetailReq.title,
         organization: achvDetailReq.organization,
         startDate: achvDetailReq.startDate,
         endDate: achvDetailReq.endDate,

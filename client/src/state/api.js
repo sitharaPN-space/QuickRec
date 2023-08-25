@@ -72,6 +72,7 @@ export const api = createApi({
     createAppExpDetails: builder.mutation({
       query: (createExpReq) => {
         const formData = new FormData();
+        formData.append("expDetailId", createExpReq?.expDetailId);
         formData.append("userId", createExpReq.userId);
         formData.append("title", createExpReq.title);
         formData.append("organization", createExpReq.organization);
@@ -105,6 +106,7 @@ export const api = createApi({
     createAppAchvDetails: builder.mutation({
       query: (createAchvReq) => {
         const formData = new FormData();
+        formData.append("achvDetailId", createAchvReq?.achvDetailId);
         formData.append("userId", createAchvReq.userId);
         formData.append("title", createAchvReq.title);
         formData.append("organization", createAchvReq.organization);

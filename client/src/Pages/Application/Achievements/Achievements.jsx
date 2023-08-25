@@ -18,53 +18,87 @@ import FileUploader from "../../../components/FileUploader";
 import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AchievementComp from "../../../components/AchievementComp";
-import { useDispatch, useSelector } from "react-redux";
-import { setAchievementsState } from "../../../state/UserApplication";
+import { useSelector } from "react-redux";
+import dayjs from "dayjs";
+import CircularProgress from "@mui/material/CircularProgress";
+
+import {
+  useCreateAppAchvDetailsMutation,
+  useGetAppAchvDetailsQuery,
+  useDeleteAchvDetailsMutation,
+} from "../../../state/api";
 
 const initAchievement = {
   title: "",
   organization: "",
-  startDate: "",
-  endDate: "",
+  startDate: {},
+  endDate: {},
   description: "",
   attachement: "",
-};
-
-const detail = {
-  title: "Best Student Award",
-  organization: "University of Peradeniya",
-  startDate: "Jan 2017",
-  endDate: "Feb 2023",
-  description:
-    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain.",
-  attachement: "",
+  attachmentPath: "",
 };
 
 const Achievements = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [currentStep, setCurrentStep] = useOutletContext();
+  const userData = useSelector((state) => state.userContext.data);
+  const [file, setFile] = useState(null);
   const [achievement, setAchievement] = useState(initAchievement);
-  // const [eduDetailsList, setEduDetailsList] = useState([]);
+  const [achievementList, setAchievementList] = useState([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const achievementsList = useSelector(
-    (state) => state.userApplication.achievements
-  );
+
+  const [createAchvDetails, { isLoading: createLoading }] =
+    useCreateAppAchvDetailsMutation();
+  const [deleteAchvDetails, { isLoading: deleteLoading }] =
+    useDeleteAchvDetailsMutation();
+
+  const {
+    data: achievementDetails,
+    isLoading: achvDataLoading,
+    isSuccess,
+  } = useGetAppAchvDetailsQuery({
+    userId: userData.data.UserId,
+  }) || [];
 
   useEffect(() => {
     setCurrentStep(3);
-    dispatch(setAchievementsState(detail));
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
-  // useEffect(() => {}, [eduDetailsList]);
+  useEffect(() => {
+    setAchievementList(achievementDetails?.data || []);
+  }, [achievementDetails?.data]);
 
   const handleChange = (e) => {
     setAchievement({ ...achievement, [e.target.name]: e.target.value });
   };
 
   const handleAddDetail = () => {
-    console.log(achievement);
-    dispatch(setAchievementsState(achievement));
+    createAchvDetails({
+      ...achievement,
+      userId: userData.data.UserId,
+      attachment: file,
+      attachmentPath: file?.name,
+    }).unwrap();
+    resetFields();
+  };
+
+  const handleEditDetails = (detialId) => {
+    const achvDetail = achievementDetails.data.filter(
+      (x) => x.achvDetailId === detialId
+    );
+    setAchievement(() => achvDetail[0]);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
+  const handleDeleteDetail = (detailId) => {
+    deleteAchvDetails({ detailId }).unwrap();
+    resetFields();
+  };
+
+  const resetFields = () => {
+    setAchievement(initAchievement);
+    setFile(null);
   };
 
   const handleNext = (e) => {
@@ -92,11 +126,13 @@ const Achievements = () => {
             name="title"
             label="Title/ Role *"
             handleChange={handleChange}
+            value={achievement?.title || ""}
             required
           />
           <Input
             name="organization"
             label="Organization *"
+            value={achievement?.organization || ""}
             handleChange={handleChange}
             required
           />
@@ -110,9 +146,7 @@ const Achievements = () => {
                 </Typography>
                 <DatePicker
                   name="startDate"
-                  // value={eduDetail.startDate}
-                  // value={moment(eduDetail.startDate).format("MMM yyyy")}
-                  // value={eduDetail?.startDate}
+                  value={dayjs(achievement?.startDate) || {}}
                   onChange={(newValue) =>
                     setAchievement({
                       ...achievement,
@@ -135,10 +169,7 @@ const Achievements = () => {
                 </Typography>
                 <DatePicker
                   name="endDate"
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // value={moment(eduDetail.endDate).format("MMM yyyy")}
-                  // formatDate={(date) => moment(date).format("DD-MM-YYYY")}
-                  // value={eduDetail?.endDate}
+                  value={dayjs(achievement?.endDate) || {}}
                   onChange={(newValue) => {
                     setAchievement({
                       ...achievement,
@@ -158,10 +189,15 @@ const Achievements = () => {
           <Input
             name="description"
             label="Description"
+            value={achievement?.description || ""}
             handleChange={handleChange}
             multiline
           />
-          <FileUploader label="Upload your Certificate" isMobile={isMobile} />
+          <FileUploader
+            label="Upload your Certificate"
+            isMobile={isMobile}
+            setFile={setFile}
+          />
 
           <Grid item xs={12} sx={{ textAlign: "right" }}>
             <Button onClick={() => handleAddDetail()}>
@@ -185,15 +221,23 @@ const Achievements = () => {
         // </Grid>
       )}
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {achievementsList.map((detail, index) => {
-          return (
-            <AchievementComp
-              key={index}
-              achievement={detail}
-              isMobile={isMobile}
-            />
-          );
-        })}
+        {isSuccess ? (
+          achievementList.map((detail, index) => {
+            return (
+              <AchievementComp
+                key={index}
+                achievement={detail}
+                isMobile={isMobile}
+                handleEdit={handleEditDetails}
+                handleDelete={handleDeleteDetail}
+              />
+            );
+          })
+        ) : (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress size="5rem" />
+          </div>
+        )}
       </Box>
     </div>
   );
