@@ -10,6 +10,16 @@ const createVacancy = async (req, res) => {
     console.log(error);
   }
 };
+const deleteVacancy = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await VacancyDao.deleteVacancy(id);
+    res.status(201).json({ result: "Vacancy removed" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+  }
+};
 
 const getVacancyBySearch = async (req, res) => {
   try {
@@ -25,4 +35,4 @@ const getVacancyBySearch = async (req, res) => {
   }
 };
 
-export { createVacancy, getVacancyBySearch };
+export { createVacancy, deleteVacancy, getVacancyBySearch };

@@ -15,7 +15,7 @@ const initExperience = {
   startDate: null,
   endDate: null,
   description: "",
-  upload: "Choose File",
+  upload: "",
 };
 
 const ProDetails = () => {

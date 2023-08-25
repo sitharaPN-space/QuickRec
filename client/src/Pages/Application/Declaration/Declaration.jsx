@@ -112,6 +112,7 @@ const Declaration = () => {
               control={
                 <Checkbox
                   checked={checked}
+                  required
                   onChange={() => setChecked(!checked)}
                   sx={{ m: "1rem" }}
                 />
@@ -129,11 +130,7 @@ const Declaration = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <ButtonComp
-              sx={{ m: "5rem auto", p: "1rem 0.5rem" }}
-              disabled={!checked}
-              type="submit"
-            >
+            <ButtonComp sx={{ m: "5rem auto", p: "1rem 0.5rem" }} type="submit">
               Submit Application
             </ButtonComp>
           </Grid>
