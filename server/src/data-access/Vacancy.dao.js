@@ -10,7 +10,7 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
       },
       vacancyReq
     );
-    return vacancy.item;
+    return vacancy.message;
   } catch (error) {
     console.log(error);
   }
@@ -33,17 +33,16 @@ const getVacanciesBySearch = async (req) => {
   try {
     const results = await req.app.locals.db.query(
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
-      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
-      VacancyName,updatedAt, 
-      IIF(DATEDIFF(day,updatedAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETUTCDATE()), ' hours ago'),
-      CONCAT(DATEDIFF(day,updatedAt,GETUTCDATE()), ' days ago')) DaysPosted
+      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Vacancies.Status,Vacancies.VacancyId,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
+      VacancyName,Vacancies.updatedAt, 
+      IIF(DATEDIFF(day,Vacancies.updatedAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,Vacancies.updatedAt,GETUTCDATE()), ' hours ago'),
+      CONCAT(DATEDIFF(day,Vacancies.updatedAt,GETUTCDATE()), ' days ago')) DaysPosted,
+      (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId) AS NoOfApplied
       FROM Vacancies
-      INNER JOIN Applications app ON app.VacancyId = Vacancies.VacancyId
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
       INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
       ORDER BY updatedAt DESC`
     );
-
     return results.recordset;
   } catch (error) {
     console.error(error);
