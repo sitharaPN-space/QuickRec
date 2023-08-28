@@ -13,8 +13,7 @@ const getApplicationsByVacancy = async (req) => {
       INNER JOIN Vacancies v ON v.VacancyId = Applications.VacancyId
       ${vacancyId ? `WHERE Applications.VacancyId='${vacancyId}'` : ""}`
     );
-
-    return results.recordsets[0];
+    return results.recordset;
   } catch (error) {
     console.log(error);
   }
