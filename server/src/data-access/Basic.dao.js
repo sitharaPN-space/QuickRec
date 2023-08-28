@@ -4,7 +4,10 @@ export const updateOrCreate = async (model, where, newItem) => {
   if (!foundItem) {
     // Item not found, create a new one
     const item = await model.create(newItem);
-    return { item: item.dataValues }; // { item: item.dataValues, created: true };
+    return {
+      item: item.dataValues,
+      message: `Vacancy created successfully`,
+    }; // { item: item.dataValues, created: true };
   }
   const item = await model.update(newItem, {
     where,
@@ -12,5 +15,8 @@ export const updateOrCreate = async (model, where, newItem) => {
     plain: true,
   });
   const data = item[1].dataValues;
-  return { item: data };
+  return {
+    item: data,
+    message: `Vacancy updated successfully`,
+  };
 };
