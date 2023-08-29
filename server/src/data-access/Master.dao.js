@@ -1,28 +1,25 @@
-import BoardGrade from "../models/BoardGrade.js";
 import SalaryGroup from "../models/SalaryGroup.js";
+import BoardGrade from "../models/BoardGrade.js";
 
 class MasterDao {
-  static async getAllSalaryGroups() {
+  static async getMasterData() {
     try {
-      const data = await SalaryGroup.findAll();
-      const salaryGroups = data.map(({ SalaryGroupId, SalaryGroup }) => ({
-        value: SalaryGroupId,
-        text: SalaryGroup,
-      }));
-      return salaryGroups;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      const salaryGroupsData = await SalaryGroup.findAll();
+      const salaryGroups = salaryGroupsData.map(
+        ({ dataValues: { SalaryGroupId, SalaryGroup } }) => ({
+          value: SalaryGroupId,
+          text: SalaryGroup,
+        })
+      );
+      const boardGradesData = await BoardGrade.findAll();
 
-  static async getAllBoardGrades() {
-    try {
-      const data = await BoardGrade.findAll();
-      const boardGrades = data.map(({ BoardGradeId, BoardGrade }) => ({
-        value: BoardGradeId,
-        text: BoardGrade,
-      }));
-      return boardGrades;
+      const boardGrades = boardGradesData.map(
+        ({ dataValues: { BoardGradeId, BoardGrade } }) => ({
+          value: BoardGradeId,
+          text: BoardGrade,
+        })
+      );
+      return { salaryGroups, boardGrades };
     } catch (error) {
       console.log(error);
     }
