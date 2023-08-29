@@ -156,7 +156,7 @@ const Vacancy = ({ vacancy }) => {
           <div style={{ display: "flex", gap: "10px" }}>
             <VisibilityIcon sx={{ fontSize: "24px" }} />
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              Applied ({vacancy.NoOfApplied})
+              Applied ({vacancy.NoOfApplicants})
             </Typography>
           </div>
           <ButtonComp sx={{ marginLeft: "auto" }} onClick={() => handleApply()}>

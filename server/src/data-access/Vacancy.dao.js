@@ -37,7 +37,7 @@ const getVacanciesBySearch = async (req) => {
       VacancyName,Vacancies.updatedAt, 
       IIF(DATEDIFF(day,Vacancies.updatedAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,Vacancies.updatedAt,GETUTCDATE()), ' hours ago'),
       CONCAT(DATEDIFF(day,Vacancies.updatedAt,GETUTCDATE()), ' days ago')) DaysPosted,
-      (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId) AS NoOfApplied
+      (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId) AS NoOfApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
       INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
