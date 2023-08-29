@@ -68,7 +68,7 @@ const getApplicationBasicDetails = async (req) => {
   const { userId } = req.query;
   try {
     const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
-      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
+      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email,basicDetailsId
       FROM ApplicationBasicDetails 
       WHERE userId = ${userId}`;
 
@@ -82,7 +82,7 @@ const getApplicationBasicDetails = async (req) => {
 const getApplicationBasicDetailsByApplication = async (req) => {
   const { userId, applicationId } = req.query;
   try {
-    const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
+    const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,basicDetailsId,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email, ISNULL(appAs.isApproved,0) isApproved
       FROM ApplicationBasicDetails 
       LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = BasicDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 1

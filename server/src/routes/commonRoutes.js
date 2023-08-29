@@ -13,7 +13,7 @@ import auth from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/", getAllVacancies);
-router.post("/createVacancy", createVacancy);
+// router.post("/createVacancy", createVacancy);
 router.get("/search", getVacancyBySearch);
 router.post("/pdfDownload", downloadFile);
 router.get("/masterData", getCommonAppData);

@@ -22,7 +22,7 @@ const getAllSalaryGroups = async (req) => {
 
 const getApplicationSteps = async (req) => {
   try {
-    const queryString = `SELECT AppStepId stepNo, AppStep step text FROM ApplicationSteps`;
+    const queryString = `SELECT AppStepId stepNo, AppSteps step FROM ApplicationSteps`;
     const results = await req.app.locals.db.query(queryString);
     return results.recordset;
   } catch (e) {

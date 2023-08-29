@@ -10,7 +10,7 @@ import {
 import Input from "../../components/Input";
 import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -128,7 +128,7 @@ const SignIn = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <GoogleLogin
+              {/* <GoogleLogin
                 clientId="90505972630-ogshh8gsa9vdkit3nrpbbcfst4m3atg5.apps.googleusercontent.com"
                 render={(renderProps) => (
                   <ButtonComp
@@ -144,7 +144,7 @@ const SignIn = () => {
                 onSuccess={googleSuccess}
                 onFailure={googleError}
                 cookiePolicy="single_host_origin"
-              />
+              /> */}
             </Grid>
           </Grid>
           <Grid container sx={{ display: "flex", justifyContent: "flex-end" }}>

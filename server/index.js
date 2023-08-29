@@ -16,6 +16,8 @@ import {
   addAchvDetails,
   uploadApplicationDocs,
 } from "./src/controllers/applicationController.js";
+import { createVacancy } from "./src/controllers/VacancyController.js";
+
 import commonRoutes from "./src/routes/commonRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -77,6 +79,8 @@ app.post(
   upload.single("document"),
   uploadApplicationDocs
 );
+
+app.post("/vacancy/createVacancy", upload.single("attachment"), createVacancy);
 
 /* ROUTES */
 app.use("/user", userRoutes);
