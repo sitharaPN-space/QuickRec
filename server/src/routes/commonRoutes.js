@@ -4,7 +4,10 @@ import {
   getVacancyBySearch,
   getAllVacancies,
 } from "../controllers/VacancyController.js";
-import { downloadFile } from "../controllers/CommonController.js";
+import {
+  downloadFile,
+  getCommonAppData,
+} from "../controllers/CommonController.js";
 import auth from "../middleware/auth.js";
 
 const router = express.Router();
@@ -12,6 +15,7 @@ const router = express.Router();
 router.get("/", getAllVacancies);
 router.post("/createVacancy", createVacancy);
 router.get("/search", getVacancyBySearch);
-router.post("pdfDownload", downloadFile);
+router.post("/pdfDownload", downloadFile);
+router.get("/masterData", getCommonAppData);
 
 export default router;

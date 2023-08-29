@@ -62,6 +62,16 @@ export const addBasicDetails = async (req, res) => {
   }
 };
 
+export const getApplicationsByVacancy = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.getApplicationsByVacancy(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
 export const getBasicDetails = async (req, res) => {
   try {
     const data = await ApplicationDAO.getApplicationBasicDetails(req);
@@ -165,6 +175,40 @@ export const deleteAchvDetails = async (req, res) => {
 export const uploadApplicationDocs = async (req, res) => {
   try {
     const data = await ApplicationDAO.uploadApplicationDocs(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const approveQualification = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.ApproveQualification(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const getUserApplication = async (req, res) => {
+  try {
+    const basicDetails =
+      await ApplicationDAO.getApplicationBasicDetailsByApplication(req);
+    const ExpDetails =
+      await ApplicationDAO.getApplicationExpDetailsByApplication(req);
+    const EduDetails =
+      await ApplicationDAO.getApplicationEduDetailsByApplication(req);
+    const achvDetails =
+      await ApplicationDAO.getApplicationAchvDetailsByApplication(req);
+
+    let data = {};
+    data.basicDetails = basicDetails;
+    data.experience = ExpDetails;
+    data.education = EduDetails;
+    data.otherDetails = achvDetails;
+
     res.status(200).json({ data });
   } catch (error) {
     console.log(error);

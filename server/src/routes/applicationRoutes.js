@@ -8,6 +8,9 @@ import {
   deleteAchvDetails,
   getExpDetails,
   getAchvDetails,
+  getApplicationsByVacancy,
+  getUserApplication,
+  approveQualification,
 } from "../controllers/applicationController.js";
 
 import auth from "../middleware/auth.js";
@@ -19,8 +22,11 @@ router.get("/basicDetails", getBasicDetails);
 router.get("/eduDetails", getEduDetails);
 router.get("/expDetails", getExpDetails);
 router.get("/achvDetails", getAchvDetails);
+router.get("/allApplications", getApplicationsByVacancy);
 router.delete("/deleteEduDetails", deleteEduDetails);
 router.delete("/deleteExpDetails", deleteExpDetails);
 router.delete("/deleteAchvDetails", deleteAchvDetails);
+router.get("/userApplication", getUserApplication);
+router.post("/approve", approveQualification);
 
 export default router;

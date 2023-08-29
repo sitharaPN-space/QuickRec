@@ -21,13 +21,16 @@ const getVacanciesBySearch = async (req) => {
   try {
     const results = await req.app.locals.db.query(
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
-      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,
+      PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,sg.SalaryGroupId,
+      IIF(Status='ACT','Open','Close') Status,VacancyId,BoardGrade,bg.BoardGradeId,
       VacancyName,updatedAt, 
       IIF(DATEDIFF(day,updatedAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETDATE()), ' hours ago'),
-      CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted
+      CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted,
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId) NoOfApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
-      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'`
+      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
+      ORDER BY PublishedDate desc`
     );
 
     return results.recordset;
@@ -44,7 +47,8 @@ const getAllVacancies = async (req) => {
     PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Status,VacancyId,BoardGrade,bg.BoardGradeId,sg.SalaryGroupId,
     VacancyName,updatedAt, 
     IIF(DATEDIFF(day,updatedAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,updatedAt,GETDATE()), ' hours ago'),
-    CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted
+    CONCAT(DATEDIFF(day,updatedAt,GETDATE()), ' days ago')) DaysPosted,
+    (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId) NoOfApplicants
     FROM Vacancies
     INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
     INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId`);

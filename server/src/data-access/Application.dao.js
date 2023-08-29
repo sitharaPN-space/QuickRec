@@ -47,12 +47,45 @@ const createBasicDetails = async (basicDetailsReq) => {
   }
 };
 
+const getApplicationsByVacancy = async (req) => {
+  let { vacancyId } = req.query;
+  if (vacancyId === "0") vacancyId = "app.VacancyId";
+  try {
+    const queryString = `SELECT app.ApplicationId, app.UserId, app.VacancyId,
+    vc.VacancyName, bd.NameWithInitials, bd.MobileNo1, bd.createdAt AppliedDate, app.Status
+    FROM Applications app
+    INNER JOIN Vacancies vc ON vc.VacancyId = app.VacancyId
+    INNER JOIN ApplicationBasicDetails bd ON bd.UserId = app.UserId
+    WHERE app.VacancyId = ${vacancyId}`;
+    const results = await req.app.locals.db.query(queryString);
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getApplicationBasicDetails = async (req) => {
   const { userId } = req.query;
   try {
     const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email
-      FROM ApplicationBasicDetails  
+      FROM ApplicationBasicDetails 
+      WHERE userId = ${userId}`;
+
+    const results = await req.app.locals.db.query(queryString);
+    return results.recordset[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationBasicDetailsByApplication = async (req) => {
+  const { userId, applicationId } = req.query;
+  try {
+    const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
+      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email, ISNULL(appAs.isApproved,0) isApproved
+      FROM ApplicationBasicDetails 
+      LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = BasicDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 1
       WHERE userId = ${userId}`;
 
     const results = await req.app.locals.db.query(queryString);
@@ -77,12 +110,44 @@ const getApplicationEduDetails = async (req) => {
   }
 };
 
+const getApplicationEduDetailsByApplication = async (req) => {
+  const { userId, applicationId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT eduDetailsId,UserId,qualification,instituteName,fieldOfStudy,startDate,endDate,
+      grade,attachmentPath, EducationType.educationType,ApplicationEduDetails.eduTypeId, ISNULL(appAs.isApproved,0) isApproved
+      FROM ApplicationEduDetails  
+      INNER JOIN EducationType ON EducationType.EduTypeId = ApplicationEduDetails.EduTypeId
+      LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = eduDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 2
+      WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getApplicationExpDetails = async (req) => {
   const { userId } = req.query;
   try {
     const results = await req.app.locals.db.query(
       `SELECT expDetailId,userId,title,organization,startDate,endDate,
       description,attachmentPath FROM ApplicationExpDetails  
+      WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationExpDetailsByApplication = async (req) => {
+  const { userId, applicationId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT expDetailId,userId,title,organization,startDate,endDate,
+      description,attachmentPath, ISNULL(appAs.isApproved,0) isApproved FROM ApplicationExpDetails  
+      LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = expDetailId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 3
       WHERE userId = ${userId}`
     );
     return results.recordset;
@@ -98,6 +163,43 @@ const getApplicationAchvDetails = async (req) => {
       `SELECT achvDetailId,userId,title,organization,startDate,endDate,
       description,attachmentPath FROM ApplicationAchveDetails  
       WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getApplicationAchvDetailsByApplication = async (req) => {
+  const { userId, applicationId } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `SELECT achvDetailId,userId,title,organization,startDate,endDate,
+      description,attachmentPath, ISNULL(appAs.isApproved,0) isApproved FROM ApplicationAchveDetails  
+      LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = achvDetailId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 4
+      WHERE userId = ${userId}`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const ApproveQualification = async (req) => {
+  const { applicationId, stepId, detailId, isApproved } = req.query;
+  try {
+    const results = await req.app.locals.db.query(
+      `IF EXISTS (SELECT * FROM ApplicationAssesments WHERE ApplicationId = ${applicationId} and AppStepId = ${stepId} and DetailId = ${detailId} ) 
+      BEGIN
+          UPDATE ApplicationAssesments 
+          SET IsApproved = ${isApproved}, UpdatedAt=GETDATE()
+          WHERE ApplicationId = ${applicationId} and AppStepId = ${stepId} and DetailId = ${detailId}
+      END
+      ELSE BEGIN
+        INSERT INTO ApplicationAssesments (ApplicationId, AppStepId, DetailId, IsApproved, UpdatedAt)
+        VALUES (${applicationId},${stepId},${detailId},${isApproved}, GETDATE())
+      END
+       `
     );
     return results.recordset;
   } catch (error) {
@@ -263,4 +365,10 @@ export {
   deleteExpDetails,
   deleteAchvDetails,
   uploadApplicationDocs,
+  getApplicationsByVacancy,
+  getApplicationAchvDetailsByApplication,
+  getApplicationExpDetailsByApplication,
+  getApplicationEduDetailsByApplication,
+  getApplicationBasicDetailsByApplication,
+  ApproveQualification,
 };

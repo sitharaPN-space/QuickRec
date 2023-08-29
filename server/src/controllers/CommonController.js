@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { getMasterData } from "../services/commonDataService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,8 +22,18 @@ const downloadFile = (req, res) => {
     file.pipe(res);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "File Download is corrupted" });
+    res.status(404).json({ message: "File Download is corrupted" });
   }
 };
 
-export { downloadFile };
+const getCommonAppData = async (req, res) => {
+  try {
+    const data = await getMasterData(req);
+    res.status(200).json({ data: data.data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { downloadFile, getCommonAppData };
