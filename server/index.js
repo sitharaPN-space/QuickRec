@@ -10,7 +10,7 @@ import DBconfig from "./dbconfig.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import applicationRoutes from "./src/routes/applicationRoutes.js";
 import commonRoutes from "./src/routes/commonRoutes.js";
-import masterRoutes from "./src/routes/masterRoutes.js";
+import vacancyRoutes from "./src/routes/vacancyRoutes.js";
 
 /* CONFIGURATION */
 const app = express();
@@ -34,8 +34,8 @@ app.use(cors());
 /* ROUTES */
 app.use("/user", userRoutes);
 app.use("/application", applicationRoutes);
-app.use("/vacancy", commonRoutes);
-app.use("/master", masterRoutes);
+app.use("/vacancy", vacancyRoutes);
+app.use("/common", commonRoutes);
 
 var port = process.env.PORT || 5000;
 appPool
