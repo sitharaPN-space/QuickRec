@@ -12,6 +12,7 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import DownloadIcon from "./DownloadIcon";
 
 const Vacancy = ({ vacancy }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -20,7 +21,7 @@ const Vacancy = ({ vacancy }) => {
 
   const handleApply = () => {
     navigate("/application/basicDetails", {
-      state: { vacancyId: vacancy.vacancyId, vacancy: vacancy.title },
+      state: { vacancyId: vacancy.VacancyId, vacancy: vacancy.VacancyName },
     });
   };
 
@@ -135,13 +136,17 @@ const Vacancy = ({ vacancy }) => {
             </div>
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "-8px",
+                alignItems: "center",
+              }}
+            >
               <Typography fontSize={isMobile ? "14px" : "16px"}>
                 Advertisement:{" "}
               </Typography>
-              <DescriptionOutlinedIcon
-                sx={{ color: (theme) => theme.palette.primary[500] }}
-              />
+              <DownloadIcon fileName={vacancy.AdvertismentPath} />
             </div>
           </Grid>
         </Grid>
