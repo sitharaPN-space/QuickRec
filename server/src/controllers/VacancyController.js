@@ -3,8 +3,9 @@ import { ActiveStatus, RecruitementType } from "../constant/common.js";
 
 const createVacancy = async (req, res) => {
   try {
-    const vacancy = await VacancyDao.createOrUpadateVacancy(req.body);
-    res.status(201).json({ message: vacancy });
+    console.log(req.file);
+    const result = await VacancyDao.createOrUpadateVacancy(req.body);
+    res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);

@@ -69,9 +69,20 @@ export const addBasicDetails = async (req, res) => {
   }
 };
 
-export const getBasicDetails = async (req, res) => {
+export const getAppDetails = async (req, res) => {
   try {
-    const data = await ApplicationDAO.getApplicationBasicDetails(req);
+    let data = {};
+    data.basicDetails = await ApplicationDAO.getApplicationBasicDetails(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
+export const approveQualification = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.ApproveQualification(req);
     res.status(200).json({ data });
   } catch (error) {
     console.log(error);

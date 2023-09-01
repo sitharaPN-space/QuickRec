@@ -2,15 +2,15 @@ import express from "express";
 import {
   addBasicDetails,
   getApplications,
-  getBasicDetails,
+  getAppDetails,
+  approveQualification,
 } from "../controllers/applicationController.js";
-
-import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.post("/addBasicDetails", addBasicDetails);
-router.get("/basicDetails", getBasicDetails);
+router.post("/approve", approveQualification);
+router.get("/userApplication", getAppDetails);
 router.get("/allApplications", getApplications);
 
 export default router;

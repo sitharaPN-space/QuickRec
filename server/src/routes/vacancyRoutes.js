@@ -4,10 +4,11 @@ import {
   deleteVacancy,
   getVacancyBySearch,
 } from "../controllers/VacancyController.js";
+import upload from "../../storage.js";
 
 const router = express.Router();
 
-router.post("/createVacancy", createVacancy);
+router.post("/createVacancy", upload.single("attachment"), createVacancy);
 router.post("/deleteVacancy/:id", deleteVacancy);
 router.get("/search", getVacancyBySearch);
 
