@@ -8,7 +8,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
