@@ -37,8 +37,8 @@ const getVacanciesBySearch = async (req) => {
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
       PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,Vacancies.Status,Vacancies.VacancyId,BoardGrade,Vacancies.BoardGradeId,Vacancies.SalaryGroupId,
       VacancyName,Vacancies.updatedAt, 
-      IIF(DATEDIFF(day,Vacancies.createdAt,GETUTCDATE()) = 0,CONCAT(DATEDIFF(hh,Vacancies.createdAt,GETUTCDATE()), ' hours ago'),
-      CONCAT(DATEDIFF(day,Vacancies.createdAt,GETUTCDATE()), ' days ago')) DaysPosted,
+      IIF(DATEDIFF(day,Vacancies.createdAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,Vacancies.createdAt,GETDATE()), ' hours ago'),
+      CONCAT(DATEDIFF(day,Vacancies.createdAt,GETDATE()), ' days ago')) DaysPosted,
       (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId) AS NoOfApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
