@@ -7,6 +7,9 @@ const ButtonComp = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.primary[400],
   },
+  "&:disabled": {
+    backgroundColor: theme.palette.secondary.main,
+  },
 }));
 
 export default ButtonComp;

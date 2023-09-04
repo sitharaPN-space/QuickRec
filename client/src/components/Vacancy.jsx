@@ -163,7 +163,11 @@ const Vacancy = ({ vacancy }) => {
               Applied ({vacancy.NoOfApplicants})
             </Typography>
           </div>
-          <ButtonComp sx={{ marginLeft: "auto" }} onClick={() => handleApply()}>
+          <ButtonComp
+            sx={{ marginLeft: "auto" }}
+            disabled={vacancy.Status === "Close" ? true : false}
+            onClick={() => handleApply()}
+          >
             Apply
           </ButtonComp>
         </div>
