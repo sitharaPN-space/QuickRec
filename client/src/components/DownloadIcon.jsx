@@ -18,14 +18,21 @@ const DownloadIcon = ({ fileName }) => {
       }
     );
     let blob = await res.blob();
-    const data = window.URL.createObjectURL(new Blob([blob]));
+    const data = window.URL.createObjectURL(
+      new Blob([blob], { type: "application/pdf" })
+    );
 
-    const link = document.createElement("a");
-    link.href = data;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode?.removeChild(link);
+    // ---------- For View the File ----------
+    const file = data.split("/").slice(-1);
+    window.open(`/file/${file}`, "_blank");
+
+    // ---------- For Download the File ----------
+    // const link = document.createElement("a");
+    // link.href = data;
+    // link.setAttribute("download", fileName);
+    // document.body.appendChild(link);
+    // link.click();
+    // link.parentNode?.removeChild(link);
   };
 
   return (

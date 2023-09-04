@@ -20,6 +20,7 @@ import EduDetails from "./Pages/Application/EduDetails/EduDetails";
 import ProDetails from "./Pages/Application/ProDetails/ProDetails";
 import Declaration from "./Pages/Application/Declaration/Declaration";
 import OtherDetails from "./Pages/Application/OtherDetails/OtherDetails";
+import File from "./Pages/File/File";
 
 function App() {
   const user = useSelector((state) => state.userContext.data?.result);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/application/declaration" element={<Declaration />} />
           </Route>
         </Route>
+        <Route path="/file/:file" element={<File />} />
       </Route>
     )
   );
