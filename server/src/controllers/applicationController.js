@@ -192,6 +192,16 @@ export const approveQualification = async (req, res) => {
   }
 };
 
+export const evaluateAppliaction = async (req, res) => {
+  try {
+    const data = await ApplicationDAO.finaliseApplication(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
+
 export const getUserApplication = async (req, res) => {
   try {
     const basicDetails =

@@ -11,6 +11,7 @@ import Input from "../../components/Input";
 import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../../components/ButtonComp";
 // import { GoogleLogin } from "react-google-login";
+import { GoogleLogin } from "@react-oauth/google";
 import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -66,10 +67,16 @@ const SignIn = () => {
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-    const successData = { result: result, token: token };
+    // const result = res?.profileObj;
+    const token = res?.credential;
+    const successData = { token };
     try {
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          token,
+        })
+      );
       dispatch(getUserDataOnSuccess(successData));
       navigate("/home");
     } catch (error) {
@@ -128,23 +135,11 @@ const SignIn = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              {/* <GoogleLogin
-                clientId="90505972630-ogshh8gsa9vdkit3nrpbbcfst4m3atg5.apps.googleusercontent.com"
-                render={(renderProps) => (
-                  <ButtonComp
-                    fullWidth
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                    startIcon={<GoogleIcon />}
-                    variant="contained"
-                  >
-                    Google Sign In
-                  </ButtonComp>
-                )}
+              <GoogleLogin
                 onSuccess={googleSuccess}
                 onFailure={googleError}
                 cookiePolicy="single_host_origin"
-              /> */}
+              />
             </Grid>
           </Grid>
           <Grid container sx={{ display: "flex", justifyContent: "flex-end" }}>

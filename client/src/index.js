@@ -9,6 +9,7 @@ import authReducer from "./state/Auth";
 import applicationReducer from "./state/UserApplication";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "./state/api";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const store = configureStore({
   reducer: {
@@ -24,11 +25,13 @@ setupListeners(store.dispatch);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>
-  // </React.StrictMode>
+  <GoogleOAuthProvider clientId="90505972630-ogshh8gsa9vdkit3nrpbbcfst4m3atg5.apps.googleusercontent.com">
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -83,10 +83,12 @@ const getApplicationBasicDetailsByApplication = async (req) => {
   const { userId, applicationId } = req.query;
   try {
     const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,basicDetailsId,
-      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email, ISNULL(appAs.isApproved,0) isApproved
+      sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email, ISNULL(appAs.isApproved,0) isApproved,
+      app.BCPath, app.CVPath, app.NICPath, app.Status, app.Remarks
       FROM ApplicationBasicDetails 
       LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = BasicDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 1
-      WHERE userId = ${userId}`;
+      LEFT JOIN Applications app ON app.UserId = ApplicationBasicDetails.UserId and app.ApplicationId = ${applicationId}
+      WHERE ApplicationBasicDetails.userId = ${userId}`;
 
     const results = await req.app.locals.db.query(queryString);
     return results.recordset[0];
@@ -350,6 +352,22 @@ const uploadApplicationDocs = async (req) => {
   }
 };
 
+const finaliseApplication = async (req) => {
+  try {
+    const { remarks, status, applicationId } = req.query;
+
+    const results = await req.app.locals.db.query(
+      `UPDATE Applications SET 
+      Status = '${status}',
+      Remarks = '${remarks}'  
+      WHERE ApplicationId = '${applicationId}'`
+    );
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   createBasicDetails,
   createOrUpadateApplication,
@@ -371,4 +389,5 @@ export {
   getApplicationEduDetailsByApplication,
   getApplicationBasicDetailsByApplication,
   ApproveQualification,
+  finaliseApplication,
 };

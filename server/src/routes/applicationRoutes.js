@@ -11,6 +11,7 @@ import {
   getApplicationsByVacancy,
   getUserApplication,
   approveQualification,
+  evaluateAppliaction,
 } from "../controllers/applicationController.js";
 
 import auth from "../middleware/auth.js";
@@ -28,5 +29,6 @@ router.delete("/deleteExpDetails", deleteExpDetails);
 router.delete("/deleteAchvDetails", deleteAchvDetails);
 router.get("/userApplication", getUserApplication);
 router.post("/approve", approveQualification);
+router.post("/reviewed", evaluateAppliaction);
 
 export default router;
