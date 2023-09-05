@@ -6,7 +6,7 @@ import { GoogleLogin } from "react-google-login";
 import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
-import * as api from "../../api/";
+import * as api from "../../api";
 
 const initState = {
   userName: "",

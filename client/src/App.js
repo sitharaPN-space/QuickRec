@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Layout from "./Pages/Layout";
 import SignIn from "./Pages/Auth/SignIn";
-import SignUp from "./Pages/Auth/SginUp";
+import SignUp from "./Pages/Auth/SignUp";
 import Application from "./Pages/Application/ApplicationLayout";
 import VacancyList from "./Pages/Vacancies/VacancyList";
 import { ThemeProvider, CssBaseline } from "@mui/material";
