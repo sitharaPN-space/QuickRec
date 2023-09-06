@@ -14,6 +14,7 @@ import ButtonComp from "./ButtonComp";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setVacancyDetails } from "../state/UserApplication";
+import dayjs from "dayjs";
 
 const Vacancy = ({ detail }) => {
   const subTitle = `Posted ${detail.DaysPosted} `;
@@ -74,7 +75,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.ClosingDate}
+                {dayjs(detail?.ClosingDate).format("YYYY-MM-DD")}
               </Typography>
             </div>
           </Grid>
@@ -87,7 +88,7 @@ const Vacancy = ({ detail }) => {
                 fontSize={isMobile ? "14px" : "16px"}
                 sx={{ fontWeight: 550, color: theme.palette.secondary[700] }}
               >
-                {detail.PublishedDate}
+                {dayjs(detail?.PublishedDate).format("YYYY-MM-DD")}
               </Typography>
             </div>
           </Grid>
@@ -139,7 +140,7 @@ const Vacancy = ({ detail }) => {
           <div style={{ display: "flex", gap: "10px" }}>
             <VisibilityIcon sx={{ fontSize: "24px" }} />
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              Applied ({detail.NoOfApplied})
+              Applied ({detail.NoOfApplicants})
             </Typography>
           </div>
           <ButtonComp

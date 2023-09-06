@@ -13,6 +13,7 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
     return vacancy.item;
   } catch (error) {
     console.log(error);
+    throw new Error();
   }
 };
 
@@ -26,7 +27,10 @@ const getVacanciesBySearch = async (req) => {
       VacancyName,updatedAt, 
       IIF(DATEDIFF(day,createdAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,createdAt,GETDATE()), ' hours ago'),
       CONCAT(DATEDIFF(day,createdAt,GETDATE()), ' days ago')) DaysPosted,
-      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId) NoOfApplicants
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId) NoOfApplicants,
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'PENDING') NoOfPendingApplicants,
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'REJECTED') NoOfRejectedApplicants,
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'APPROVED') NoOfSelectedApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
       INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
@@ -35,8 +39,8 @@ const getVacanciesBySearch = async (req) => {
 
     return results.recordset;
   } catch (error) {
-    console.error(error);
-    return { message: "Failed data retrieval", error };
+    console.log(error);
+    throw new Error();
   }
 };
 
@@ -54,8 +58,8 @@ const getAllVacancies = async (req) => {
     INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId`);
     return results.recordset;
   } catch (error) {
-    console.error(error);
-    return { message: "Failed data retrieval", error };
+    console.log(error);
+    throw new Error();
   }
 };
 

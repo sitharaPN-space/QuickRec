@@ -9,7 +9,6 @@ const createVacancy = async (req, res) => {
     res.status(201).json({ result: vacancy });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
   }
 };
 
@@ -21,7 +20,6 @@ const getVacanciesForApply = async (req, res) => {
     const startIndex = (Number(page) - 1) * LIMIT; // get the starting index of every page
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
   }
 };
 
@@ -42,8 +40,7 @@ const getVacancyBySearch = async (req, res) => {
     });
     res.status(200).json({ data: vacancies });
   } catch (e) {
-    res.status(404).json({ message: "Data Retrival Fails" });
-    console.log(e);
+    res.status(404).json({ message: "Something went wrong" });
   }
 };
 
@@ -64,7 +61,7 @@ const getAllVacancies = async (req, res) => {
     });
     res.status(200).json({ data: vacancies });
   } catch (e) {
-    res.status(404).json({ message: "Data Retrival Fails" });
+    res.status(404).json({ message: "Something went wrong" });
     console.log(e);
   }
 };
