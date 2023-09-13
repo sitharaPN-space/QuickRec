@@ -12,6 +12,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import applicationRoutes from "./src/routes/applicationRoutes.js";
 import commonRoutes from "./src/routes/commonRoutes.js";
 import vacancyRoutes from "./src/routes/vacancyRoutes.js";
+import reportRoutes from "./src/routes/reportRoutes.js";
 
 /* CONFIGURATION */
 const app = express();
@@ -40,6 +41,7 @@ app.use("/application", applicationRoutes);
 app.use("/vacancy", vacancyRoutes);
 app.use("/common", commonRoutes);
 app.use("/download", commonRoutes);
+app.use("/report", reportRoutes);
 
 var port = process.env.PORT || 5000;
 appPool
