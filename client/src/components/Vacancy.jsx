@@ -40,18 +40,6 @@ const Vacancy = ({ vacancy }) => {
         subheaderTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "0.8rem" : "1rem"),
         }}
-        action={
-          <Typography
-            fontSize={isMobile ? "14px" : "16px"}
-            sx={{
-              lineHeight: "3.3",
-              pr: "10px",
-              color: (theme) => theme.palette.secondary[800],
-            }}
-          >
-            {vacancy.Status}
-          </Typography>
-        }
       />
       <CardContent sx={{ "&:last-child": { pb: "10px" } }}>
         <Typography
