@@ -6,8 +6,7 @@ const DownloadIcon = ({ fileName }) => {
 
   const downloadHandler = async (fileName) => {
     let res = await fetch(
-      // process.env.REACT_APP_BASE_URL + "/download/pdfDownload",
-      "http://localhost:5000/report/ApplicantsReport",
+      process.env.REACT_APP_BASE_URL + "/download/pdfDownload",
       {
         method: "POST",
         headers: {
