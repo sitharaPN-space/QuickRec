@@ -22,10 +22,6 @@ const StepGuide = ({ state, isMobile, activeStep, setActiveStep }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleNext = () => {
-    navigate(steps[activeStep + 1].path, state);
-  };
-
   const handleBack = () => {
     navigate(steps[activeStep - 1].path, state);
   };
@@ -50,7 +46,8 @@ const StepGuide = ({ state, isMobile, activeStep, setActiveStep }) => {
           nextButton={
             <Button
               size="small"
-              onClick={handleNext}
+              type="submit"
+              form="application"
               disabled={activeStep === steps.length - 1}
             >
               Next

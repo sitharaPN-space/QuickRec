@@ -79,7 +79,7 @@ const ProDetails = () => {
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
-        <form onSubmit={handleAdd}>
+        <form id="application" onSubmit={handleAdd}>
           <Grid container spacing={2} sx={{ p: "1.5rem" }}>
             <Input
               name="title"
@@ -196,7 +196,7 @@ const ProDetails = () => {
                     onClick={handleNext}
                     type="submit"
                   >
-                    Next
+                    Save & Next
                   </ButtonComp>
                 </div>
               </Grid>

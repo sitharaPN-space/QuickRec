@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
-import {
-  Paper,
-  Typography,
-  MenuItem,
-  Grid,
-  FormControl,
-  useMediaQuery,
-} from "@mui/material";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import dayjs from "dayjs";
+import { Paper, Grid, useMediaQuery } from "@mui/material";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
-import SelectComp from "../../../components/SelectComp";
 
 const initEducation = {
   type: "",
@@ -89,25 +79,21 @@ const EduDetails = () => {
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
-        <form onSubmit={handleAdd}>
+        <form id="application" onSubmit={handleAdd}>
           <Grid container spacing={2} sx={{ p: "1.5rem" }}>
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-                Type of Education *
-              </Typography>
-              <FormControl size="small">
-                <SelectComp
-                  name="type"
-                  value={education.type}
-                  required
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                </SelectComp>
-              </FormControl>
-            </Grid>
+            <Input
+              name="type"
+              type="select"
+              label="Type of Education *"
+              required
+              value={education.type}
+              handleChange={handleChange}
+              options={[
+                { value: "1", text: "1" },
+                { value: "2", text: "2" },
+                { value: "3", text: "3" },
+              ]}
+            />
             <Input
               name="institute"
               value={education.institute}
@@ -130,79 +116,41 @@ const EduDetails = () => {
               required
             />
             <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                  >
-                    Start Date *
-                  </Typography>
-                  <DateField
-                    value={education.startDate && dayjs(education.startDate)}
-                    format="MMMM-YYYY"
-                    required
-                    onChange={(newValue) => {
-                      handleChange({
-                        target: {
-                          name: "startDate",
-                          value: newValue.$d.toDateString(),
-                        },
-                      });
-                    }}
-                    sx={{
-                      width: "100%",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
-                    slotProps={{
-                      textField: { size: "small" },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                  >
-                    End Date *
-                  </Typography>
-                  <DateField
-                    value={education.endDate && dayjs(education.endDate)}
-                    format="MMMM-YYYY"
-                    required
-                    onChange={(newValue) => {
-                      handleChange({
-                        target: {
-                          name: "endDate",
-                          value: newValue.$d.toDateString(),
-                        },
-                      });
-                    }}
-                    sx={{
-                      width: "100%",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
-                    slotProps={{
-                      textField: { size: "small" },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-                Grade *
-              </Typography>
-              <FormControl size="small">
-                <SelectComp
-                  name="grade"
-                  value={education.grade}
+              <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={isMobile ? 2 : 5}
+                sx={{ p: "0" }}
+              >
+                <Input
+                  name="startDate"
+                  type="date"
+                  value={education.startDate}
+                  handleChange={handleChange}
+                  label="Start Date *"
+                  format="MMMM-YYYY"
                   required
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                </SelectComp>
-              </FormControl>
+                  half
+                />
+                <Input
+                  name="endDate"
+                  type="date"
+                  value={education.endDate}
+                  handleChange={handleChange}
+                  label="End Date *"
+                  format="MMMM-YYYY"
+                  required
+                  half
+                />
+                <Input
+                  name="grade"
+                  label="Grade *"
+                  required
+                  value={education.grade}
+                  handleChange={handleChange}
+                  half
+                />
+              </Grid>
             </Grid>
             <Input
               name="upload"
@@ -234,7 +182,7 @@ const EduDetails = () => {
                     onClick={handleNext}
                     type="submit"
                   >
-                    Next
+                    Save & Next
                   </ButtonComp>
                 </div>
               </Grid>
