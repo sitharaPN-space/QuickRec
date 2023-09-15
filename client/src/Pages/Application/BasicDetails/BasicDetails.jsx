@@ -1,23 +1,23 @@
 import { useEffect } from "react";
-import {
-  Paper,
-  Typography,
-  MenuItem,
-  Grid,
-  FormControl,
-  useMediaQuery,
-} from "@mui/material";
-import dayjs from "dayjs";
+import { Paper, Grid, useMediaQuery } from "@mui/material";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
-import { DateField } from "@mui/x-date-pickers";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
-import SelectComp from "../../../components/SelectComp";
+import {
+  useCreateAppBasicDetailsMutation,
+  useGetAppBasicDetailsQuery,
+} from "../../../state/api";
 
 const BasicDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const user = useSelector((state) => state.userContext.data);
+  const [createAppBasicDetails] = useCreateAppBasicDetailsMutation();
+  const { data: appBasicDetails, isLoading: detailsLoading } =
+    useGetAppBasicDetailsQuery({
+      userId: user.result.UserId,
+    });
   const [setActiveStep] = useOutletContext();
   const { state } = useLocation();
   const dispatch = useDispatch();
@@ -25,10 +25,25 @@ const BasicDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => setActiveStep(0), [setActiveStep]);
+  useEffect(() => {
+    !detailsLoading &&
+      dispatch(
+        setApplicationData({
+          basicDetails: appBasicDetails?.data,
+        })
+      );
+  }, [dispatch, appBasicDetails?.data, detailsLoading]);
 
   const handleNext = (e) => {
     e.preventDefault();
-    navigate("/application/eduDetails", { state });
+    try {
+      createAppBasicDetails({
+        ...basicDetails,
+        vacancyId: state.vacancyId,
+        userId: user.result.UserId,
+      });
+      navigate("/application/eduDetails", { state });
+    } catch (error) {}
   };
   const handleChange = (e) => {
     dispatch(
@@ -46,24 +61,23 @@ const BasicDetails = () => {
         display: "flex",
       }}
     >
-      <form onSubmit={handleNext}>
+      <form id="application" onSubmit={handleNext}>
         <Grid container spacing={2} sx={{ p: "1.5rem" }}>
-          <Grid item xs={12} sx={{ textAlign: "left" }}>
-            <Typography sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}>
-              Title *
-            </Typography>
-            <FormControl size="small">
-              <SelectComp
-                name="title"
-                value={basicDetails.title}
-                required
-                onChange={handleChange}
-              >
-                <MenuItem value={1}>Mr.</MenuItem>
-                <MenuItem value={2}>Mrs.</MenuItem>
-                <MenuItem value={3}>Miss.</MenuItem>
-              </SelectComp>
-            </FormControl>
+          <Grid item xs={6} sx={{ textAlign: "left" }}>
+            <Input
+              name="title"
+              type="select"
+              label="Title *"
+              required
+              half
+              value={basicDetails.title}
+              handleChange={handleChange}
+              options={[
+                { value: "Mr.", text: "Mr." },
+                { value: "Mrs.", text: "Mrs." },
+                { value: "Miss.", text: "Miss." },
+              ]}
+            />
           </Grid>
           <Input
             name="nameWithInitials"
@@ -94,156 +108,116 @@ const BasicDetails = () => {
                 required
                 half
               />
-
-              <Grid item xs={12} sm={6}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Date of Birth *
-                </Typography>
-                <DateField
-                  value={
-                    basicDetails.dateOfBirth && dayjs(basicDetails.dateOfBirth)
-                  }
-                  required
-                  onChange={(newValue) => {
-                    handleChange({
-                      target: {
-                        name: "dateOfBirth",
-                        value: newValue.$d.toDateString(),
-                      },
-                    });
-                  }}
-                  sx={{
-                    width: "100%",
-                    backgroundColor: (theme) => theme.palette.background.main,
-                  }}
-                  slotProps={{
-                    textField: { size: "small" },
-                  }}
-                />
-              </Grid>
+              <Input
+                name="dateOfBirth"
+                type="date"
+                value={basicDetails.dateOfBirth}
+                handleChange={handleChange}
+                label="Date of Birth *"
+                required
+                half
+              />
             </Grid>
           </Grid>
 
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Sex *
-                </Typography>
-                <FormControl size="small" sx={{ width: "100%" }}>
-                  <SelectComp
-                    name="sex"
-                    required
-                    value={basicDetails.sex}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={1}>Male</MenuItem>
-                    <MenuItem value={2}>Female</MenuItem>
-                  </SelectComp>
-                </FormControl>
+                <Input
+                  name="sex"
+                  type="select"
+                  label="Sex *"
+                  required
+                  value={basicDetails.sex}
+                  handleChange={handleChange}
+                  options={[
+                    { value: "Male", text: "Male" },
+                    { value: "Female", text: "Female" },
+                  ]}
+                />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Civil Status *
-                </Typography>
-                <FormControl size="small" sx={{ width: "100%" }}>
-                  <SelectComp
-                    name="civilStatus"
-                    required
-                    value={basicDetails.civilStatus}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={1}>Single</MenuItem>
-                    <MenuItem value={2}>Married</MenuItem>
-                  </SelectComp>
-                </FormControl>
+                <Input
+                  name="civilStatus"
+                  type="select"
+                  label="Civil Status *"
+                  required
+                  value={basicDetails.civilStatus}
+                  handleChange={handleChange}
+                  options={[
+                    { value: "Single", text: "Single" },
+                    { value: "Married", text: "Married" },
+                  ]}
+                />
               </Grid>
             </Grid>
           </Grid>
           <Input
-            name="AddressLine1"
-            value={basicDetails.AddressLine1}
+            name="addressLine1"
+            value={basicDetails.addressLine1}
             label="Permenant Address line 1 *"
             handleChange={handleChange}
             required
           />
           <Input
-            name="AddressLine2"
-            value={basicDetails.AddressLine2}
+            name="addressLine2"
+            value={basicDetails.addressLine2}
             label="Permenant Address line 2 "
             handleChange={handleChange}
           />
           <Grid item xs={12} sx={{ textAlign: "left" }}>
             <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Nationality *
-                </Typography>
-                <FormControl size="small" sx={{ width: "100%" }}>
-                  <SelectComp
-                    name="nationality"
-                    required
-                    value={basicDetails.nationality}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={1}>Sri Lankan</MenuItem>
-                    <MenuItem value={2}>Indian</MenuItem>
-                    <MenuItem value={3}>Japanese</MenuItem>
-                    <MenuItem value={4}>Chinease</MenuItem>
-                    <MenuItem value={5}>Other </MenuItem>
-                  </SelectComp>
-                </FormControl>
+                <Input
+                  name="nationality"
+                  type="select"
+                  label="Nationality *"
+                  required
+                  value={basicDetails.nationality}
+                  handleChange={handleChange}
+                  options={[
+                    { value: "Sri Lankan", text: "Sri Lankan" },
+                    { value: "Indian", text: "Indian" },
+                    { value: "Japanese", text: "Japanese" },
+                    { value: "Chinese", text: "Chinese" },
+                    { value: "Other", text: "Other" },
+                  ]}
+                />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Religion *
-                </Typography>
-                <FormControl size="small" sx={{ width: "100%" }}>
-                  <SelectComp
-                    name="religion"
-                    required
-                    value={basicDetails.religion}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={1}>Buddhism</MenuItem>
-                    <MenuItem value={2}>Hindu</MenuItem>
-                    <MenuItem value={3}>Christianity </MenuItem>
-                    <MenuItem value={4}>Islam </MenuItem>
-                    <MenuItem value={5}>Other </MenuItem>
-                  </SelectComp>
-                </FormControl>
+                <Input
+                  name="religion"
+                  type="select"
+                  label="Religion *"
+                  required
+                  value={basicDetails.religion}
+                  handleChange={handleChange}
+                  options={[
+                    { value: "Buddhist", text: "Buddhist" },
+                    { value: "Hindu", text: "Hindu" },
+                    { value: "Christianity", text: "Christianity" },
+                    { value: "Islam", text: "Islam" },
+                    { value: "Other", text: "Other" },
+                  ]}
+                />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                >
-                  Ethnicity *
-                </Typography>
-                <FormControl size="small" sx={{ width: "100%" }}>
-                  <SelectComp
-                    name="ethnicity"
-                    required
-                    onChange={handleChange}
-                    value={basicDetails.ethnicity}
-                  >
-                    <MenuItem value={1}>Sinhala</MenuItem>
-                    <MenuItem value={2}>Tamil</MenuItem>
-                    <MenuItem value={3}>Muslim </MenuItem>
-                    <MenuItem value={4}>Malay </MenuItem>
-                    <MenuItem value={5}>Burger </MenuItem>
-                    <MenuItem value={6}>Other </MenuItem>
-                  </SelectComp>
-                </FormControl>
+                <Input
+                  name="ethnicity"
+                  type="select"
+                  label="Ethnicity *"
+                  required
+                  value={basicDetails.ethnicity}
+                  handleChange={handleChange}
+                  options={[
+                    { value: "Sinhala", text: "Sinhala" },
+                    { value: "Tamil", text: "Tamil" },
+                    { value: "Muslim", text: "Muslim" },
+                    { value: "Malay", text: "Malay" },
+                    { value: "Burger", text: "Burger" },
+                    { value: "Other", text: "Other" },
+                  ]}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -258,9 +232,8 @@ const BasicDetails = () => {
           <Input
             name="mobileNo2"
             value={basicDetails.mobileNo2}
-            label="Mobile No 2 *"
+            label="Mobile No 2"
             handleChange={handleChange}
-            required
             half
           />
           <Input
@@ -276,7 +249,7 @@ const BasicDetails = () => {
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
                 <ButtonComp type="submit" sx={{ mt: "1rem" }}>
-                  Next
+                  Save & Next
                 </ButtonComp>
               </div>
             </Grid>

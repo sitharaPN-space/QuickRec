@@ -8,13 +8,10 @@ import {
 } from "@mui/material";
 import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import StepGuide from "../../components/StepGuide";
-import { useDispatch } from "react-redux";
-import { initState, setApplicationData } from "../../state/UserApplication";
 
 const Application = () => {
   const theme = useTheme();
   const location = useLocation();
-  const dispatch = useDispatch();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
@@ -24,10 +21,6 @@ const Application = () => {
       navigate("./home");
     }
   }, [location?.state?.vacancy, navigate]);
-
-  useEffect(() => {
-    dispatch(setApplicationData(initState));
-  }, [dispatch]);
 
   return (
     <Box
