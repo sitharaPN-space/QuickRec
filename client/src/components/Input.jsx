@@ -36,6 +36,7 @@ const Input = ({
   maxRows,
   type,
   setAttachment,
+  format,
   inline,
   required,
   loading,
@@ -121,6 +122,7 @@ const Input = ({
                 },
               });
             }}
+            format={format}
             sx={{
               width: "100%",
               backgroundColor: (theme) => theme.palette.background.main,
