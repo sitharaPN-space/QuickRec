@@ -17,6 +17,7 @@ import { logOut } from "../state/Auth";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { isTokenExpired } from "../utils/userValidation";
+import { api } from "../state/api";
 
 const Navbar = ({
   active,
@@ -35,11 +36,13 @@ const Navbar = ({
 
   useEffect(() => {
     if (isTokenExpired()) {
-      dispatch(logOut());
+      handleLogOut();
     }
   });
+
   const handleLogOut = () => {
     localStorage.clear();
+    dispatch(api.util.resetApiState());
     dispatch(logOut());
   };
   const handleClick = (e, navigateTo) => {
