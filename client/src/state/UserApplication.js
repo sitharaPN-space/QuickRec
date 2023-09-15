@@ -10,8 +10,8 @@ export const initState = {
     dateOfBirth: null,
     sex: "",
     civilStatus: "",
-    AddressLine1: "",
-    AddressLine2: "",
+    addressLine2: "",
+    addressLine1: "",
     nationality: "",
     religion: "",
     ethnicity: "",
@@ -23,9 +23,9 @@ export const initState = {
   experience: [],
   otherAchievements: [],
   attachments: {
-    cv: "Choose File",
-    nic: "Choose File",
-    birthCertificate: "Choose File",
+    cv: "",
+    nic: "",
+    birthCertificate: "",
   },
 };
 
