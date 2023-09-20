@@ -1,34 +1,80 @@
 import { useState, useEffect } from "react";
-import { Paper, Grid, useMediaQuery } from "@mui/material";
+import {
+  Paper,
+  Grid,
+  useMediaQuery,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  useCreateAppEducationMutation,
+  useGetAppEduDetailsQuery,
+} from "../../../state/api";
 
 const initEducation = {
-  type: "",
-  institute: "",
+  eduTypeId: null,
+  instituteName: "",
   qualification: "",
-  feild: "",
+  fieldOfStudy: "",
   startDate: null,
   endDate: null,
   grade: "",
-  upload: "",
+  attachmentPath: "",
 };
+
+const eduTypes = [
+  { value: 1, text: "Doctoral Degree" },
+  { value: 2, text: "Master" },
+  {
+    value: 3,
+    text: "Postgraduate Certificate",
+  },
+  { value: 4, text: "Postgraduate Diploma" },
+  { value: 5, text: "Bachelors" },
+  { value: 6, text: "Diploma" },
+  { value: 7, text: "Certificate" },
+  { value: 8, text: "Advanced Level" },
+  { value: 9, text: "Ordinary Level" },
+];
 
 const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const user = useSelector((state) => state.userContext.data);
+  const [createAppEducation] = useCreateAppEducationMutation();
+  const { data: appEduDetails, isLoading: detailsLoading } =
+    useGetAppEduDetailsQuery({
+      userId: user.result.UserId,
+    });
   const [setActiveStep] = useOutletContext();
   const [education, setEducation] = useState(initEducation);
   const [isEditing, setIsEditing] = useState(false);
+  const [attachment, setAttachment] = useState();
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { eduQualification } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(1), [setActiveStep]);
+
+  useEffect(() => {
+    !detailsLoading &&
+      dispatch(
+        setApplicationData({
+          eduQualification: appEduDetails?.data ?? eduQualification,
+        })
+      );
+  }, [dispatch, appEduDetails?.data, detailsLoading]);
 
   const handlePrevious = () => {
     navigate("/application/basicDetails", { state });
@@ -48,6 +94,10 @@ const EduDetails = () => {
         eduQualification: [...eduQualification, education],
       })
     );
+    createAppEducation({
+      ...education,
+      userId: user.result.UserId,
+    });
     setEducation(initEducation);
     isEditing && setIsEditing(false);
   };
@@ -65,38 +115,53 @@ const EduDetails = () => {
     handleDelete(index);
   };
 
-  const handleDelete = (index) => {
-    const newEduQualification = eduQualification.filter(
-      (value, i) => i !== index
-    );
-    dispatch(
-      setApplicationData({
-        eduQualification: newEduQualification,
-      })
-    );
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteButton = (detailId) => {
+    setOpen(true);
+    setDeleteId(detailId);
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
   };
 
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
-        <form id="application" onSubmit={handleAdd}>
-          <Grid container spacing={2} sx={{ p: "1.5rem" }}>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Delete this Vacancy ?</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose} autoFocus>
+              Cancel
+            </Button>
+            <Button onClick={handleDelete} sx={{ color: "red" }}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <form value="application" onSubmit={handleAdd}>
+          <Grid
+            container
+            rowSpacing={2}
+            columnSpacing={isMobile ? 2 : 5}
+            sx={{ p: "1.5rem" }}
+          >
             <Input
-              name="type"
+              name="eduTypeId"
               type="select"
               label="Type of Education *"
               required
-              value={education.type}
+              value={education.eduTypeId}
               handleChange={handleChange}
-              options={[
-                { value: "1", text: "1" },
-                { value: "2", text: "2" },
-                { value: "3", text: "3" },
-              ]}
+              options={eduTypes}
+              half
             />
             <Input
-              name="institute"
-              value={education.institute}
+              name="instituteName"
+              value={education.instituteName}
               label="University / Institute / School *"
               handleChange={handleChange}
               required
@@ -109,53 +174,46 @@ const EduDetails = () => {
               required
             />
             <Input
-              name="feild"
-              value={education.feild}
+              name="fieldOfStudy"
+              value={education.fieldOfStudy}
               label="Field of Study *"
               handleChange={handleChange}
               required
             />
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Grid
-                container
-                rowSpacing={2}
-                columnSpacing={isMobile ? 2 : 5}
-                sx={{ p: "0" }}
-              >
-                <Input
-                  name="startDate"
-                  type="date"
-                  value={education.startDate}
-                  handleChange={handleChange}
-                  label="Start Date *"
-                  format="MMMM-YYYY"
-                  required
-                  half
-                />
-                <Input
-                  name="endDate"
-                  type="date"
-                  value={education.endDate}
-                  handleChange={handleChange}
-                  label="End Date *"
-                  format="MMMM-YYYY"
-                  required
-                  half
-                />
-                <Input
-                  name="grade"
-                  label="Grade *"
-                  required
-                  value={education.grade}
-                  handleChange={handleChange}
-                  half
-                />
-              </Grid>
-            </Grid>
             <Input
-              name="upload"
-              value={education.upload}
+              name="startDate"
+              type="date"
+              value={education.startDate}
+              handleChange={handleChange}
+              label="Start Date *"
+              format="MMMM-YYYY"
+              required
+              half
+            />
+            <Input
+              name="endDate"
+              type="date"
+              value={education.endDate}
+              handleChange={handleChange}
+              label="End Date *"
+              format="MMMM-YYYY"
+              required
+              half
+            />
+            <Input
+              name="grade"
+              label="Grade *"
+              required
+              value={education.grade}
+              handleChange={handleChange}
+              half
+            />
+            <Grid item sm={6}></Grid>
+            <Input
+              name="attachmentPath"
+              value={education.attachmentPath}
               type="file"
+              setAttachment={setAttachment}
               label="Upload *"
               handleChange={handleChange}
               required
@@ -163,9 +221,15 @@ const EduDetails = () => {
             />
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
-                <ButtonComp sx={{ mt: "1rem" }} type="submit">
-                  {isEditing ? "Save" : "Add"}
-                </ButtonComp>
+                {isEditing ? (
+                  <ButtonComp sx={{ mt: "1rem" }} type="submit">
+                    Save
+                  </ButtonComp>
+                ) : (
+                  <Button sx={{ mt: "1rem" }} type="submit">
+                    <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
+                  </Button>
+                )}
               </div>
             </Grid>
             {!isMobile && !isEditing && (
@@ -182,7 +246,7 @@ const EduDetails = () => {
                     onClick={handleNext}
                     type="submit"
                   >
-                    Save & Next
+                    Next
                   </ButtonComp>
                 </div>
               </Grid>
@@ -200,7 +264,7 @@ const EduDetails = () => {
             <DetailCard
               key={i}
               detail={detail}
-              onDelete={() => handleDelete(i)}
+              onDelete={() => handleDeleteButton(detail.eduDetailsId)}
               onEdit={() => handleEdit(i)}
             />
           ))}

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Paper, Typography, Grid, useMediaQuery } from "@mui/material";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import dayjs from "dayjs";
+import { Paper, Grid, useMediaQuery, Button } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
+import { useCreateAppAchievementMutation } from "../../../state/api";
 
 const initAchievement = {
   title: "",
@@ -15,14 +15,17 @@ const initAchievement = {
   startDate: null,
   endDate: null,
   description: "",
-  upload: "",
+  attachmentPath: "",
 };
 
 const ProDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [setActiveStep] = useOutletContext();
+  const user = useSelector((state) => state.userContext.data);
+  const [createAppAchievement] = useCreateAppAchievementMutation();
   const [achievement, setAchievement] = useState(initAchievement);
   const [isEditing, setIsEditing] = useState(false);
+  const [attachment, setAttachment] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,6 +51,10 @@ const ProDetails = () => {
         otherAchievements: [...otherAchievements, achievement],
       })
     );
+    createAppAchievement({
+      ...achievement,
+      userId: user.result.UserId,
+    });
     setAchievement(initAchievement);
     isEditing && setIsEditing(false);
   };
@@ -80,7 +87,13 @@ const ProDetails = () => {
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
         <form id="application" onSubmit={handleAdd}>
-          <Grid container spacing={2} sx={{ p: "1.5rem" }}>
+          <Grid
+            container
+            rowSpacing={2}
+            columnSpacing={isMobile ? 2 : 5}
+            sx={{ p: "1.5rem" }}
+          >
+            {" "}
             <Input
               name="title"
               value={achievement.title}
@@ -95,66 +108,26 @@ const ProDetails = () => {
               handleChange={handleChange}
               required
             />
-            <Grid item xs={12} sx={{ textAlign: "left" }}>
-              <Grid container spacing={isMobile ? 2 : 5} sx={{ p: "0" }}>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                  >
-                    Start Date *
-                  </Typography>
-                  <DateField
-                    value={
-                      achievement.startDate && dayjs(achievement.startDate)
-                    }
-                    required
-                    format="MMMM-YYYY"
-                    onChange={(newValue) => {
-                      handleChange({
-                        target: {
-                          name: "startDate",
-                          value: newValue.$d.toDateString(),
-                        },
-                      });
-                    }}
-                    sx={{
-                      width: "100%",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
-                    slotProps={{
-                      textField: { size: "small" },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    sx={{ fontSize: "1rem", fontWeight: 500, mb: "5px" }}
-                  >
-                    End Date *
-                  </Typography>
-                  <DateField
-                    value={achievement.endDate && dayjs(achievement.endDate)}
-                    required
-                    format="MMMM-YYYY"
-                    onChange={(newValue) => {
-                      handleChange({
-                        target: {
-                          name: "endDate",
-                          value: newValue.$d.toDateString(),
-                        },
-                      });
-                    }}
-                    sx={{
-                      width: "100%",
-                      backgroundColor: (theme) => theme.palette.background.main,
-                    }}
-                    slotProps={{
-                      textField: { size: "small" },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
+            <Input
+              name="startDate"
+              type="date"
+              value={achievement.startDate}
+              handleChange={handleChange}
+              label="Start Date *"
+              format="MMMM-YYYY"
+              required
+              half
+            />
+            <Input
+              name="endDate"
+              type="date"
+              value={achievement.endDate}
+              handleChange={handleChange}
+              label="End Date *"
+              format="MMMM-YYYY"
+              required
+              half
+            />
             <Input
               name="description"
               value={achievement.description}
@@ -166,9 +139,9 @@ const ProDetails = () => {
               maxRows={8}
             />
             <Input
-              name="upload"
-              value={achievement.upload}
-              disabled
+              name="attachmentPath"
+              value={achievement.attachmentPath}
+              setAttachment={setAttachment}
               type="file"
               label="Upload *"
               handleChange={handleChange}
@@ -177,9 +150,15 @@ const ProDetails = () => {
             />
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
-                <ButtonComp sx={{ mt: "1rem" }} type="submit">
-                  {isEditing ? "Save" : "Add"}
-                </ButtonComp>
+                {isEditing ? (
+                  <ButtonComp sx={{ mt: "1rem" }} type="submit">
+                    Save
+                  </ButtonComp>
+                ) : (
+                  <Button sx={{ mt: "1rem" }} type="submit">
+                    <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
+                  </Button>
+                )}
               </div>
             </Grid>
             {!isMobile && !isEditing && (
