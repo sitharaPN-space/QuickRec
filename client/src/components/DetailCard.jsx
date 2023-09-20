@@ -8,6 +8,7 @@ import {
   useMediaQuery,
   IconButton,
 } from "@mui/material";
+import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
@@ -15,16 +16,11 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
 
-  const getDate = (date) => {
-    const fromDate = date.split(" ");
-    return `${fromDate[1]} ${fromDate[3]}`;
-  };
-
   return (
     <Card sx={{ width: "100%", textAlign: "left", mb: "2px" }}>
       <CardHeader
         sx={{ pb: "0" }}
-        title={detail.institute ?? detail.title}
+        title={detail.instituteName ?? detail.title}
         titleTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "1.2rem" : "1.5rem"),
           fontWeight: 600,
@@ -57,13 +53,14 @@ const DetailCard = ({ detail, onDelete, onEdit }) => {
           </Grid>
           <Grid item xs={isMobile ? 12 : 7}>
             <Typography fontSize={isMobile ? "14px" : "16px"}>
-              {detail.feild && `Specialized in ${detail.feild}`}
+              {detail.fieldOfStudy && `Specialized in ${detail.fieldOfStudy}`}
             </Typography>
           </Grid>
           {detail.startDate && detail.endDate && (
             <Grid item xs={12}>
               <Typography fontSize={isMobile ? "14px" : "16px"}>
-                From {getDate(detail.startDate)} to {getDate(detail.endDate)}
+                From {dayjs(detail.startDate).format("MMMM YYYY")} to{" "}
+                {dayjs(detail.endDate).format("MMMM YYYY")}
               </Typography>
             </Grid>
           )}
