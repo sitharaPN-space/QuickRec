@@ -5,83 +5,78 @@ class BasicDetails extends Model {}
 
 BasicDetails.init(
   {
-    BasicDetailsId: {
+    basicDetailsId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    UserId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    Title: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    NameWithInitials: {
+    nameWithInitials: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    NameDenotedbyInit: {
+    nameDenotedbyInit: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    OtherName: {
+    otherName: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    NIC: {
+    nic: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    DateOfBirth: {
+    dateOfBirth: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    Sex: {
+    sex: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    CivilStatus: {
+    civilStatus: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Religion: {
+    religion: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    AddressLine1: {
+    addressLine1: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    AddressLine2: {
+    addressLine2: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    Nationality: {
+    nationality: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Ethnicity: {
+    ethnicity: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    MobileNo1: {
+    mobileNo1: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    MobileNo2: {
+    mobileNo2: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    Email: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    IsChecked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
   },
   {
