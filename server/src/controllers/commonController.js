@@ -1,18 +1,18 @@
-import MasterDao from "../data-access/Master.dao.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { getMasterData } from "../services/commonDataServices.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const MasterData = async (req, res) => {
   try {
-    const masterData = await MasterDao.getMasterData();
-    res.status(201).json({ data: masterData });
+    const data = await getMasterData(req);
+    res.status(200).json({ data: data.data });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
