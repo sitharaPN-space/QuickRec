@@ -36,14 +36,11 @@ const BasicDetails = () => {
 
   const handleNext = (e) => {
     e.preventDefault();
-    try {
-      createAppBasicDetails({
-        ...basicDetails,
-        vacancyId: state.vacancyId,
-        userId: user.result.UserId,
-      });
-      navigate("/application/eduDetails", { state });
-    } catch (error) {}
+    createAppBasicDetails({
+      ...basicDetails,
+      userId: user.result.UserId,
+    });
+    navigate("/application/eduDetails", { state });
   };
   const handleChange = (e) => {
     dispatch(
