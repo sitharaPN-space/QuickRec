@@ -9,7 +9,7 @@ import upload from "../../storage.js";
 const router = express.Router();
 
 router.post("/createVacancy", upload.single("attachment"), createVacancy);
-router.post("/deleteVacancy/:id", deleteVacancy);
+router.delete("/deleteVacancy/:id", deleteVacancy);
 router.get("/search", getVacancyBySearch);
 
 export default router;
