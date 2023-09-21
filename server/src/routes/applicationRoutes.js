@@ -12,14 +12,23 @@ import {
   addEducation,
   addExperience,
   addOtherDetails,
+  deleteAppEduDetail,
+  deleteAppExpDetail,
+  deleteAppOtherDetail,
+  submitAppication,
 } from "../controllers/applicationController.js";
+import upload from "../../storage.js";
 
 const router = express.Router();
 
 router.post("/addBasicDetails", addBasicDetails);
-router.post("/addEduDetails", addEducation);
-router.post("/addExpDetails", addExperience);
-router.post("/addOtherDetails", addOtherDetails);
+router.post("/addEduDetails", upload.single("attachment"), addEducation);
+router.post("/addExpDetails", upload.single("attachment"), addExperience);
+router.post("/addOtherDetails", upload.single("attachment"), addOtherDetails);
+router.post("/submitApplication", submitAppication);
+router.delete("/deleteEduDetail", deleteAppEduDetail);
+router.delete("/deleteExpDetail", deleteAppExpDetail);
+router.delete("/deleteOtherDetail", deleteAppOtherDetail);
 router.post("/approve", approveQualification);
 router.post("/reviewed", reviewApplication);
 router.get("/userApplication", getAppDetails);
