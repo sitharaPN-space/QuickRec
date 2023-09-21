@@ -22,6 +22,7 @@ export const getApplicationsByVacancy = async (req) => {
     return results.recordset;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -54,6 +55,7 @@ export const createBasicDetails = async (basicDetailsReq) => {
     return basicDetails.item;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -69,6 +71,7 @@ export const createEducation = async (educationReq) => {
     return education.item;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -77,13 +80,14 @@ export const createExperience = async (experienceReq) => {
     const education = await updateOrCreate(
       ExpDetails,
       {
-        ExpDetailsId: experienceReq?.expDetailsId ?? 0,
+        ExpDetailId: experienceReq?.expDetailId ?? 0,
       },
       experienceReq
     );
     return education.item;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -92,13 +96,14 @@ export const createOtherDetails = async (otherDetailsReq) => {
     const achievement = await updateOrCreate(
       AchveDetails,
       {
-        AchvDetailsId: otherDetailsReq?.achvDetailsId ?? 0,
+        AchvDetailId: otherDetailsReq?.achvDetailId ?? 0,
       },
       otherDetailsReq
     );
     return achievement.item;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -117,13 +122,14 @@ export const getApplicationBasicDetails = async (req) => {
       : await BasicDetails.findOne({
           where: { userId: `${userId}` },
           attributes: {
-            exclude: ["basicDetailsId", "userId", "updatedAt"],
+            exclude: ["basicDetailsId", "userId", "createdAt", "updatedAt"],
           },
         });
 
     return applicationId ? results.recordset[0] : results;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -142,13 +148,14 @@ export const getApplicationEducation = async (req) => {
       : await EduDetails.findAll({
           where: { userId: `${userId}` },
           attributes: {
-            exclude: ["userId", "updatedAt"],
+            exclude: ["userId", "createdAt", "updatedAt"],
           },
         });
 
     return results?.recordset ?? results;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -165,11 +172,15 @@ export const getApplicationExperience = async (req) => {
       ? await req.app.locals.db.query(query)
       : await ExpDetails.findAll({
           where: { userId: `${userId}` },
+          attributes: {
+            exclude: ["userId", "createdAt", "updatedAt"],
+          },
         });
 
     return results?.recordset ?? results;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -186,11 +197,54 @@ export const getApplicationOtherDetails = async (req) => {
       ? await req.app.locals.db.query(query)
       : await AchveDetails.findAll({
           where: { userId: `${userId}` },
+          attributes: {
+            exclude: ["userId", "createdAt", "updatedAt"],
+          },
         });
 
     return results?.recordset ?? results;
   } catch (error) {
     console.log(error);
+    throw Error();
+  }
+};
+
+export const deleteEducation = async (req, res) => {
+  const { detailId } = req.query;
+  try {
+    const results = await EduDetails.destroy({
+      where: { EduDetailsId: detailId },
+    });
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw Error();
+  }
+};
+
+export const deleteExperience = async (req, res) => {
+  const { detailId } = req.query;
+  try {
+    const results = await ExpDetails.destroy({
+      where: { ExpDetailId: detailId },
+    });
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw Error();
+  }
+};
+
+export const deleteAchievement = async (req, res) => {
+  const { detailId } = req.query;
+  try {
+    const results = await AchveDetails.destroy({
+      where: { AchvDetailId: detailId },
+    });
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw Error();
   }
 };
 
@@ -214,10 +268,11 @@ export const ApproveQualification = async (req) => {
     return results.recordset;
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
-export const changeApplicationStatus = async (req) => {
+export const finaliseApplication = async (req) => {
   const { applicationId, status, remarks } = req.query;
   try {
     const results = await req.app.locals.db.query(`

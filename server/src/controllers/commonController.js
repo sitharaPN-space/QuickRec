@@ -10,8 +10,7 @@ export const MasterData = async (req, res) => {
   try {
     const data = await getMasterData(req);
     res.status(200).json({ data: data.data });
-  } catch (error) {
-    console.log(error);
+  } catch {
     res.status(500).json({ message: "Something went wrong" });
   }
 };

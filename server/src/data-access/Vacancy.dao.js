@@ -27,6 +27,7 @@ const deleteVacancy = async (vacancyId) => {
     });
   } catch (error) {
     console.log(error);
+    throw Error();
   }
 };
 
@@ -51,7 +52,7 @@ const getVacanciesBySearch = async (req) => {
     return results.recordset;
   } catch (error) {
     console.error(error);
-    return { message: "Failed data retrieval", error };
+    throw Error();
   }
 };
 

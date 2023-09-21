@@ -5,6 +5,7 @@ export const getAllBoardGrades = async (req) => {
     return results.recordset;
   } catch (e) {
     console.log(e);
+    throw Error();
   }
 };
 
@@ -15,5 +16,6 @@ export const getAllSalaryGroups = async (req) => {
     return results.recordset;
   } catch (e) {
     console.log(e);
+    throw Error();
   }
 };
