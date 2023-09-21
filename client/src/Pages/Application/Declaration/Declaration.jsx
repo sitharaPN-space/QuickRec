@@ -13,13 +13,20 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../../../api";
+import { useCreateApplicationSubmissionMutation } from "../../../state/api";
 
 const Declaration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const user = useSelector((state) => state.userContext.data);
   const [setActiveStep] = useOutletContext();
+  const [createApplicationSubmission] =
+    useCreateApplicationSubmissionMutation();
   const { state } = useLocation();
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState("");
+  const [cv, setCv] = useState();
+  const [nic, setNic] = useState();
+  const [birthCertificate, setBirthCertificate] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const details = useSelector((state) => state.userApplication);
@@ -34,7 +41,10 @@ const Declaration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.applicationSubmit({ state, details });
+      createApplicationSubmission({
+        vacancyId: state.vacancyId,
+        userId: user.result.UserId,
+      });
     } catch (error) {
       setError(error.response.data);
       console.log(error.response.data);
@@ -69,6 +79,7 @@ const Declaration = () => {
             <Input
               name="cv"
               value={attachments.cv}
+              setAttachment={setCv}
               label="You CV *"
               type="file"
               handleChange={handleChange}
@@ -80,6 +91,7 @@ const Declaration = () => {
             <Input
               name="nic"
               value={attachments.nic}
+              setAttachment={setNic}
               label="Copy of NIC *"
               type="file"
               handleChange={handleChange}
@@ -91,6 +103,7 @@ const Declaration = () => {
             <Input
               name="birthCertificate"
               value={attachments.birthCertificate}
+              setAttachment={setBirthCertificate}
               label="Birth Certificate *"
               type="file"
               handleChange={handleChange}
