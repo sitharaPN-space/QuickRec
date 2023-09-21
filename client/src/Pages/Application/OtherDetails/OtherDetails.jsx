@@ -7,7 +7,12 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
-import { useCreateAppAchievementMutation } from "../../../state/api";
+import {
+  useCreateAppAchievementMutation,
+  useDeleteAppAchievementMutation,
+  useGetAppOtherDetailsQuery,
+} from "../../../state/api";
+import DeleteConfirmation from "../../../components/DeleteConfirmation";
 
 const initAchievement = {
   title: "",
@@ -23,15 +28,31 @@ const ProDetails = () => {
   const [setActiveStep] = useOutletContext();
   const user = useSelector((state) => state.userContext.data);
   const [createAppAchievement] = useCreateAppAchievementMutation();
+  const [deleteAppAchievement] = useDeleteAppAchievementMutation();
+  const { data: appOtherDetails, isLoading: detailsLoading } =
+    useGetAppOtherDetailsQuery({
+      userId: user.result.UserId,
+    });
   const [achievement, setAchievement] = useState(initAchievement);
   const [isEditing, setIsEditing] = useState(false);
   const [attachment, setAttachment] = useState();
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { otherAchievements } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(3), [setActiveStep]);
+
+  useEffect(() => {
+    !detailsLoading &&
+      dispatch(
+        setApplicationData({
+          otherAchievements: appOtherDetails?.data ?? otherAchievements,
+        })
+      );
+  }, [dispatch, appOtherDetails?.data, detailsLoading]);
 
   const handlePrevious = () => {
     navigate("/application/proDetails", { state });
@@ -46,11 +67,6 @@ const ProDetails = () => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    dispatch(
-      setApplicationData({
-        otherAchievements: [...otherAchievements, achievement],
-      })
-    );
     createAppAchievement({
       ...achievement,
       userId: user.result.UserId,
@@ -69,23 +85,30 @@ const ProDetails = () => {
   const handleEdit = (index) => {
     setIsEditing(true);
     setAchievement(otherAchievements[index]);
-    handleDelete(index);
   };
 
-  const handleDelete = (index) => {
-    const newotherAchievements = otherAchievements.filter(
-      (value, i) => i !== index
-    );
-    dispatch(
-      setApplicationData({
-        otherAchievements: newotherAchievements,
-      })
-    );
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteButton = (detailId) => {
+    setOpen(true);
+    setDeleteId(detailId);
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
+    deleteAppAchievement(deleteId);
   };
 
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
+        <DeleteConfirmation
+          open={open}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        />
         <form id="application" onSubmit={handleAdd}>
           <Grid
             container
@@ -175,7 +198,7 @@ const ProDetails = () => {
                     onClick={handleNext}
                     type="submit"
                   >
-                    Save & Next
+                    Next
                   </ButtonComp>
                 </div>
               </Grid>
@@ -193,7 +216,7 @@ const ProDetails = () => {
             <DetailCard
               key={i}
               detail={detail}
-              onDelete={() => handleDelete(i)}
+              onDelete={() => handleDeleteButton(detail.achvDetailId)}
               onEdit={() => handleEdit(i)}
             />
           ))}

@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Paper,
-  Grid,
-  useMediaQuery,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-} from "@mui/material";
+import { Paper, Grid, useMediaQuery, Button } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
@@ -16,12 +8,14 @@ import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  useDeleteAppEducationMutation,
   useCreateAppEducationMutation,
   useGetAppEduDetailsQuery,
 } from "../../../state/api";
+import DeleteConfirmation from "../../../components/DeleteConfirmation";
 
 const initEducation = {
-  eduTypeId: null,
+  eduTypeId: "",
   instituteName: "",
   qualification: "",
   fieldOfStudy: "",
@@ -50,6 +44,7 @@ const EduDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const user = useSelector((state) => state.userContext.data);
   const [createAppEducation] = useCreateAppEducationMutation();
+  const [deleteAppEducation] = useDeleteAppEducationMutation();
   const { data: appEduDetails, isLoading: detailsLoading } =
     useGetAppEduDetailsQuery({
       userId: user.result.UserId,
@@ -89,14 +84,12 @@ const EduDetails = () => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    dispatch(
-      setApplicationData({
-        eduQualification: [...eduQualification, education],
-      })
-    );
     createAppEducation({
-      ...education,
-      userId: user.result.UserId,
+      createReq: {
+        ...education,
+        userId: user.result.UserId,
+      },
+      attachment,
     });
     setEducation(initEducation);
     isEditing && setIsEditing(false);
@@ -112,7 +105,6 @@ const EduDetails = () => {
   const handleEdit = (index) => {
     setIsEditing(true);
     setEducation(eduQualification[index]);
-    handleDelete(index);
   };
 
   const handleClose = () => {
@@ -126,22 +118,17 @@ const EduDetails = () => {
 
   const handleDelete = () => {
     setOpen(false);
+    deleteAppEducation(deleteId);
   };
 
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Delete this Vacancy ?</DialogTitle>
-          <DialogActions>
-            <Button onClick={handleClose} autoFocus>
-              Cancel
-            </Button>
-            <Button onClick={handleDelete} sx={{ color: "red" }}>
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <DeleteConfirmation
+          open={open}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        />
         <form value="application" onSubmit={handleAdd}>
           <Grid
             container

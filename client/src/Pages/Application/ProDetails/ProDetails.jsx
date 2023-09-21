@@ -7,7 +7,12 @@ import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import DetailCard from "../../../components/DetailCard";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
-import { useCreateAppExperienceMutation } from "../../../state/api";
+import {
+  useCreateAppExperienceMutation,
+  useDeleteAppExperienceMutation,
+  useGetAppExpDetailsQuery,
+} from "../../../state/api";
+import DeleteConfirmation from "../../../components/DeleteConfirmation";
 
 const initExperience = {
   title: "",
@@ -23,15 +28,31 @@ const ProDetails = () => {
   const [setActiveStep] = useOutletContext();
   const user = useSelector((state) => state.userContext.data);
   const [createAppExperience] = useCreateAppExperienceMutation();
+  const [deleteAppExperience] = useDeleteAppExperienceMutation();
+  const { data: appExpDetails, isLoading: detailsLoading } =
+    useGetAppExpDetailsQuery({
+      userId: user.result.UserId,
+    });
   const [experienceDetails, setExperienceDetails] = useState(initExperience);
   const [isEditing, setIsEditing] = useState(false);
   const [attachment, setAttachment] = useState();
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { experience } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(2), [setActiveStep]);
+
+  useEffect(() => {
+    !detailsLoading &&
+      dispatch(
+        setApplicationData({
+          experience: appExpDetails?.data ?? experience,
+        })
+      );
+  }, [dispatch, appExpDetails?.data, detailsLoading]);
 
   const handlePrevious = () => {
     navigate("/application/eduDetails", { state });
@@ -46,11 +67,6 @@ const ProDetails = () => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    dispatch(
-      setApplicationData({
-        experience: [...experience, experienceDetails],
-      })
-    );
     createAppExperience({
       ...experienceDetails,
       userId: user.result.UserId,
@@ -69,21 +85,30 @@ const ProDetails = () => {
   const handleEdit = (index) => {
     setIsEditing(true);
     setExperienceDetails(experience[index]);
-    handleDelete(index);
   };
 
-  const handleDelete = (index) => {
-    const newExperience = experience.filter((value, i) => i !== index);
-    dispatch(
-      setApplicationData({
-        experience: newExperience,
-      })
-    );
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteButton = (detailId) => {
+    setOpen(true);
+    setDeleteId(detailId);
+  };
+
+  const handleDelete = () => {
+    setOpen(false);
+    deleteAppExperience(deleteId);
   };
 
   return (
     <div sx={{ display: "flex", flexDirection: "column" }}>
       <Paper sx={{ display: "flex" }}>
+        <DeleteConfirmation
+          open={open}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        />
         <form id="application" onSubmit={handleAdd}>
           <Grid
             container
@@ -172,7 +197,7 @@ const ProDetails = () => {
                     onClick={handleNext}
                     type="submit"
                   >
-                    Save & Next
+                    Next
                   </ButtonComp>
                 </div>
               </Grid>
@@ -190,7 +215,7 @@ const ProDetails = () => {
             <DetailCard
               key={i}
               detail={detail}
-              onDelete={() => handleDelete(i)}
+              onDelete={() => handleDeleteButton(detail.expDetailId)}
               onEdit={() => handleEdit(i)}
             />
           ))}
