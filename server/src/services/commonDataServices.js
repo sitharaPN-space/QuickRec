@@ -10,7 +10,6 @@ const getMasterData = async (req) => {
     let data = {};
     data.boardGrades = boardGrades;
     data.salaryGroups = salaryGroups;
-    data.appSteps = appSteps;
     return { data };
   } catch (e) {
     console.log(e);
