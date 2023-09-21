@@ -5,6 +5,7 @@ const FileUploader = ({
   handleChange,
   setAttachment,
   setError,
+  fileName,
   required,
   children,
 }) => {
@@ -56,7 +57,7 @@ const FileUploader = ({
           width: "1px",
           position: "absolute",
         }}
-        required={required}
+        required={!fileName && required}
       />
     </>
   );

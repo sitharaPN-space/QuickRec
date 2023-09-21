@@ -80,6 +80,7 @@ const Input = ({
           <FileUploader
             required={required}
             name={name}
+            fileName={value}
             setAttachment={setAttachment}
             setError={setErrorText}
             handleChange={handleChange}
