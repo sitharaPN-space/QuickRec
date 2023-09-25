@@ -23,9 +23,9 @@ export const initState = {
   experience: [],
   otherAchievements: [],
   attachments: {
-    cv: "",
-    nic: "",
-    birthCertificate: "",
+    cvPath: "",
+    nicPath: "",
+    birthCertificatePath: "",
   },
 };
 
