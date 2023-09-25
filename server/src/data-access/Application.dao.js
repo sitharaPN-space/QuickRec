@@ -31,8 +31,8 @@ export const createOrUpadateApplication = async (applicationReq) => {
     const application = await updateOrCreate(
       Application,
       {
-        UserId: `${applicationReq?.UserId}`,
-        VacancyId: `${applicationReq?.VacancyId}`,
+        UserId: applicationReq?.UserId,
+        VacancyId: applicationReq?.VacancyId,
       },
       applicationReq
     );
