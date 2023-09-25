@@ -48,11 +48,12 @@ export const api = createApi({
       invalidatesTags: ["AppBasicDetails"],
     }),
     createAppEducation: builder.mutation({
-      query: ({ createReq, attachment }) => {
+      query: (createReq) => {
         const formData = new FormData();
         createReq.eduDetailsId &&
           formData.append("eduDetailsId", createReq.eduDetailsId);
         formData.append("eduTypeId", createReq.eduTypeId);
+        formData.append("userId", createReq.userId);
         formData.append("instituteName", createReq.instituteName);
         formData.append("qualification", createReq.qualification);
         formData.append("fieldOfStudy", createReq.fieldOfStudy);
@@ -60,7 +61,7 @@ export const api = createApi({
         formData.append("endDate", createReq.endDate);
         formData.append("grade", createReq.grade);
         formData.append("attachmentPath", createReq.attachmentPath);
-        formData.append("attachment", attachment);
+        formData.append("attachment", createReq.attachment);
         return {
           url: `/application/addEduDetails`,
           method: "POST",
@@ -71,27 +72,67 @@ export const api = createApi({
       invalidatesTags: ["AppEduDetails"],
     }),
     createAppExperience: builder.mutation({
-      query: (createReq) => ({
-        url: `/application/addExpDetails`,
-        method: "POST",
-        body: createReq,
-      }),
+      query: (createReq) => {
+        const formData = new FormData();
+        createReq.expDetailId &&
+          formData.append("expDetailId", createReq.expDetailId);
+        formData.append("userId", createReq.userId);
+        formData.append("title", createReq.title);
+        formData.append("organization", createReq.organization);
+        formData.append("startDate", createReq.startDate);
+        formData.append("endDate", createReq.endDate);
+        formData.append("description", createReq.description);
+        formData.append("attachmentPath", createReq.attachmentPath);
+        formData.append("attachment", createReq.attachment);
+        return {
+          url: `/application/addExpDetails`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
       invalidatesTags: ["AppExpDetails"],
     }),
     createAppAchievement: builder.mutation({
-      query: (createReq) => ({
-        url: `/application/addOtherDetails`,
-        method: "POST",
-        body: createReq,
-      }),
+      query: (createReq) => {
+        const formData = new FormData();
+        createReq.achvDetailId &&
+          formData.append("achvDetailId", createReq.achvDetailId);
+        formData.append("userId", createReq.userId);
+        formData.append("title", createReq.title);
+        formData.append("organization", createReq.organization);
+        formData.append("startDate", createReq.startDate);
+        formData.append("endDate", createReq.endDate);
+        formData.append("description", createReq.description);
+        formData.append("attachmentPath", createReq.attachmentPath);
+        formData.append("attachment", createReq.attachment);
+        return {
+          url: `/application/addOtherDetails`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
       invalidatesTags: ["AppOtherDetails"],
     }),
     createApplicationSubmission: builder.mutation({
-      query: (createReq) => ({
-        url: `/application/submitApplication`,
-        method: "POST",
-        body: createReq,
-      }),
+      query: (createReq) => {
+        const formData = new FormData();
+        formData.append("vacancyId", createReq.vacancyId);
+        formData.append("userId", createReq.userId);
+        formData.append("cvPath", createReq.cvPath);
+        formData.append("nicPath", createReq.nicPath);
+        formData.append("birthCertificatePath", createReq.birthCertificatePath);
+        formData.append("cv", createReq.cv);
+        formData.append("nic", createReq.nic);
+        formData.append("birthCertificate", createReq.birthCertificate);
+        return {
+          url: `/application/submitApplication`,
+          method: "POST",
+          body: formData,
+          formData: true,
+        };
+      },
     }),
     deleteAppEducation: builder.mutation({
       query: (detailId) => ({
