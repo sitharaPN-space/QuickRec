@@ -25,7 +25,15 @@ router.post("/addBasicDetails", addBasicDetails);
 router.post("/addEduDetails", upload.single("attachment"), addEducation);
 router.post("/addExpDetails", upload.single("attachment"), addExperience);
 router.post("/addOtherDetails", upload.single("attachment"), addOtherDetails);
-router.post("/submitApplication", submitAppication);
+router.post(
+  "/submitApplication",
+  upload.fields([
+    { name: "cv", maxCount: 1 },
+    { name: "nic", maxCount: 1 },
+    { name: "birthCertificate", maxCount: 1 },
+  ]),
+  submitAppication
+);
 router.delete("/deleteEduDetail", deleteAppEduDetail);
 router.delete("/deleteExpDetail", deleteAppExpDetail);
 router.delete("/deleteOtherDetail", deleteAppOtherDetail);
