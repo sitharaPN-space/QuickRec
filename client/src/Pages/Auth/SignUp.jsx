@@ -7,6 +7,7 @@ import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
 import * as api from "../../api";
+import Error from "../../components/Error";
 
 const initState = {
   userName: "",
@@ -24,7 +25,7 @@ const SignUp = () => {
   const [boardEmpCheck, setBoardEmpCheck] = useState(false);
   const [userData, setUserData] = useState(initState);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const confirmPasswordMatches = userData.password === userData.confirmPassword;
 
   const handleSubmit = async (e) => {
@@ -36,9 +37,6 @@ const SignUp = () => {
     } catch (error) {
       setError(error.response.data);
       console.log(error.response.data);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
   };
 
@@ -189,31 +187,21 @@ const SignUp = () => {
                 cookiePolicy="single_host_origin"
               />
             </Grid>
-          </Grid>
-          <Grid container sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Grid item>
-              <Typography
-                sx={{ fontSize: "0.8rem", mt: "1rem", cursor: "pointer" }}
-                onClick={switchMode}
-              >
-                Sign in with existing account
-              </Typography>
-            </Grid>
-          </Grid>
-          {error && (
-            <Typography
-              sx={{
-                fontSize: "0.8rem",
-                m: "1rem",
-                p: "1rem",
-                color: "#ff0000",
-                border: "1px solid red",
-                borderRadius: "5px",
-              }}
+            <Grid
+              container
+              sx={{ display: "flex", justifyContent: "flex-end" }}
             >
-              {error.message}
-            </Typography>
-          )}
+              <Grid item>
+                <Typography
+                  sx={{ fontSize: "0.8rem", mt: "1rem", cursor: "pointer" }}
+                  onClick={switchMode}
+                >
+                  Sign in with existing account
+                </Typography>
+              </Grid>
+            </Grid>
+            <Error error={error} setError={setError} />
+          </Grid>
         </form>
       </Paper>
     </Container>

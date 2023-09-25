@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Paper, Grid, useMediaQuery } from "@mui/material";
 import Input from "../../../components/Input";
 import ButtonComp from "../../../components/ButtonComp";
@@ -9,6 +9,7 @@ import {
   useCreateAppBasicDetailsMutation,
   useGetAppBasicDetailsQuery,
 } from "../../../state/api";
+import Error from "../../../components/Error";
 
 const BasicDetails = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -21,6 +22,7 @@ const BasicDetails = () => {
   const [setActiveStep] = useOutletContext();
   const { state } = useLocation();
   const dispatch = useDispatch();
+  const [error, setError] = useState();
   const { basicDetails } = useSelector((state) => state.userApplication);
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ const BasicDetails = () => {
           basicDetails: appBasicDetails?.data ?? basicDetails,
         })
       );
-  }, [dispatch, appBasicDetails?.data, detailsLoading]);
+  }, [dispatch, basicDetails, appBasicDetails?.data, detailsLoading]);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -242,6 +244,7 @@ const BasicDetails = () => {
               </div>
             </Grid>
           )}
+          <Error error={error} setError={setError} />
         </Grid>
       </form>
     </Paper>

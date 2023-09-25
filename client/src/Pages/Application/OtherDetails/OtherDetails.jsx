@@ -13,6 +13,7 @@ import {
   useGetAppOtherDetailsQuery,
 } from "../../../state/api";
 import DeleteConfirmation from "../../../components/DeleteConfirmation";
+import Error from "../../../components/Error";
 
 const initAchievement = {
   title: "",
@@ -37,6 +38,7 @@ const ProDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [attachment, setAttachment] = useState();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState();
   const [deleteId, setDeleteId] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -52,7 +54,7 @@ const ProDetails = () => {
           otherAchievements: appOtherDetails?.data ?? otherAchievements,
         })
       );
-  }, [dispatch, appOtherDetails?.data, detailsLoading]);
+  }, [dispatch, otherAchievements, appOtherDetails?.data, detailsLoading]);
 
   const handlePrevious = () => {
     navigate("/application/proDetails", { state });
@@ -70,6 +72,7 @@ const ProDetails = () => {
     createAppAchievement({
       ...achievement,
       userId: user.result.UserId,
+      attachment,
     });
     setAchievement(initAchievement);
     isEditing && setIsEditing(false);
@@ -85,6 +88,11 @@ const ProDetails = () => {
   const handleEdit = (index) => {
     setIsEditing(true);
     setAchievement(otherAchievements[index]);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setAchievement(initAchievement);
   };
 
   const handleClose = () => {
@@ -174,9 +182,17 @@ const ProDetails = () => {
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
                 {isEditing ? (
-                  <ButtonComp sx={{ mt: "1rem" }} type="submit">
-                    Save
-                  </ButtonComp>
+                  <>
+                    <ButtonComp
+                      sx={{ mt: "1rem", mr: "0.5rem" }}
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </ButtonComp>
+                    <ButtonComp sx={{ mt: "1rem" }} type="submit">
+                      Save
+                    </ButtonComp>
+                  </>
                 ) : (
                   <Button sx={{ mt: "1rem" }} type="submit">
                     <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
@@ -203,6 +219,7 @@ const ProDetails = () => {
                 </div>
               </Grid>
             )}
+            <Error error={error} setError={setError} />
           </Grid>
         </form>
       </Paper>

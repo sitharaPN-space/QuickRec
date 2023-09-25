@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getUserDataOnSuccess, getUserDataOnFailiure } from "../../state/Auth";
 import * as api from "../../api/";
+import Error from "../../components/Error";
 
 const initState = { userName: "", password: "" };
 
@@ -15,7 +16,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState(initState);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const navigate = useNavigate();
 
   const handleShowPassowrd = () => {
@@ -38,9 +39,6 @@ const SignIn = () => {
       dispatch(getUserDataOnFailiure(error.response.data));
       setError(error.response.data);
       console.log(error.response.data);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
   };
 
@@ -124,33 +122,23 @@ const SignIn = () => {
                 cookiePolicy="single_host_origin"
               />
             </Grid>
-          </Grid>
-          <Grid container sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Grid item>
-              <Typography
-                sx={{ fontSize: "0.8rem", mt: "1rem", cursor: "pointer" }}
-                onClick={() => {
-                  navigate("/signUp");
-                }}
-              >
-                Sign up to create a new account
-              </Typography>
-            </Grid>
-          </Grid>
-          {error && (
-            <Typography
-              sx={{
-                fontSize: "0.8rem",
-                m: "1rem",
-                p: "1rem",
-                color: "#ff0000",
-                border: "1px solid red",
-                borderRadius: "5px",
-              }}
+            <Grid
+              container
+              sx={{ display: "flex", justifyContent: "flex-end" }}
             >
-              {error.message}
-            </Typography>
-          )}
+              <Grid item>
+                <Typography
+                  sx={{ fontSize: "0.8rem", mt: "1rem", cursor: "pointer" }}
+                  onClick={() => {
+                    navigate("/signUp");
+                  }}
+                >
+                  Sign up to create a new account
+                </Typography>
+              </Grid>
+            </Grid>
+            <Error error={error} setError={setError} />
+          </Grid>
         </form>
       </Paper>
     </Container>

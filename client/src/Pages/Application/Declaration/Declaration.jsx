@@ -12,8 +12,8 @@ import ButtonComp from "../../../components/ButtonComp";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { setApplicationData } from "../../../state/UserApplication";
 import { useDispatch, useSelector } from "react-redux";
-import * as api from "../../../api";
 import { useCreateApplicationSubmissionMutation } from "../../../state/api";
+import Error from "../../../components/Error";
 
 const Declaration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -23,14 +23,13 @@ const Declaration = () => {
     useCreateApplicationSubmissionMutation();
   const { state } = useLocation();
   const [checked, setChecked] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const [cv, setCv] = useState();
   const [nic, setNic] = useState();
   const [birthCertificate, setBirthCertificate] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const details = useSelector((state) => state.userApplication);
-  const { attachments } = details;
+  const { attachments } = useSelector((state) => state.userApplication);
 
   useEffect(() => setActiveStep(4), [setActiveStep]);
 
@@ -40,19 +39,15 @@ const Declaration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      createApplicationSubmission({
-        vacancyId: state.vacancyId,
-        userId: user.result.UserId,
-      });
-    } catch (error) {
-      setError(error.response.data);
-      console.log(error.response.data);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-    }
-    navigate("/home");
+    const result = await createApplicationSubmission({
+      ...attachments,
+      cv: cv,
+      nic: nic,
+      birthCertificate: birthCertificate,
+      vacancyId: state.vacancyId,
+      userId: user.result.UserId,
+    });
+    result?.error ? setError(result.error?.data) : navigate("/home");
   };
 
   const handleChange = (e) => {
@@ -77,8 +72,8 @@ const Declaration = () => {
         <Grid container spacing={5} sx={{ p: "1.5rem" }}>
           <Grid item xs={12}>
             <Input
-              name="cv"
-              value={attachments.cv}
+              name="cvPath"
+              value={attachments.cvPath}
               setAttachment={setCv}
               label="You CV *"
               type="file"
@@ -89,8 +84,8 @@ const Declaration = () => {
           </Grid>
           <Grid item xs={12}>
             <Input
-              name="nic"
-              value={attachments.nic}
+              name="nicPath"
+              value={attachments.nicPath}
               setAttachment={setNic}
               label="Copy of NIC *"
               type="file"
@@ -101,8 +96,8 @@ const Declaration = () => {
           </Grid>
           <Grid item xs={12}>
             <Input
-              name="birthCertificate"
-              value={attachments.birthCertificate}
+              name="birthCertificatePath"
+              value={attachments.birthCertificatePath}
               setAttachment={setBirthCertificate}
               label="Birth Certificate *"
               type="file"
@@ -143,35 +138,21 @@ const Declaration = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <ButtonComp sx={{ m: "5rem auto", p: "1rem 0.5rem" }} type="submit">
+            <ButtonComp
+              sx={{ m: "5rem auto 3rem", p: "1rem 0.5rem" }}
+              type="submit"
+            >
               Submit Application
             </ButtonComp>
-          </Grid>
-          <Grid item xs={12}>
-            {error && (
-              <Typography
-                sx={{
-                  fontSize: "0.8rem",
-                  m: "0 1rem 1rem",
-                  p: "1rem",
-                  color: "#ff0000",
-                  border: "1px solid red",
-                  borderRadius: "5px",
-                }}
-              >
-                {error.message}
-              </Typography>
-            )}
           </Grid>
           {!isMobile && (
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
-                <ButtonComp sx={{ mt: "1rem" }} onClick={handlePrevious}>
-                  Previous
-                </ButtonComp>
+                <ButtonComp onClick={handlePrevious}>Previous</ButtonComp>
               </div>
             </Grid>
           )}
+          <Error error={error} setError={setError} />
         </Grid>
       </form>
     </Paper>

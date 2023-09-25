@@ -13,6 +13,7 @@ import {
   useGetAppEduDetailsQuery,
 } from "../../../state/api";
 import DeleteConfirmation from "../../../components/DeleteConfirmation";
+import Error from "../../../components/Error";
 
 const initEducation = {
   eduTypeId: "",
@@ -54,6 +55,7 @@ const EduDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [attachment, setAttachment] = useState();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState();
   const [deleteId, setDeleteId] = useState();
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ const EduDetails = () => {
           eduQualification: appEduDetails?.data ?? eduQualification,
         })
       );
-  }, [dispatch, appEduDetails?.data, detailsLoading]);
+  }, [dispatch, eduQualification, appEduDetails?.data, detailsLoading]);
 
   const handlePrevious = () => {
     navigate("/application/basicDetails", { state });
@@ -85,10 +87,8 @@ const EduDetails = () => {
   const handleAdd = (e) => {
     e.preventDefault();
     createAppEducation({
-      createReq: {
-        ...education,
-        userId: user.result.UserId,
-      },
+      ...education,
+      userId: user.result.UserId,
       attachment,
     });
     setEducation(initEducation);
@@ -105,6 +105,11 @@ const EduDetails = () => {
   const handleEdit = (index) => {
     setIsEditing(true);
     setEducation(eduQualification[index]);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEducation(initEducation);
   };
 
   const handleClose = () => {
@@ -209,9 +214,17 @@ const EduDetails = () => {
             <Grid item xs={12} sx={{ textAlign: "left" }}>
               <div style={{ textAlign: "right" }}>
                 {isEditing ? (
-                  <ButtonComp sx={{ mt: "1rem" }} type="submit">
-                    Save
-                  </ButtonComp>
+                  <>
+                    <ButtonComp
+                      sx={{ mt: "1rem", mr: "0.5rem" }}
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </ButtonComp>
+                    <ButtonComp sx={{ mt: "1rem" }} type="submit">
+                      Save
+                    </ButtonComp>
+                  </>
                 ) : (
                   <Button sx={{ mt: "1rem" }} type="submit">
                     <AddCircleIcon sx={{ width: "3rem", height: "3rem" }} />
@@ -238,6 +251,7 @@ const EduDetails = () => {
                 </div>
               </Grid>
             )}
+            <Error error={error} setError={setError} />
           </Grid>
         </form>
       </Paper>
