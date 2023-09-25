@@ -18,6 +18,7 @@ export const submitAppication = async (req, res) => {
       VacancyId: vacancyId,
       Status: ApplicationStatus.PENDING,
     });
+    res.status(200).json({ data: { message: "Success !" } });
   } catch {
     res.status(404).json({ message: "Something went wrong" });
   }
