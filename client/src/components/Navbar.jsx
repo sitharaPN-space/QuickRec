@@ -194,7 +194,9 @@ const Navbar = ({
           margin: "10px 20px 0 20px",
         }}
       >
-        <Typography>Welcome {user?.result?.UserName} !</Typography>
+        <Typography>
+          Welcome {user?.result?.UserName ?? user?.result?.name} !
+        </Typography>
       </div>
     </div>
   );

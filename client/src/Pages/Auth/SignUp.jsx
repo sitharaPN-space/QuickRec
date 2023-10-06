@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Typography, Container, Paper, Grid, Checkbox } from "@mui/material";
 import Input from "../../components/Input";
 import ButtonComp from "../../components/ButtonComp";
-import { GoogleLogin } from "react-google-login";
-import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
 import * as api from "../../api";
@@ -52,9 +50,6 @@ const SignUp = () => {
   };
 
   const navigate = useNavigate();
-
-  const googleSuccess = () => {};
-  const googleError = () => {};
 
   const switchMode = () => {
     navigate("/signIn");
@@ -167,25 +162,6 @@ const SignUp = () => {
               <Typography sx={{ fontSize: "0.8rem" }}>
                 -- or sign up with --
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <GoogleLogin
-                clientId="564033717568-e5p23rhvcs4i6kffgsbci1d64r8hp6fn.apps.googleusercontent.com"
-                render={(renderProps) => (
-                  <ButtonComp
-                    fullWidth
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled || boardEmpCheck}
-                    startIcon={<GoogleIcon />}
-                    variant="contained"
-                  >
-                    Google Sign In
-                  </ButtonComp>
-                )}
-                onSuccess={googleSuccess}
-                onFailure={googleError}
-                cookiePolicy="single_host_origin"
-              />
             </Grid>
             <Grid
               container

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Typography, Container, Paper, Grid } from "@mui/material";
 import Input from "../../components/Input";
 import ButtonComp from "../../components/ButtonComp";
-import { GoogleLogin } from "react-google-login";
-import GoogleIcon from "../../components/GoogleIcon";
+import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getUserDataOnSuccess, getUserDataOnFailiure } from "../../state/Auth";
@@ -43,12 +42,14 @@ const SignIn = () => {
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-    const successData = { result: result, token: token };
+    const token = res?.credential;
+    localStorage.setItem("profile", token);
     try {
-      dispatch(getUserDataOnSuccess(successData));
+      dispatch(getUserDataOnSuccess());
+      navigate("/home");
     } catch (error) {
+      dispatch(getUserDataOnFailiure(error.response.data));
+      setError(error.response.data);
       console.log(error);
     }
   };
@@ -99,24 +100,11 @@ const SignIn = () => {
               xs={12}
               sx={{ justifyContent: "center", textAlign: "center" }}
             >
-              <Typography sx={{ fontSize: "0.8rem" }}>
-                -- or Sign In with --
-              </Typography>
+              <Typography sx={{ fontSize: "0.8rem" }}>-- or --</Typography>
             </Grid>
             <Grid item xs={12}>
               <GoogleLogin
-                clientId="90505972630-ogshh8gsa9vdkit3nrpbbcfst4m3atg5.apps.googleusercontent.com"
-                render={(renderProps) => (
-                  <ButtonComp
-                    fullWidth
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                    startIcon={<GoogleIcon />}
-                    variant="contained"
-                  >
-                    Google Sign In
-                  </ButtonComp>
-                )}
+                width="362"
                 onSuccess={googleSuccess}
                 onFailure={googleError}
                 cookiePolicy="single_host_origin"
