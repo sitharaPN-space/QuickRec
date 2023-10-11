@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Typography, Container, Paper, Grid } from "@mui/material";
 import Input from "../../components/Input";
 import ButtonComp from "../../components/ButtonComp";
@@ -16,7 +16,13 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState(initState);
   const [error, setError] = useState();
+  const inputRe = useRef();
+  const [googleLoginWidth, setGoogleLoginWidth] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setGoogleLoginWidth(inputRe.current?.offsetWidth);
+  }, [setGoogleLoginWidth]);
 
   const handleShowPassowrd = () => {
     setShowPassword(!showPassword);
@@ -91,7 +97,12 @@ const SignIn = () => {
               handleShowPassword={handleShowPassowrd}
             />
             <Grid item xs={12}>
-              <ButtonComp type="submit" fullWidth variant="contained">
+              <ButtonComp
+                type="submit"
+                fullWidth
+                ref={inputRe}
+                variant="contained"
+              >
                 Sign In
               </ButtonComp>
             </Grid>
@@ -104,10 +115,9 @@ const SignIn = () => {
             </Grid>
             <Grid item xs={12}>
               <GoogleLogin
-                width="362"
+                width={googleLoginWidth}
                 onSuccess={googleSuccess}
                 onFailure={googleError}
-                cookiePolicy="single_host_origin"
               />
             </Grid>
             <Grid
