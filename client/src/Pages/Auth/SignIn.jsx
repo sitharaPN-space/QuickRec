@@ -16,12 +16,12 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState(initState);
   const [error, setError] = useState();
-  const inputRe = useRef();
+  const inputRef = useRef();
   const [googleLoginWidth, setGoogleLoginWidth] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setGoogleLoginWidth(inputRe.current?.offsetWidth);
+    setGoogleLoginWidth(inputRef.current?.offsetWidth);
   }, [setGoogleLoginWidth]);
 
   const handleShowPassowrd = () => {
@@ -100,7 +100,7 @@ const SignIn = () => {
               <ButtonComp
                 type="submit"
                 fullWidth
-                ref={inputRe}
+                ref={inputRef}
                 variant="contained"
               >
                 Sign In
