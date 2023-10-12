@@ -4,21 +4,21 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
     const isCustomAuth = token.length < 500; // custom auth or google auth
 
     let decodeData;
 
     if (token && isCustomAuth) {
       decodeData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-      req.userId = decodeData?.id;
+      req.body.userId = decodeData?.UserId;
+      req.query.userId = decodeData?.UserId;
     } else {
       // google auth
       decodeData = jwt.decode(token);
-      req.userId = decodeData?.sub;
+      req.body.userId = decodeData?.sub;
+      req.query.userId = decodeData?.sub;
     }
-
     next();
   } catch (error) {
     res.status(401).json({ error: "session expired" });
