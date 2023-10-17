@@ -6,9 +6,7 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
   host: config.server,
   dialect: "mssql",
   dialectOptions: {
-    options: {
-      encrypt: false, // For secure connections
-    },
+    options: config.options,
   },
   pool: {
     max: 5,
