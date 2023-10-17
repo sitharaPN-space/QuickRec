@@ -22,7 +22,8 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.use(auth);
+router.post("/*", auth);
+router.delete("/*", auth);
 router.post("/addBasicDetails", addBasicDetails);
 router.post("/addEduDetails", upload.single("attachment"), addEducation);
 router.post("/addExpDetails", upload.single("attachment"), addExperience);
