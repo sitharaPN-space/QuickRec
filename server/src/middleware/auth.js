@@ -11,17 +11,16 @@ const auth = async (req, res, next) => {
 
     if (token && isCustomAuth) {
       decodeData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      req.body.userId = decodeData?.UserId;
-      req.query.userId = decodeData?.UserId;
     } else {
       // google auth
       decodeData = jwt.decode(token);
-      req.body.userId = decodeData?.sub;
-      req.query.userId = decodeData?.sub;
+    }
+    if (decodeData?.exp <= Date.now() / 1000) {
+      throw Error("session expired");
     }
     next();
   } catch (error) {
-    res.status(401).json({ error: "session expired" });
+    res.status(401).json({ message: "session expired" });
     console.log(error);
   }
 };
