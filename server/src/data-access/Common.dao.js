@@ -19,3 +19,18 @@ export const getAllSalaryGroups = async (req) => {
     throw Error();
   }
 };
+
+export const getAllDashboardData = async (req) => {
+  try {
+    const queryString = `
+    SELECT
+    (SELECT COUNT(VacancyId) FROM Vacancies WHERE Status = 'ACT') AS NoOfActiveVacancies,
+    (SELECT COUNT(ApplicationId) FROM Applications WHERE Status = 'PENDING') AS NoOfPendingApplications
+    `;
+    const results = await req.app.locals.db.query(queryString);
+    return results.recordset[0];
+  } catch (e) {
+    console.log(e);
+    throw Error();
+  }
+};

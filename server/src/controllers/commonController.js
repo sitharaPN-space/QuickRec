@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 export const MasterData = async (req, res) => {
   try {
     const data = await getMasterData(req);
-    res.status(200).json({ data: data.data });
+    res.status(200).json({ data });
   } catch {
     res.status(500).json({ message: "Something went wrong" });
   }
