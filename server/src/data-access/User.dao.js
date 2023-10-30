@@ -31,16 +31,22 @@ class UserDao {
     }
   }
 
-  static async getUserByEmail(email, admin) {
+  static async getUserByEmailNRole(req, email, admin) {
     try {
       const user = await UserModel.findOne({
         where: {
           [Op.and]: [
-            { isAdmin: admin ?? { [Op.or]: [true, false] } },
+            admin ? { UserRoleId: { [Op.or]: [3, 4] } } : "",
             { EmailAddress: `${email}` },
           ],
         },
       });
+      if (user) {
+        const { recordset } = await req.app.locals.db.query(`
+        SELECT UserRole FROM UserRoles WHERE UserRoleId = ${user.UserRoleId}
+      `);
+        user.UserRole = recordset[0].UserRole;
+      }
       return user;
     } catch (error) {
       console.log(error);

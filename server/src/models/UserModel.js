@@ -40,9 +40,9 @@ UserModel.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    IsEmployee: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
+    UserRoleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {
