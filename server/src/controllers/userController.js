@@ -36,7 +36,7 @@ export const signup = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(201).json({token });
+    res.status(201).json({ token });
   } catch {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -46,11 +46,11 @@ export const signin = async (req, res) => {
   const { userName, password, admin } = req.body;
 
   try {
-    const oldUser = await UserDao.getUserByEmail(userName, admin);
+    const oldUser = await UserDao.getUserByEmailNRole(req, userName, admin);
 
     if (!oldUser)
       return res.status(404).json({ message: "User doesn't exist" });
-    const { UserName, EmailAddress, UserId } = oldUser.dataValues;
+    const { UserName, EmailAddress, UserId, UserRole } = oldUser;
 
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.Password);
 
@@ -58,12 +58,12 @@ export const signin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { EmailAddress, UserName, UserId },
+      { EmailAddress, UserName, UserId, UserRole },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({token });
+    res.status(200).json({ token });
   } catch {
     res.status(500).json({ message: "Something went wrong" });
   }
