@@ -34,3 +34,33 @@ export const getAllDashboardData = async (req) => {
     throw Error();
   }
 };
+
+export const getUpcomingInterviews = async (req) => {
+  try {
+    const results = await req.app.locals.db.query(`
+    SELECT VacancyName,PlannedInterViewDate FROM Vacancies WHERE PlannedInterViewDate > GETDATE() ORDER BY PlannedInterViewDate ASC
+    `);
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+    throw Error();
+  }
+};
+
+export const getDashboardChartData = async (req) => {
+  try {
+    const results = await req.app.locals.db.query(`
+    SELECT
+    FORMAT(AppliedDate,'MMM') AS month,
+    SUM(CASE WHEN status = 'SELECTED' THEN 1 ELSE 0 END) AS selected,
+    SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS rejected
+    FROM Applications
+    GROUP BY FORMAT(AppliedDate,'MMM')
+    ORDER BY MIN(AppliedDate)
+    `);
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+    throw Error();
+  }
+};
