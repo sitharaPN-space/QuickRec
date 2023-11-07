@@ -68,3 +68,22 @@ export const signin = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+export const changePassword = async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+  try {
+    const user = await UserDao.getUserById(userId);
+    const isPasswordCorrect = await bcrypt.compare(
+      currentPassword,
+      user.Password
+    );
+
+    if (!isPasswordCorrect)
+      return res.status(400).json({ message: "Invalid credentials" });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await UserDao.updateUserPassword(user, hashedPassword);
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
