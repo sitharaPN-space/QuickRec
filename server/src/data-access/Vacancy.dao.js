@@ -1,7 +1,7 @@
 import Vacancy from "../models/Vacancy.js";
 import { updateOrCreate } from "./Basic.dao.js";
 
-const createOrUpadateVacancy = async (vacancyReq, req) => {
+export const createOrUpadateVacancy = async (vacancyReq, req) => {
   try {
     const vacancy = await updateOrCreate(
       Vacancy,
@@ -18,7 +18,7 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
   }
 };
 
-const deleteVacancy = async (vacancyId) => {
+export const deleteVacancy = async (vacancyId) => {
   try {
     await Vacancy.destroy({
       where: {
@@ -31,7 +31,7 @@ const deleteVacancy = async (vacancyId) => {
   }
 };
 
-const getVacanciesBySearch = async (req) => {
+export const getVacanciesBySearch = async (req) => {
   const { searchQuery } = req.query;
   try {
     const results = await req.app.locals.db.query(
@@ -40,6 +40,8 @@ const getVacanciesBySearch = async (req) => {
       VacancyName,Vacancies.updatedAt, 
       IIF(DATEDIFF(day,Vacancies.createdAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,Vacancies.createdAt,GETDATE()), ' hours ago'),
       CONCAT(DATEDIFF(day,Vacancies.createdAt,GETDATE()), ' days ago')) DaysPosted,
+      IIF(DATEDIFF(day,GETDATE(),ClosingDate) < 0,'',
+      CONCAT(DATEDIFF(day,GETDATE(),ClosingDate), ' days left')) DaysLeft,
       (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId) AS NoOfApplicants,
       (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId AND Applications.Status = 'SELECTED')  AS NoOfSelectedApplicants,
       (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId AND Applications.Status = 'REJECTED')  AS NoOfRejectedApplicants,
@@ -51,9 +53,7 @@ const getVacanciesBySearch = async (req) => {
     );
     return results.recordset;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     throw Error();
   }
 };
-
-export { createOrUpadateVacancy, deleteVacancy, getVacanciesBySearch };
