@@ -30,7 +30,7 @@ const getVacanciesBySearch = async (req) => {
       (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId) NoOfApplicants,
       (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'PENDING') NoOfPendingApplicants,
       (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'REJECTED') NoOfRejectedApplicants,
-      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'APPROVED') NoOfSelectedApplicants
+      (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'SELECTED') NoOfSelectedApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
       INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'

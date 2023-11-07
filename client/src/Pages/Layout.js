@@ -54,7 +54,7 @@ const Layout = () => {
           <Navbar
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
-            isNonMobile={isNonMobile}
+            isMobile={!isNonMobile}
           />
         ) : (
           <CareerBanner />

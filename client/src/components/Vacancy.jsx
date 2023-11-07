@@ -40,10 +40,13 @@ const Vacancy = ({ detail }) => {
       <CardHeader
         title={detail.VacancyName}
         subheader={subTitle}
-        sx={{ backgroundColor: theme.palette.secondary[400], p: "12px" }}
+        sx={{
+          backgroundColor: "#f9f9f9",
+          p: "0.5rem 1rem",
+        }}
         titleTypographyProps={{
-          fontSize: (isMobile) => (isMobile ? "1.2rem" : "1.5rem"),
-          fontWeight: 600,
+          fontSize: (isMobile) => (isMobile ? "1.2rem" : "3rem"),
+          fontWeight: 700,
         }}
         subheaderTypographyProps={{
           fontSize: (isMobile) => (isMobile ? "0.8rem" : "1rem"),
@@ -51,11 +54,11 @@ const Vacancy = ({ detail }) => {
       />
       <CardContent>
         <Typography
+          fontSize={isMobile ? "14px" : "16px"}
           sx={{
-            fontSize: (isMobile) => (isMobile ? "14px" : "16px"),
             fontWeight: 550,
             mb: "10px",
-            color: theme.palette.secondary[800],
+            color: theme.palette.secondary[900],
           }}
         >
           {detail.RecruitmentType}

@@ -69,10 +69,10 @@ const VacancyList = () => {
             sx={{
               fontWeight: 700,
               fontSize: "18px",
-              mb: "1rem",
+              m: "1rem 0",
             }}
           >
-            Available Opportunities
+            Job Search
           </Typography>
           <TextField
             sx={{

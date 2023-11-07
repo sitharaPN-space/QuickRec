@@ -354,7 +354,7 @@ const uploadApplicationDocs = async (req) => {
 
 const finaliseApplication = async (req) => {
   try {
-    const { remarks, status, applicationId } = req; // req.query;
+    const { remarks, status, applicationId } = req.query;
 
     const results = await req.app.locals.db.query(
       `UPDATE Applications SET 

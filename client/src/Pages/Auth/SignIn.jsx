@@ -59,7 +59,6 @@ const SignIn = () => {
     } catch (error) {
       dispatch(getUserDataOnFailiure(error.response.data));
       setError(error.response.data);
-      console.log(error.response.data);
       setTimeout(() => {
         setError("");
       }, 5000);
@@ -138,7 +137,7 @@ const SignIn = () => {
               <GoogleLogin
                 onSuccess={googleSuccess}
                 onFailure={googleError}
-                cookiePolicy="single_host_origin"
+                // cookiePolicy="single_host_origin"
               />
             </Grid>
           </Grid>

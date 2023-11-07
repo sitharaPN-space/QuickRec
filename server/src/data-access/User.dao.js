@@ -17,6 +17,7 @@ class UserDao {
       return user;
     } catch (e) {
       console.log(e);
+      throw new Error(`Couldn't find user`);
     }
   }
 
@@ -28,6 +29,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(e);
+      throw new Error(`Couldn't find user`);
     }
   }
 
@@ -39,6 +41,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(e);
+      throw new Error(`Couldn't find user`);
     }
   }
 
@@ -55,6 +58,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(e);
+      throw new Error(`Couldn't find user`);
     }
   }
 }
