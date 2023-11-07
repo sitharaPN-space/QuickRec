@@ -7,6 +7,7 @@ class UserDao {
       const user = await UserModel.create(userData);
       return user;
     } catch (error) {
+      console.log(error);
       throw new Error("Failed to create user");
     }
   }
@@ -17,6 +18,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(error);
+      throw Error();
     }
   }
 
@@ -28,6 +30,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(error);
+      throw Error();
     }
   }
 
@@ -50,6 +53,7 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(error);
+      throw Error();
     }
   }
 
@@ -66,6 +70,16 @@ class UserDao {
       return user;
     } catch (error) {
       console.log(error);
+      throw Error();
+    }
+  }
+  static async updateUserPassword(user, password) {
+    try {
+      user.Password = password;
+      await user.save();
+    } catch (error) {
+      console.log(error);
+      throw Error();
     }
   }
 }
