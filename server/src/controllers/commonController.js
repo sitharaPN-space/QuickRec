@@ -33,6 +33,6 @@ export const downloadFile = (req, res) => {
     file.pipe(res);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "File Download is corrupted" });
+    res.status(500).json({ message: "File Download is corrupted" });
   }
 };
