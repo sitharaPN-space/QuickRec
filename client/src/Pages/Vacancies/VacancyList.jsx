@@ -14,28 +14,40 @@ import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
+import Input from "../../components/Input";
+import FilterDialog from "../../components/FilterDialog";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
-  useGetVacanciesQuery,
   useGetVacancyBySearchQuery,
+  useGetMasterDataQuery,
 } from "../../state/api";
+import TuneIcon from "@mui/icons-material/Tune";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+const searchInit = {
+  searchQuery: "",
+  vacancyType: "",
+  salaryGroup: "",
+  boardGrade: "",
+};
 
 const VacancyList = () => {
   const [isNavbar, setIsNavBar] = useOutletContext();
-  const query = useQuery();
+  // const query = useQuery();
   const navigate = useNavigate();
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [search, setSearch] = useState("");
-  const page = query.get("page") || 1;
-  const searchQuery = query.get("searchQuery");
+  const [search, setSearch] = useState(searchInit);
+  // const page = query.get("page") || 1;
+  // const searchQuery = query.get("searchQuery");
+  const [open, setOpen] = React.useState(false);
 
   const { data: searchVacancyList, isLoading: vacancySearchLoading } =
     useGetVacancyBySearchQuery(search) || {};
+  const { data: masterData, isLoading: masterDataLoading } =
+    useGetMasterDataQuery() || {};
 
   useEffect(() => {
     setIsNavBar(true);
@@ -52,6 +64,19 @@ const VacancyList = () => {
     } else {
       navigate("/");
     }
+  };
+
+  const handleClickFilterOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCloseFilter = () => {
+    setOpen(false);
+    // setSearch(searchInit);
+  };
+
+  const handleReset = () => {
+    setSearch(searchInit);
   };
 
   return (
@@ -74,30 +99,55 @@ const VacancyList = () => {
           >
             Job Search
           </Typography>
-          <TextField
-            sx={{
-              flex: 1,
-              border: "none",
-              width: "75%",
-              variant: "filled",
-              background: "#fff",
-              border: `1px solid ${theme.palette.primary[500]}`,
-              borderRadius: "5px",
-            }}
-            name="search"
-            value={search}
-            placeholder="Search..."
-            onKeyDown={handleKeyPress}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={searchVacancy}>
-                    <Search />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+          <div style={{ display: "flex", width: "75%", alignItems: "center" }}>
+            <TextField
+              variant="outlined"
+              name="search"
+              type="text"
+              value={search?.searchQuery || ""}
+              placeholder="Search..."
+              onKeyDown={handleKeyPress}
+              onChange={(e) =>
+                setSearch({ ...search, searchQuery: e.target.value })
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={searchVacancy}>
+                      <Search />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                flex: 1,
+                border: (theme) => `1px solid ${theme.palette.primary[500]}`,
+                borderRadius: "5px",
+                backgroundColor: "white",
+              }}
+            />
+            <IconButton
+              aria-label="Filter"
+              onClick={handleClickFilterOpen}
+              handleClose={handleCloseFilter}
+            >
+              <TuneIcon
+                fontSize="large"
+                sx={{
+                  backgroundColor: "white",
+                  width: "3rem",
+                  height: "3rem",
+                }}
+              />
+            </IconButton>
+          </div>
+          <FilterDialog
+            open={open}
+            masterData={masterData}
+            handleClose={handleCloseFilter}
+            setSearch={setSearch}
+            search={search}
+            handleReset={handleReset}
           />
           {/* </Paper> */}
         </div>

@@ -18,9 +18,9 @@ const createOrUpadateVacancy = async (vacancyReq, req) => {
 };
 
 const getVacanciesBySearch = async (req) => {
-  const { searchQuery } = req.query;
+  const { searchQuery, boardGrade, salaryGroup, vacancyType } = req.query;
   try {
-    const results = await req.app.locals.db.query(
+    let SQLquery =
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
       PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,sg.SalaryGroupId,
       IIF(Status='ACT','Open','Close') Status,VacancyId,BoardGrade,bg.BoardGradeId,
@@ -32,10 +32,20 @@ const getVacanciesBySearch = async (req) => {
       (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'REJECTED') NoOfRejectedApplicants,
       (SELECT count(*) FROM Applications app WHERE app.VacancyId = Vacancies.VacancyId and app.Status = 'SELECTED') NoOfSelectedApplicants
       FROM Vacancies
-      INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
-      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
-      ORDER BY createdAt desc`
-    );
+      INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId 
+      ${boardGrade !== "" ? ` AND bg.BoardGradeId = ${boardGrade} ` : ``} ` +
+      `INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId ` +
+      `${
+        salaryGroup !== "" ? ` AND sg.SalaryGroupId = ${salaryGroup} ` : ``
+      }  ` +
+      `WHERE lower(VacancyName) like '%${searchQuery}%' ` +
+      `${
+        vacancyType !== ""
+          ? ` AND Vacancies.RecruitmentType = '${vacancyType}' `
+          : ``
+      }` +
+      `ORDER BY createdAt desc`;
+    const results = await req.app.locals.db.query(SQLquery);
 
     return results.recordset;
   } catch (error) {

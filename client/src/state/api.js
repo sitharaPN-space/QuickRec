@@ -14,12 +14,19 @@ export const api = createApi({
   reducerPath: "adminApi",
   tagTypes: ["Vacancy", "AppBasicDetails"],
   endpoints: (builder) => ({
+    getMasterData: builder.query({
+      query: () => `common/masterData`,
+      providesTags: ["masterData"],
+    }),
     getVacancies: builder.query({
       query: () => `/vacancy`,
       providesTags: ["Vacancy"],
     }),
     getVacancyBySearch: builder.query({
-      query: (searchQuery) => `/vacancy/search/?searchQuery=${searchQuery}`,
+      query: (searchQuery) => ({
+        url: `/vacancy/search/`,
+        params: { ...searchQuery },
+      }),
       providesTags: ["Vacancy"],
     }),
     getAppBasicDetails: builder.query({
@@ -167,6 +174,7 @@ export const api = createApi({
 });
 
 export const {
+  useGetMasterDataQuery,
   useGetVacanciesQuery,
   useGetVacancyBySearchQuery,
   useCreateAppBasicDetailsMutation,

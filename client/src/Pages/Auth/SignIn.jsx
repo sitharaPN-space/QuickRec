@@ -16,6 +16,7 @@ import GoogleIcon from "../../components/GoogleIcon";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getUserDataOnSuccess, getUserDataOnFailiure } from "../../state/Auth";
+import { useGetMasterDataQuery } from "../../state/api";
 import * as api from "../../api/";
 
 const initState = { userName: "", password: "" };
@@ -28,6 +29,9 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [isNavbar, setIsNavBar] = useOutletContext();
+
+  const { data: masterData, isLoading: masterDataLoading } =
+    useGetMasterDataQuery() || {};
 
   useEffect(() => {
     setIsNavBar(false);
