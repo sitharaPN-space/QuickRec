@@ -32,7 +32,7 @@ export const deleteVacancy = async (vacancyId) => {
 };
 
 export const getVacanciesBySearch = async (req) => {
-  const { searchQuery } = req.query;
+  const { searchQuery, vacancyType, salaryGroup, boardGrade } = req.query;
   try {
     const results = await req.app.locals.db.query(
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
@@ -48,7 +48,16 @@ export const getVacanciesBySearch = async (req) => {
       (SELECT COUNT(ApplicationId) FROM Applications WHERE Applications.VacancyId = Vacancies.VacancyId AND Applications.Status = 'PENDING')  AS NoOfPendingApplicants
       FROM Vacancies
       INNER JOIN BoardGrades bg ON bg.BoardGradeId = Vacancies.BoardGradeId
-      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%'
+      INNER JOIN SalaryGroups sg ON sg.SalaryGroupId = Vacancies.SalaryGroupId WHERE lower(VacancyName) like '%${searchQuery}%' ${
+        vacancyType !== ""
+          ? "AND RecruitmentType = " + vacancyType
+          : "" + salaryGroup !== ""
+          ? "AND Vacancies.SalaryGroupId = " + salaryGroup
+          : "" + boardGrade !== ""
+          ? "AND Vacancies.BoardGradeId = " + boardGrade
+          : ""
+      }
+
       ORDER BY createdAt DESC`
     );
     return results.recordset;
