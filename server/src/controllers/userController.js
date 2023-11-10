@@ -68,6 +68,17 @@ export const signin = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getUserByEmpNo = async (req, res) => {
+  const { employeeNo } = req.query;
+  try {
+    const user = await UserDao.getUserByEmpNo(employeeNo);
+    res.status(200).json({ data: user });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 export const changePassword = async (req, res) => {
   const { userId, currentPassword, newPassword } = req.body;
   try {

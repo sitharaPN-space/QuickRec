@@ -22,6 +22,18 @@ class UserDao {
     }
   }
 
+  static async getUserByEmpNo(employeeNo) {
+    try {
+      const user = await UserModel.findOne({
+        where: { EmpNumber: employeeNo },
+      });
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw Error();
+    }
+  }
+
   static async getUserByName(userName) {
     try {
       const user = await UserModel.findOne({
