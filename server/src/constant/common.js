@@ -7,6 +7,7 @@ const ApplicationStatus = {
 const ActiveStatus = {
   ACT: "Open",
   INA: "Close",
+  PENDING: "Pending",
   Open: "ACT",
   Close: "INA",
 };

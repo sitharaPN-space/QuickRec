@@ -25,6 +25,7 @@ export const getAllDashboardData = async (req) => {
     const queryString = `
     SELECT
     (SELECT COUNT(VacancyId) FROM Vacancies WHERE Status = 'ACT') AS NoOfActiveVacancies,
+    (SELECT COUNT(VacancyId) FROM Vacancies WHERE Status = 'PENDING') AS NoOfPendingVacancies,
     (SELECT COUNT(ApplicationId) FROM Applications WHERE Status = 'PENDING') AS NoOfPendingApplications
     `;
     const results = await req.app.locals.db.query(queryString);
