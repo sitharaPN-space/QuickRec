@@ -21,6 +21,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import commonRoutes from "./src/routes/commonRoutes.js";
+import reportRoutes from "./src/routes/reportRoutes.js";
 
 /* CONFIGURATION */
 const __filename = fileURLToPath(import.meta.url);
@@ -88,6 +89,7 @@ app.use("/application", applicationRoutes);
 app.use("/vacancy", commonRoutes);
 app.use("/download", commonRoutes);
 app.use("/common", commonRoutes);
+app.use("/report", reportRoutes);
 
 /* SERVER CONFIG */
 var port = process.env.PORT || 5000;
