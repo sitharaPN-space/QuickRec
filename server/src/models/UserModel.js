@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db-connect-seq.js";
 import { DATE } from "sequelize";
+import UserRole from "./UserRole.js";
 
 class UserModel extends Model {}
 
@@ -15,6 +16,9 @@ UserModel.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    UserRoleId: {
+      type: DataTypes.INTEGER,
     },
     UserName: {
       type: DataTypes.STRING,
@@ -50,5 +54,10 @@ UserModel.init(
     modelName: "UserAccount",
   }
 );
+
+UserModel.hasOne(UserRole, {
+  foreignKey: "UserRoleId",
+});
+UserRole.belongsTo(UserModel);
 
 export default UserModel;

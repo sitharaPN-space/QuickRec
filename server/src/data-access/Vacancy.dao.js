@@ -73,4 +73,25 @@ const getAllVacancies = async (req) => {
   }
 };
 
-export { createOrUpadateVacancy, getVacanciesBySearch, getAllVacancies };
+const getUpcommingInterviews = async (req) => {
+  try {
+    let QueryString = `SELECT 
+    PlannedInterViewDate,
+    VacancyName
+    FROM Vacancies
+	WHERE Vacancies.Status = 'ACT' and Vacancies.PlannedInterViewDate >= GETDATE()
+	ORDER BY Vacancies.PlannedInterViewDate`;
+    const results = await req.app.locals.db.query(QueryString);
+    return results.recordset;
+  } catch (error) {
+    console.log(error);
+    throw new Error();
+  }
+};
+
+export {
+  createOrUpadateVacancy,
+  getVacanciesBySearch,
+  getAllVacancies,
+  getUpcommingInterviews,
+};

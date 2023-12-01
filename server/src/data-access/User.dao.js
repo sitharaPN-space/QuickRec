@@ -1,5 +1,6 @@
 import UserModel from "../models/UserModel.js";
 import { Op } from "sequelize";
+import UserRole from "../models/UserRole.js";
 
 class UserDao {
   static async createUser(userData) {
@@ -33,17 +34,29 @@ class UserDao {
     }
   }
 
-  static async getUserByEmail(email) {
+  static async getUserByEmail(req) {
+    const { userName, password } = req.body;
     try {
-      const user = await UserModel.findOne({
-        where: { EmailAddress: `${email}` },
-      });
-      return user;
+      // const user = await UserModel.findAll({
+      //   include: {
+      //     model: UserRole,
+      //     required: true,
+      //   },
+      //   where: { EmailAddress: `${email}` },
+      // });
+      // return user;
+      let queryString = `SELECT [UserAccount].[UserId], [UserAccount].[UserRoleId], [UserAccount].[UserName], [UserAccount].[Password], [UserAccount].[EmailAddress], [UserAccount].[MobileNo], [UserAccount].[EmpNumber], [UserAccount].[NIC], [UserAccount].[IsEmployee], [UserAccount].[createdAt], [UserAccount].[updatedAt],  [UserRole].[UserRole] 
+      FROM [UserAccounts] [UserAccount]
+      INNER JOIN [UserRoles] AS [UserRole] ON [UserAccount].[UserRoleId] = [UserRole].[UserRoleId] 
+      WHERE [UserAccount].[EmailAddress] = '${userName}'`;
+      const results = await req.app.locals.db.query(queryString);
+      return results.recordset[0];
     } catch (error) {
-      console.log(e);
+      console.log(error);
       throw new Error(`Couldn't find user`);
     }
   }
+  // where: { EmailAddress: `${email}` },
 
   static async getUserByNameOrEmail(userName, EmailAddress) {
     try {

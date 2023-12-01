@@ -48,11 +48,11 @@ export const signin = async (req, res) => {
 
   try {
     console.log("user request " + req);
-    const oldUser = await UserDao.getUserByEmail(userName);
+    const oldUser = await UserDao.getUserByEmail(req);
 
     if (!oldUser)
       return res.status(404).json({ message: "User doesn't exist" });
-    const { UserName, EmailAddress, UserId } = oldUser.dataValues;
+    const { UserName, EmailAddress, UserId, UserRole } = oldUser;
 
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.Password);
 
@@ -64,10 +64,11 @@ export const signin = async (req, res) => {
         EmailAddress,
         UserName,
         UserId,
+        UserRole,
       },
       process.env.JWT_SECRET_KEY,
       {
-        expiresIn: 300, // 60 seconds
+        expiresIn: 1200, // 60 seconds
       }
     );
 

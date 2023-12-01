@@ -35,9 +35,7 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/" element={<Navigate to="/signIn" replace />} />
         </Route>
-        <Route
-          element={user.data ? <Layout /> : <Navigate to="/signIn" replace />}
-        >
+        <Route element={user ? <Layout /> : <Navigate to="/signIn" replace />}>
           <Route path="/home" element={<VacancyList />} />
           <Route path="/application" element={<ApplicationLayout />}>
             <Route

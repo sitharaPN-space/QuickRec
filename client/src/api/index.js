@@ -3,13 +3,11 @@ import axios from "axios";
 const config = {
   header: {
     "Content-type": "application/json",
-    // Authorization: `Bearer ${
-    //   JSON.parse(localStorage.getItem("profile"))?.token
-    // }`,
   },
 };
 
-const API = axios.create({ baseURL: "http://10.0.5.10:5000" }); // process.env.REACT_APP_BASE_URL });
+//const API = axios.create({ baseURL: "http://10.0.5.10:5000" });
+const API = axios.create({ baseURL: process.env.REACT_APP_BASE_URL });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {

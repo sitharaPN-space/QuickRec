@@ -1,26 +1,26 @@
-import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import express from "express";
 import helmet from "helmet"; // for http header security
 import morgan from "morgan"; // request loggers
-import multer from "multer"; // for file uploads
 import sql from "mssql";
+import multer from "multer"; // for file uploads
 
 import DBconfig from "./dbconfig.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import applicationRoutes from "./src/routes/applicationRoutes.js";
 import {
+  addAchvDetails,
   addEduDetails,
   addExpDetails,
-  addAchvDetails,
   uploadApplicationDocs,
 } from "./src/controllers/applicationController.js";
 import { createVacancy } from "./src/controllers/VacancyController.js";
+import applicationRoutes from "./src/routes/applicationRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 
-import commonRoutes from "./src/routes/commonRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import commonRoutes from "./src/routes/commonRoutes.js";
 
 /* CONFIGURATION */
 const __filename = fileURLToPath(import.meta.url);
@@ -91,6 +91,8 @@ app.use("/common", commonRoutes);
 
 /* SERVER CONFIG */
 var port = process.env.PORT || 5000;
+// var io;
+
 appPool
   .connect()
   .then(function (pool) {
@@ -104,10 +106,21 @@ appPool
         port
       );
     });
+    // io = socket(server);
   })
   .catch(function (err) {
     console.error("ERROR starting server ", err);
   });
+
+// app.use((req, res, next) => {
+//   req.io = io;
+//   return next();
+// });
+// /* SOCKET.IO ESTABLISHED */
+// io.on("connection", (socket) => {
+//   console.log(`New socket connection established with ID ${socket.id} `);
+//   sendData(socket);
+// });
 
 process.once("SIGUSR2", function () {
   process.kill(process.pid, "SIGUSR2");

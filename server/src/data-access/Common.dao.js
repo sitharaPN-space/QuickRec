@@ -30,4 +30,21 @@ const getApplicationSteps = async (req) => {
   }
 };
 
-export { getAllBoardGrades, getAllSalaryGroups, getApplicationSteps };
+const getDashboardData = async (req) => {
+  try {
+    const queryString = `select
+    (select count(*) from Applications where applications.Status = 'PENDING') NoOfActiveVacancies,  
+    (select COUNT(*) from Vacancies where Vacancies.Status = 'ACT') NoOfPendingApplications`;
+    const results = await req.app.locals.db.query(queryString);
+    return results.recordset[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getAllBoardGrades,
+  getAllSalaryGroups,
+  getApplicationSteps,
+  getDashboardData,
+};

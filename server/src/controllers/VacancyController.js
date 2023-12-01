@@ -1,5 +1,5 @@
-import * as VacancyDao from "../data-access/Vacancy.dao.js";
 import { ActiveStatus, RecruitementType } from "../constant/common.js";
+import * as VacancyDao from "../data-access/Vacancy.dao.js";
 
 const createVacancy = async (req, res) => {
   // if (!req.userId) return res.json({ message: "Unauthenticated" });
