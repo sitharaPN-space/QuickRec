@@ -1,13 +1,18 @@
 import express from "express";
-import { signup, signin } from "../controllers/userController.js";
-
-// import auth from "../middleware/auth.js";
+import {
+  signup,
+  signin,
+  getEmployees,
+  changeUserRole,
+  changePassword,
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
-//router.get("/signin", signin);
 router.post("/signin", signin);
 router.post("/signup", signup);
-// router.post("/menus", getMenu);
+router.get("/getEmployee", getEmployees);
+router.post("/changeUserRole", changeUserRole);
+router.post("/changePassword", changePassword);
 
 export default router;

@@ -78,3 +78,45 @@ export const signin = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getEmployees = async (req, res) => {
+  const { employeeNo, admin } = req.query;
+  try {
+    const userRole = admin === "true" ? [3, 4] : [2];
+    const user = await UserDao.getUserByEmpNoNRole(employeeNo, userRole);
+    res.status(200).json({ data: user });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const changeUserRole = async (req, res) => {
+  const { userId, userRoleId } = req.query;
+  try {
+    await UserDao.updateUserRole(userId, userRoleId);
+    res.status(200).json({ message: "Role updated successfully" });
+  } catch {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+  try {
+    const user = await UserDao.getUserById(userId);
+    const isPasswordCorrect = await bcrypt.compare(
+      currentPassword,
+      user.Password
+    );
+
+    if (!isPasswordCorrect)
+      return res.status(400).json({ message: "Invalid credentials" });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.Password = hashedPassword;
+    await user.save();
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

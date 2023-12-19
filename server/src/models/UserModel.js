@@ -55,9 +55,6 @@ UserModel.init(
   }
 );
 
-UserModel.hasOne(UserRole, {
-  foreignKey: "UserRoleId",
-});
-UserRole.belongsTo(UserModel);
+UserModel.belongsTo(UserRole, { foreignKey: "UserRoleId" });
 
 export default UserModel;
