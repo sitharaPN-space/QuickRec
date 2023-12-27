@@ -30,7 +30,7 @@ const Vacancy = ({ vacancy }) => {
         title={vacancy.VacancyName}
         subheader={`Posted ${vacancy.DaysPosted}`}
         sx={{
-          backgroundColor: (theme) => theme.palette.secondary[400],
+          backgroundColor: (theme) => theme.palette.secondary[200],
           p: "12px",
         }}
         titleTypographyProps={{
@@ -70,7 +70,7 @@ const Vacancy = ({ vacancy }) => {
                   color: (theme) => theme.palette.secondary[700],
                 }}
               >
-                {dayjs(vacancy.ClosingDate).format("YYYY-MM-DD")}
+                {dayjs(vacancy.ClosingDate).format("DD/MM/YYYY")}
               </Typography>
             </div>
           </Grid>
@@ -86,7 +86,7 @@ const Vacancy = ({ vacancy }) => {
                   color: (theme) => theme.palette.secondary[700],
                 }}
               >
-                {dayjs(vacancy.PublishedDate).format("YYYY-MM-DD")}
+                {dayjs(vacancy.PublishedDate).format("DD/MM/YYYY")}
               </Typography>
             </div>
           </Grid>

@@ -1,11 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL,prepareHeaders: (headers) => {
-    headers.set("authorization", localStorage.getItem("profile"));
-    return headers;
-  }, }),
-    reducerPath: "adminApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_BASE_URL,
+    prepareHeaders: (headers) => {
+      headers.set("authorization", localStorage.getItem("profile"));
+      return headers;
+    },
+  }),
+  reducerPath: "adminApi",
   tagTypes: [
     "Vacancy",
     "AppBasicDetails",
@@ -15,7 +18,9 @@ export const api = createApi({
   ],
   endpoints: (builder) => ({
     getVacancyBySearch: builder.query({
-      query: (searchQuery) => `/vacancy/search/?searchQuery=${searchQuery}`,
+      query: (searchQuery) => {
+        return { url: `/vacancy/search/`, params: { ...searchQuery } };
+      },
       providesTags: ["Vacancy"],
     }),
     getAppBasicDetails: builder.query({

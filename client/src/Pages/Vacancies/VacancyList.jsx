@@ -12,16 +12,25 @@ import { useTheme } from "@mui/material/styles";
 import Vacancy from "../../components/Vacancy";
 import { useGetVacancyBySearchQuery } from "../../state/api";
 
+const searchInit = {
+  searchQuery: "",
+  vacancyType: "",
+  salaryGroup: "",
+  boardGrade: "",
+};
+
 const VacancyList = () => {
   const [searchText, setSearchText] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchInit);
   const theme = useTheme();
 
-  const { data: searchVacancyList, isLoading: vacancySearchLoading } =
+  const { data: vacancyList, isLoading: vacancySearchLoading } =
     useGetVacancyBySearchQuery(search);
-
+  const searchVacancyList = vacancyList?.data.filter(
+    (vacancy) => vacancy.Status === "Open"
+  );
   const handleSearch = () => {
-    setSearch(searchText);
+    setSearch({ ...search, searchQuery: searchText });
   };
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -85,8 +94,8 @@ const VacancyList = () => {
           }}
         >
           {searchVacancyList && !vacancySearchLoading ? (
-            searchVacancyList.data.length > 0 ? (
-              searchVacancyList.data.map((vacancy) => {
+            searchVacancyList.length > 0 ? (
+              searchVacancyList.map((vacancy) => {
                 return <Vacancy key={vacancy.VacancyId} vacancy={vacancy} />;
               })
             ) : (

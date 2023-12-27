@@ -55,15 +55,14 @@ const SignUp = () => {
     navigate("/signIn");
   };
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{ p: "2rem 0" }}>
       <Paper
         sx={{
-          mt: "2rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "1rem",
+          p: "1rem",
         }}
         elevation={0}
         variant="outlined"
@@ -153,15 +152,6 @@ const SignUp = () => {
               >
                 create an account
               </ButtonComp>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{ justifyContent: "center", textAlign: "center" }}
-            >
-              <Typography sx={{ fontSize: "0.8rem" }}>
-                -- or sign up with --
-              </Typography>
             </Grid>
             <Grid
               container

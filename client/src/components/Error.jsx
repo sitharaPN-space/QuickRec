@@ -1,12 +1,17 @@
 import { Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Error = ({ error, setError }) => {
+  const [fadeIn, setFadeIn] = useState(false);
+
   useEffect(() => {
-    setTimeout(() => {
-      setError(null);
-    }, 5000);
+    if (error !== null) {
+      setFadeIn(true);
+      setTimeout(() => setFadeIn(false), 5000);
+      setTimeout(() => setError(null), 5500);
+    }
   }, [error, setError]);
+
   return (
     <Grid item xs={12}>
       <Typography

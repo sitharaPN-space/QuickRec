@@ -64,15 +64,14 @@ const SignIn = () => {
     console.log(err);
   };
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{ pt: "2rem" }}>
       <Paper
         sx={{
-          mt: "2rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "1rem",
+          p: "1rem",
         }}
         elevation={0}
         variant="outlined"
