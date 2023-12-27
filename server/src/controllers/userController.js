@@ -44,15 +44,20 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   const { userName, password, admin } = req.body;
+  const adminRoleIds = [3, 4];
 
   try {
-    const oldUser = await UserDao.getUserByEmailNRole(req, userName, admin);
+    const oldUser = await UserDao.getUserByEmailNRole(
+      userName,
+      admin,
+      adminRoleIds
+    );
 
     if (!oldUser)
       return res.status(404).json({ message: "User doesn't exist" });
-    const { UserName, EmailAddress, UserId, UserRole } = oldUser;
+    const { UserName, EmailAddress, UserId, UserRole, Password } = oldUser;
 
-    const isPasswordCorrect = await bcrypt.compare(password, oldUser.Password);
+    const isPasswordCorrect = await bcrypt.compare(password, Password);
 
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid credentials" });
@@ -69,10 +74,11 @@ export const signin = async (req, res) => {
   }
 };
 
-export const getUserByEmpNo = async (req, res) => {
-  const { employeeNo } = req.query;
+export const getEmployees = async (req, res) => {
+  const { employeeNo, admin } = req.query;
   try {
-    const user = await UserDao.getUserByEmpNo(employeeNo);
+    const userRole = admin === "true" ? [3, 4] : [2];
+    const user = await UserDao.getUserByEmpNoNRole(employeeNo, userRole);
     res.status(200).json({ data: user });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
@@ -92,8 +98,19 @@ export const changePassword = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-    await UserDao.updateUserPassword(user, hashedPassword);
+    user.Password = hashedPassword;
+    await user.save();
     res.status(200).json({ message: "Password changed successfully" });
+  } catch {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const changeUserRole = async (req, res) => {
+  const { userId, userRoleId } = req.query;
+  try {
+    await UserDao.updateUserRole(userId, userRoleId);
+    res.status(200).json({ message: "Role updated successfully" });
   } catch {
     res.status(500).json({ message: "Something went wrong" });
   }

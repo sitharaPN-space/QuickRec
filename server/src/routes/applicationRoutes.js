@@ -22,14 +22,18 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/*", auth);
-router.delete("/*", auth);
-router.post("/addBasicDetails", addBasicDetails);
-router.post("/addEduDetails", upload.single("attachment"), addEducation);
-router.post("/addExpDetails", upload.single("attachment"), addExperience);
-router.post("/addOtherDetails", upload.single("attachment"), addOtherDetails);
+router.post("/addBasicDetails", auth, addBasicDetails);
+router.post("/addEduDetails", auth, upload.single("attachment"), addEducation);
+router.post("/addExpDetails", auth, upload.single("attachment"), addExperience);
+router.post(
+  "/addOtherDetails",
+  auth,
+  upload.single("attachment"),
+  addOtherDetails
+);
 router.post(
   "/submitApplication",
+  auth,
   upload.fields([
     { name: "cv", maxCount: 1 },
     { name: "nic", maxCount: 1 },
@@ -37,11 +41,11 @@ router.post(
   ]),
   submitAppication
 );
-router.delete("/deleteEduDetail", deleteAppEduDetail);
-router.delete("/deleteExpDetail", deleteAppExpDetail);
-router.delete("/deleteOtherDetail", deleteAppOtherDetail);
-router.post("/approve", approveQualification);
-router.post("/reviewed", reviewApplication);
+router.delete("/deleteEduDetail", auth, deleteAppEduDetail);
+router.delete("/deleteExpDetail", auth, deleteAppExpDetail);
+router.delete("/deleteOtherDetail", auth, deleteAppOtherDetail);
+router.post("/approve", auth, approveQualification);
+router.post("/reviewed", auth, reviewApplication);
 router.get("/userApplication", getAppDetails);
 router.get("/basicDetails", getAppBasicDetails);
 router.get("/education", getAppEducation);

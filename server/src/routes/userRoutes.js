@@ -3,14 +3,17 @@ import {
   signup,
   signin,
   changePassword,
-  getUserByEmpNo,
+  changeUserRole,
+  getEmployees,
 } from "../controllers/userController.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.post("/signin", signin);
 router.post("/signup", signup);
-router.post("/findEmployee", getUserByEmpNo);
-router.post("/changePassword", changePassword);
+router.get("/getEmployee", getEmployees);
+router.post("/changePassword", auth, changePassword);
+router.post("/changeUserRole", auth, changeUserRole);
 
 export default router;

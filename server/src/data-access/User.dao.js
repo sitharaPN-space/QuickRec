@@ -1,5 +1,6 @@
 import UserModel from "../models/UserModel.js";
-import { Op } from "sequelize";
+import { Op, literal } from "sequelize";
+import UserRole from "../models/UserRoles.js";
 
 class UserDao {
   static async createUser(userData) {
@@ -22,12 +23,32 @@ class UserDao {
     }
   }
 
-  static async getUserByEmpNo(employeeNo) {
+  static async getUserByEmpNoNRole(employeeNo, roles) {
     try {
-      const user = await UserModel.findOne({
-        where: { EmpNumber: employeeNo },
+      let users = await UserModel.findAll({
+        where: employeeNo && { EmpNumber: employeeNo },
+        attributes: [
+          "UserId",
+          "UserName",
+          "EmpNumber",
+          "EmailAddress",
+          "MobileNo",
+          "NIC",
+          [literal("[UserRole].[UserRole]"), "UserRole"],
+        ],
+        include: [
+          {
+            model: UserRole,
+            attributes: [],
+            where: {
+              UserRoleId: { [Op.or]: roles },
+            },
+          },
+        ],
+        raw: true,
       });
-      return user;
+
+      return users;
     } catch (error) {
       console.log(error);
       throw Error();
@@ -46,22 +67,30 @@ class UserDao {
     }
   }
 
-  static async getUserByEmailNRole(req, email, admin) {
+  static async getUserByEmailNRole(email, admin, roles) {
     try {
       const user = await UserModel.findOne({
         where: {
           [Op.and]: [
-            admin ? { UserRoleId: { [Op.or]: [3, 4] } } : "",
+            admin ? { UserRoleId: { [Op.or]: roles } } : "",
             { EmailAddress: `${email}` },
           ],
         },
+        attributes: [
+          "UserName",
+          "EmailAddress",
+          "UserId",
+          "Password",
+          [literal("[UserRole].[UserRole]"), "UserRole"],
+        ],
+        include: [
+          {
+            model: UserRole,
+            attributes: [],
+          },
+        ],
+        raw: true,
       });
-      if (user) {
-        const { recordset } = await req.app.locals.db.query(`
-        SELECT UserRole FROM UserRoles WHERE UserRoleId = ${user.UserRoleId}
-      `);
-        user.UserRole = recordset[0].UserRole;
-      }
       return user;
     } catch (error) {
       console.log(error);
@@ -85,9 +114,11 @@ class UserDao {
       throw Error();
     }
   }
-  static async updateUserPassword(user, password) {
+
+  static async updateUserRole(userId, userRoleId) {
     try {
-      user.Password = password;
+      const user = await UserDao.getUserById(userId);
+      user.UserRoleId = userRoleId;
       await user.save();
     } catch (error) {
       console.log(error);

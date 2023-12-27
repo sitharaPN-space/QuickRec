@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db-connect-seq.js";
 import { DATE } from "sequelize";
+import UserRole from "./UserRoles.js";
 
 class UserModel extends Model {}
 
@@ -50,5 +51,7 @@ UserModel.init(
     modelName: "UserAccount",
   }
 );
+
+UserModel.belongsTo(UserRole, { foreignKey: "UserRoleId" });
 
 export default UserModel;
