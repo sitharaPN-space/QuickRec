@@ -82,6 +82,7 @@ class UserDao {
           "UserId",
           "Password",
           [literal("[UserRole].[UserRole]"), "UserRole"],
+          [literal("[UserRole].[Permissions]"), "Permissions"],
         ],
         include: [
           {

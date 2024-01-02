@@ -14,10 +14,15 @@ UserRole.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    Permissions: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     sequelize,
     modelName: "UserRoles",
+    timestamps: false,
   }
 );
 
