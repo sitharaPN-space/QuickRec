@@ -23,7 +23,6 @@ export const getVacancyBySearch = async (req, res) => {
   try {
     const vacancies = await VacancyDao.getVacanciesBySearch(req);
     vacancies.map((vacancy) => {
-      vacancy.Status = ActiveStatus[vacancy.Status];
       vacancy.RecruitmentType = RecruitementType[vacancy.RecruitmentType];
     });
     res.status(200).json({ data: vacancies });

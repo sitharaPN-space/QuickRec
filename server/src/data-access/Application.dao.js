@@ -10,7 +10,7 @@ export const getApplicationsByVacancy = async (req) => {
 
   try {
     const results = await req.app.locals.db.query(
-      `SELECT ApplicationId,Applications.UserId,VacancyName,NameWithInitials,MobileNo1,Applications.Status,AppliedDate
+      `SELECT ApplicationId,Applications.UserId,VacancyName,NameWithInitials,MobileNo1,Applications.Status,ReviewStatus,RecommendedBy,CertifiedBy,ApprovedBy,AppliedDate
       FROM Applications 
       INNER JOIN ApplicationBasicDetails abd ON abd.UserId = Applications.UserId
       INNER JOIN Vacancies v ON v.VacancyId = Applications.VacancyId
@@ -110,7 +110,7 @@ export const createOtherDetails = async (otherDetailsReq) => {
 export const getApplicationBasicDetails = async (req) => {
   const { userId, applicationId } = req.query;
   const query = `SELECT basicDetailsId,title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,
-  sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email,ISNULL(appAs.isApproved,0) isApproved,Status,Remarks
+  sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email,ISNULL(appAs.isApproved,0) isApproved,Status,Remarks,ReviewStatus,RecommendedBy,CertifiedBy,ApprovedBy
   FROM ApplicationBasicDetails appB
   LEFT JOIN ApplicationAssesments appAs ON appAs.detailId = BasicDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 1
   INNER JOIN Applications app ON app.ApplicationId = ${applicationId}

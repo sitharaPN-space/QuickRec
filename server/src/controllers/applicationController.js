@@ -16,7 +16,6 @@ export const submitAppication = async (req, res) => {
     await ApplicationDAO.createOrUpadateApplication({
       UserId: userId,
       VacancyId: vacancyId,
-      Status: ApplicationStatus.PENDING,
     });
     res
       .status(200)

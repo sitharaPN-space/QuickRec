@@ -1,6 +1,9 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db-connect-seq.js";
-import { ApplicationStatus } from "../constant/common.js";
+import {
+  ApplicationReviewStatus,
+  ApplicationStatus,
+} from "../constant/common.js";
 
 class Application extends Model {}
 
@@ -17,7 +20,6 @@ Application.init(
     },
     VacancyId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
     Status: {
       type: DataTypes.ENUM,
@@ -26,6 +28,16 @@ Application.init(
         ApplicationStatus.SELECTED,
         ApplicationStatus.REJECTED,
       ],
+      defaultValue: ApplicationStatus.PENDING,
+    },
+    ReviewStatus: {
+      type: DataTypes.ENUM,
+      values: [
+        ApplicationReviewStatus.PENDING,
+        ApplicationReviewStatus.APPROVED,
+        ApplicationReviewStatus.RECOMMENDED,
+      ],
+      defaultValue: ApplicationReviewStatus.PENDING,
     },
   },
   {

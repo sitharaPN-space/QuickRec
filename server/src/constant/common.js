@@ -1,10 +1,10 @@
-const ApplicationStatus = {
+export const ApplicationStatus = {
   PENDING: "PENDING",
   SELECTED: "SELECTED",
   REJECTED: "REJECTED",
 };
 
-const ActiveStatus = {
+export const ActiveStatus = {
   ACT: "Open",
   INA: "Close",
   PENDING: "Pending",
@@ -12,7 +12,7 @@ const ActiveStatus = {
   Close: "INA",
 };
 
-const RecruitementType = {
+export const RecruitementType = {
   Internal: "INT",
   External: "EXT",
   Internal_External: "INT_EXT",
@@ -23,4 +23,8 @@ const RecruitementType = {
   PRO: "Promotion Recruitment",
 };
 
-export { ApplicationStatus, ActiveStatus, RecruitementType };
+export const ApplicationReviewStatus = {
+  PENDING: "PENDING",
+  RECOMMENDED: "RECOMMENDED",
+  APPROVED: "APPROVED",
+};
