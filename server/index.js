@@ -7,7 +7,7 @@ import morgan from "morgan"; // request loggers
 import sql from "mssql";
 import multer from "multer"; // for file uploads
 
-import DBconfig from "./dbconfig.js";
+import { DBconfig } from "./dbconfig.js";
 import {
   addAchvDetails,
   addEduDetails,

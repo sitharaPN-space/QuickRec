@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Container,
-  Paper,
-  Grid,
-  Alert,
-  AlertTitle,
-} from "@mui/material";
-import Input from "../../components/Input";
+import { Container, Grid, Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 import ButtonComp from "../../components/ButtonComp";
+import Input from "../../components/Input";
 // import { GoogleLogin } from "react-google-login";
-import { GoogleLogin } from "@react-oauth/google";
-import GoogleIcon from "../../components/GoogleIcon";
-import { useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getUserDataOnSuccess, getUserDataOnFailiure } from "../../state/Auth";
-import { useGetMasterDataQuery } from "../../state/api";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import * as api from "../../api/";
+import { useGetMasterDataQuery } from "../../state/api";
+import { getUserDataOnFailiure, getUserDataOnSuccess } from "../../state/Auth";
 
 const initState = { userName: "", password: "" };
 
@@ -137,13 +128,13 @@ const SignIn = () => {
                 -- or Sign In with --
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <GoogleLogin
                 onSuccess={googleSuccess}
                 onFailure={googleError}
                 // cookiePolicy="single_host_origin"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Grid item>

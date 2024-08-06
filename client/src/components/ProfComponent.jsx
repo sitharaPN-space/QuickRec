@@ -1,24 +1,17 @@
-import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Card,
-  Typography,
-  useTheme,
+  CardActions,
   CardContent,
-  CardHeader,
-  Button,
   IconButton,
   Paper,
-  Link,
-  CardActions,
+  Typography,
+  useTheme,
 } from "@mui/material";
-import TimelineDot from "@mui/lab/TimelineDot";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import Collapse from "@mui/material/Collapse";
 import { styled } from "@mui/material/styles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import moment from "moment";
+import React from "react";
 import DownloadIcon from "../components/DownloadIcon";
 
 const ExpandMore = styled((props) => {
@@ -65,7 +58,17 @@ const ProfComponent = ({ profDetail, isActive, handleEdit, handleDelete }) => {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h4">{profDetail.title}</Typography>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <Typography variant="h4">{profDetail.title}</Typography>
+              {/* TODO: Set the lable based on the board experience checks */}
+              <Typography
+                variant="h5"
+                color={theme.palette.primary[500]}
+                sx={{ fontWeight: 500, fontStyle: "italic" }}
+              >
+                [Board Experience]
+              </Typography>
+            </div>
             <Typography variant="h5" color={theme.palette.secondary[600]}>
               {profDetail.organization}
             </Typography>

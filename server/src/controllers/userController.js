@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
     nic,
   } = req.body;
   try {
-    const olduser = await UserDao.getUserByEmail(email);
+    const olduser = await UserDao.getUserByEmail(req);
 
     if (olduser)
       return res.status(400).json({ message: "User already exists" });
@@ -28,6 +28,7 @@ export const signup = async (req, res) => {
       EmpNumber: empNumber,
       NIC: nic,
       IsEmployee: IsBoardEmployee,
+      UserRoleId: 1,
     });
 
     const token = jwt.sign(

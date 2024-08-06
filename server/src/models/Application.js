@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../../db-connect-seq.js";
 import { ApplicationStatus } from "../constant/common.js";
 
@@ -10,6 +10,10 @@ Application.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    ApplicationRefNo: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
     UserId: {
       type: DataTypes.INTEGER,

@@ -1,7 +1,10 @@
-import BasicDetails from "../models/BasicDetails.js";
-import Application from "../models/Application.js";
-import * as ApplicationDAO from "../data-access/Application.dao.js";
+import { customAlphabet } from "nanoid";
 import { ApplicationStatus } from "../constant/common.js";
+import * as ApplicationDAO from "../data-access/Application.dao.js";
+
+// const alphabet =
+//   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const alphabet = "0123456789";
 
 export const addBasicDetails = async (req, res) => {
   const {
@@ -28,9 +31,11 @@ export const addBasicDetails = async (req, res) => {
   try {
     // get existing appliation
     // if (!req.userId) return res.json({ message: "Unauthenticated" });
+    const nanoid = customAlphabet(alphabet, 20);
 
     const dbResult = await ApplicationDAO.createOrUpadateApplication({
       UserId: userId,
+      ApplicationRefNo: nanoid(),
       VacancyId: vacancyId,
       Status: ApplicationStatus.PENDING,
     });

@@ -23,7 +23,7 @@ const getVacanciesBySearch = async (req) => {
     let SQLquery =
       `SELECT AdvertismentPath,AgeLimit,ClosingDate,NoOfVacancies,
       PlannedInterViewDate,PublishedDate,RecruitmentType,Remarks,SalaryGroup,sg.SalaryGroupId,
-      IIF(Status='ACT','Open','Close') Status,VacancyId,BoardGrade,bg.BoardGradeId,
+      IIF(Status='ACT','Open',IIF(Status='INA','Close','Pending')) Status,VacancyId,BoardGrade,bg.BoardGradeId,
       VacancyName,updatedAt, 
       IIF(DATEDIFF(day,createdAt,GETDATE()) = 0,CONCAT(DATEDIFF(hh,createdAt,GETDATE()), ' hours ago'),
       CONCAT(DATEDIFF(day,createdAt,GETDATE()), ' days ago')) DaysPosted,

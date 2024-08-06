@@ -1,31 +1,27 @@
-import {
-  Paper,
-  Grid,
-  Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  useMediaQuery,
-  Button,
-  Box,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import dayjs from "dayjs";
-import Input from "../../../components/Input";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import FileUploader from "../../../components/FileUploader";
-import StepperButton from "../../../components/StepperButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ProfComponent from "../../../components/ProfComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { setProfessionalQulifications } from "../../../state/UserApplication";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  Paper,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import FileUploader from "../../../components/FileUploader";
+import Input from "../../../components/Input";
+import ProfComponent from "../../../components/ProfComponent";
+import StepperButton from "../../../components/StepperButton";
 import {
   useCreateAppExpDetailsMutation,
-  useGetAppExpDetailsQuery,
   useDeleteExpDetailsMutation,
+  useGetAppExpDetailsQuery,
 } from "../../../state/api";
 
 const initExpDetail = {
@@ -44,9 +40,12 @@ const ProfDetails = () => {
   const [file, setFile] = useState(null);
   const [expDetail, setExpDetail] = useState(initExpDetail);
   const [expDetailsList, setExpDetailsList] = useState([]);
+  const [boardEmpCheck, setBoardEmpCheck] = useState(false);
+  const [noOfdays, setNoOfdays] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userContext.data);
+
   const profDetailsList = useSelector(
     (state) => state.userApplication.experience
   );
@@ -76,6 +75,10 @@ const ProfDetails = () => {
 
   const handleChange = (e) => {
     setExpDetail({ ...expDetail, [e.target.name]: e.target.value });
+  };
+
+  const hadleEmpCheck = () => {
+    setBoardEmpCheck(!boardEmpCheck);
   };
 
   const handleAddDetail = () => {
@@ -125,8 +128,23 @@ const ProfDetails = () => {
         <Grid container spacing={2} sx={{ p: "1.5rem" }}>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
             <Typography variant="h4" sx={{ fontWeight: "600" }}>
-              Professional Qualifications
+              Professional Qualification & Experience
             </Typography>
+          </Grid>
+          {/* TODO: This should be visible only for board employees */}
+          <Grid item xs={12}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography sx={{ fontSize: "1rem", fontWeight: 500 }}>
+                Is Board Experience * / මණ්ඩල සේවයේ විස්තර
+              </Typography>
+              <Checkbox sx={{ ml: "1rem" }} onChange={hadleEmpCheck} />
+            </div>
           </Grid>
           <Input
             name="title"
@@ -137,7 +155,7 @@ const ProfDetails = () => {
           />
           <Input
             name="organization"
-            label="Organization *"
+            label="Organization/ Department *"
             value={expDetail?.organization || ""}
             handleChange={handleChange}
             required
@@ -164,7 +182,6 @@ const ProfDetails = () => {
                     backgroundColor: (theme) => theme.palette.background.main,
                   }}
                   slotProps={{ textField: { size: "small" } }}
-                  views={["month", "year"]}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
@@ -181,13 +198,24 @@ const ProfDetails = () => {
                       ...expDetail,
                       endDate: newValue?.$d,
                     });
+                    setNoOfdays(
+                      dayjs(newValue?.$d).diff(expDetail?.startDate, "days")
+                    );
                   }}
                   sx={{
                     width: "100%",
                     backgroundColor: (theme) => theme.palette.background.main,
                   }}
                   slotProps={{ textField: { size: "small" } }}
-                  views={["month", "year"]}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4} sx={{ textAlign: "left" }}>
+                <Input
+                  name="days"
+                  label="No of Days"
+                  disabled
+                  value={noOfdays || ""}
                 />
               </Grid>
             </Grid>

@@ -1,8 +1,8 @@
+import AchvDetails from "../models/AchveDetails.js";
 import Application from "../models/Application.js";
 import BasicDetails from "../models/BasicDetails.js";
 import EduDetails from "../models/EduDetails.js";
 import ExpDetails from "../models/ExpDetails.js";
-import AchvDetails from "../models/AchveDetails.js";
 import { updateOrCreate } from "./Basic.dao.js";
 
 const getExistingApplication = async (applicationId) => {
@@ -51,7 +51,7 @@ const getApplicationsByVacancy = async (req) => {
   let { vacancyId } = req.query;
   if (vacancyId === "0") vacancyId = "app.VacancyId";
   try {
-    const queryString = `SELECT app.ApplicationId, app.UserId, app.VacancyId,
+    const queryString = `SELECT app.ApplicationId, app.ApplicationRefNo, app.UserId, app.VacancyId,
     vc.VacancyName, bd.NameWithInitials, bd.MobileNo1, bd.createdAt AppliedDate, app.Status
     FROM Applications app
     INNER JOIN Vacancies vc ON vc.VacancyId = app.VacancyId
@@ -84,7 +84,7 @@ const getApplicationBasicDetailsByApplication = async (req) => {
   try {
     const queryString = `SELECT title, nameWithInitials,nameDenotedbyInit,otherName,nic,dateOfBirth,basicDetailsId,
       sex,civilStatus,religion,addressLine1,addressLine2,nationality,ethnicity,mobileNo1,mobileNo2,email, ISNULL(appAs.isApproved,0) isApproved,
-      app.BCPath, app.CVPath, app.NICPath, app.Status, app.Remarks
+      app.BCPath, app.CVPath, app.NICPath, app.Status, app.Remarks, app.ApplicationRefNo
       FROM ApplicationBasicDetails 
       LEFT jOIN ApplicationAssesments appAs ON appAs.detailId = BasicDetailsId and appAs.ApplicationId = ${applicationId} and appAs.AppStepId = 1
       LEFT JOIN Applications app ON app.UserId = ApplicationBasicDetails.UserId and app.ApplicationId = ${applicationId}

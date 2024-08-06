@@ -1,11 +1,11 @@
-import React from "react";
 import {
-  TextField,
   Grid,
-  Typography,
-  InputAdornment,
   IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -19,6 +19,7 @@ const Input = ({
   type,
   value,
   required,
+  disabled,
   handleShowPassword,
   size,
   multiline,
@@ -38,6 +39,7 @@ const Input = ({
         onChange={handleChange}
         required={required}
         fullWidth
+        disabled={disabled}
         value={value}
         type={type}
         multiline={multiline}

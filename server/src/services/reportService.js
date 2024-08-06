@@ -6,6 +6,7 @@ export const RPTScheduleDetails = async (req, res) => {
     const browser = await puppeteer.launch({
       headless: "new",
       userDataDir: "./reports/tmp",
+     
     });
 
     const file = html();
