@@ -1,4 +1,4 @@
-export const DBconfig = {
+const DBconfig = { 
   user: "sa", // sql user
   password: "123@com", //sql user password
   //server: "10.0.0.186\\COMBILL", // if it does not work try- localhost
@@ -16,7 +16,7 @@ export const DBconfig = {
   },
 };
 
-export const MessageDBconfig = {
+const MessageDBconfig = {
   user: "sa", // sql user
   password: "123@com", //sql user password
   server: "10.3.0.211",
@@ -31,3 +31,5 @@ export const MessageDBconfig = {
     trustServerCertificate: false, // change to true for local dev / self-signed certs
   },
 };
+
+export default DBconfig;

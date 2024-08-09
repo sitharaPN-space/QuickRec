@@ -31,7 +31,7 @@ export const addBasicDetails = async (req, res) => {
   try {
     // get existing appliation
     // if (!req.userId) return res.json({ message: "Unauthenticated" });
-    const nanoid = customAlphabet(alphabet, 20);
+    const nanoid = customAlphabet(alphabet, 15);
 
     const dbResult = await ApplicationDAO.createOrUpadateApplication({
       UserId: userId,
@@ -40,6 +40,7 @@ export const addBasicDetails = async (req, res) => {
       Status: ApplicationStatus.PENDING,
     });
     const application = dbResult;
+    console.log("DB Result", dbResult);
 
     const basicDetails = await ApplicationDAO.createBasicDetails({
       userId: userId,

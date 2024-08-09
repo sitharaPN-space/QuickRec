@@ -1,14 +1,12 @@
 import express from "express";
 import {
-  createVacancy,
-  getVacancyBySearch,
-  getAllVacancies,
-} from "../controllers/VacancyController.js";
-import {
   downloadFile,
   getCommonAppData,
 } from "../controllers/CommonController.js";
-import auth from "../middleware/auth.js";
+import {
+  getAllVacancies,
+  getVacancyBySearch,
+} from "../controllers/VacancyController.js";
 
 const router = express.Router();
 
