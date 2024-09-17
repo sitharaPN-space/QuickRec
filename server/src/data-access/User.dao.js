@@ -1,5 +1,5 @@
 import UserModel from "../models/UserModel.js";
-import { Op } from "sequelize";
+import { Op, literal } from "sequelize";
 import UserRole from "../models/UserRole.js";
 
 class UserDao {
@@ -72,6 +72,49 @@ class UserDao {
     } catch (error) {
       console.log(e);
       throw new Error(`Couldn't find user`);
+    }
+  }
+
+  static async getUserByEmpNoNRole(employeeNo, roles) {
+    try {
+      let users = await UserModel.findAll({
+        where: employeeNo && { EmpNumber: employeeNo },
+        attributes: [
+          "UserId",
+          "UserName",
+          "EmpNumber",
+          "EmailAddress",
+          "MobileNo",
+          "NIC",
+          [literal("[UserRole].[UserRole]"), "UserRole"],
+        ],
+        include: [
+          {
+            model: UserRole,
+            attributes: [],
+            where: {
+              UserRoleId: { [Op.or]: roles },
+            },
+          },
+        ],
+        raw: true,
+      });
+
+      return users;
+    } catch (error) {
+      console.log(error);
+      throw Error();
+    }
+  }
+
+  static async updateUserRole(userId, userRoleId) {
+    try {
+      const user = await UserDao.getUserById(userId);
+      user.UserRoleId = userRoleId;
+      await user.save();
+    } catch (error) {
+      console.log(error);
+      throw Error();
     }
   }
 }
